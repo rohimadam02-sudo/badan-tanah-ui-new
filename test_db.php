@@ -1,0 +1,1 @@
+<?php $host = '127.0.0.1'; $db = 'u250369146_badan_tanah2'; $user = 'u250369146_btanah2'; $pass = 'Bcr215oke';  try {     $pdo = new PDO("mysql:host=$host;dbname=$db", $user, $pass);     echo "✅ Database connected successfully!"; } catch(PDOException $e) {     echo "❌ Connection failed: " . $e->getMessage(); } ?>
