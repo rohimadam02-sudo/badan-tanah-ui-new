@@ -60,8 +60,17 @@
 </div>
 
 <!-- ========================================================= -->
-<!-- STATISTIK -->
+<!-- STATISTIK - DATA REAL DARI DATABASE -->
 <!-- ========================================================= -->
+@php
+    $totalLuas = \App\Models\AsetTanah::sum('luas_hektar');
+    $totalAset = \App\Models\AsetTanah::count();
+    $totalProvinsi = \App\Models\AsetTanah::distinct('provinsi')->count('provinsi');
+    $totalKerjasama = \App\Models\ProyekInvestasi::where('is_active', true)->count();
+    // Nilai Aset - fallback ke 68,45 T
+    $nilaiAset = 68450000000000;
+@endphp
+
 <div class="w-full px-3 sm:px-4 -mt-10 sm:-mt-16 relative z-10">
     <div class="max-w-7xl mx-auto bg-white rounded-2xl shadow-lg px-4 sm:px-6 md:px-10 py-4 sm:py-6">
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 md:gap-6">
@@ -73,8 +82,8 @@
                 </div>
                 <div class="min-w-0">
                     <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium truncate">Total Luas Aset</p>
-                    <p class="text-sm sm:text-base md:text-xl font-extrabold text-gray-900">420.000 Ha</p>
-                    <p class="text-[7px] sm:text-[8px] text-green-600">+2% dari tahun lalu</p>
+                    <p class="text-sm sm:text-base md:text-xl font-extrabold text-gray-900">{{ number_format($totalLuas, 0, ',', '.') }} Ha</p>
+                    <p class="text-[7px] sm:text-[8px] text-green-600">Data real dari database</p>
                 </div>
             </div>
 
@@ -85,7 +94,7 @@
                 </div>
                 <div class="min-w-0">
                     <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium truncate">Lokasi Aset</p>
-                    <p class="text-sm sm:text-base md:text-xl font-extrabold text-gray-900">1.248</p>
+                    <p class="text-sm sm:text-base md:text-xl font-extrabold text-gray-900">{{ number_format($totalAset) }}</p>
                     <p class="text-[7px] sm:text-[8px] text-gray-400 truncate">Bidang Tanah</p>
                 </div>
             </div>
@@ -97,19 +106,19 @@
                 </div>
                 <div class="min-w-0">
                     <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium truncate">Wilayah</p>
-                    <p class="text-sm sm:text-base md:text-xl font-extrabold text-gray-900">18</p>
+                    <p class="text-sm sm:text-base md:text-xl font-extrabold text-gray-900">{{ number_format($totalProvinsi) }}</p>
                     <p class="text-[7px] sm:text-[8px] text-gray-400 truncate">Provinsi</p>
                 </div>
             </div>
 
-            <!-- Kerja Sama -->
+            <!-- Kerja Sama Aktif -->
             <div class="flex items-center gap-2 sm:gap-3 px-2 sm:px-3 py-2 sm:py-3">
-                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-blue-50 text-blue-700 flex items-center justify-center flex-shrink-0">
-                    <i class="fas fa-users text-base sm:text-xl"></i>
+                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-green-50 text-green-700 flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-handshake text-base sm:text-xl"></i>
                 </div>
                 <div class="min-w-0">
                     <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium truncate">Kerja Sama Aktif</p>
-                    <p class="text-sm sm:text-base md:text-xl font-extrabold text-gray-900">32</p>
+                    <p class="text-sm sm:text-base md:text-xl font-extrabold text-gray-900">{{ $totalKerjasama > 0 ? number_format($totalKerjasama) : '0' }}</p>
                     <p class="text-[7px] sm:text-[8px] text-gray-400 truncate">Mitra Strategis</p>
                 </div>
             </div>
@@ -228,6 +237,10 @@
                 <div class="flex items-center gap-1">
                     <span class="w-2 h-2 rounded-full bg-orange-500"></span>
                     Dalam Proses
+                </div>
+                <div class="flex items-center gap-1">
+                    <span class="w-2 h-2 rounded-full bg-gray-500"></span>
+                    Terikat
                 </div>
             </div>
         </div>
@@ -389,20 +402,41 @@
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
+        // =========================================================
+        // MARKER DARI DATABASE
+        // =========================================================
+        @php
+            $markers = \App\Models\AsetTanah::whereNotNull('lat')->whereNotNull('lng')->get();
+        @endphp
+
         var markers = [
-            { lat: -6.9, lng: 109.7, type: 'green' },
-            { lat: -3.3, lng: 114.5, type: 'blue' },
-            { lat: -8.5, lng: 140.4, type: 'orange' }
+            @foreach ($markers as $marker)
+                {
+                    lat: {{ $marker->lat }},
+                    lng: {{ $marker->lng }},
+                    status: '{{ $marker->status }}',
+                    nama: '{{ $marker->nama_lokasi }}',
+                    provinsi: '{{ $marker->provinsi }}',
+                    luas: {{ $marker->luas_hektar }}
+                },
+            @endforeach
         ];
 
         markers.forEach(function(marker) {
-            var color = marker.type === 'green' ? '#16a34a' : (marker.type === 'blue' ? '#3b82f6' : '#f97316');
+            var color = marker.status === 'Tersedia' ? '#16a34a' :
+                       (marker.status === 'Dalam Pengembangan' ? '#3b82f6' :
+                       (marker.status === 'Dalam Proses' ? '#f97316' : '#6b7280'));
             L.circleMarker([marker.lat, marker.lng], {
                 color: color,
                 fillColor: color,
                 fillOpacity: 0.6,
                 radius: 8
-            }).addTo(map).bindPopup('<b>Lokasi Aset</b><br>Klik untuk detail');
+            }).addTo(map).bindPopup(`
+                <b>${marker.nama}</b><br>
+                ${marker.provinsi}<br>
+                <strong>${Number(marker.luas).toLocaleString('id-ID')} Ha</strong><br>
+                <span style="color:${color};font-weight:600">${marker.status}</span>
+            `);
         });
 
         // =========================================================
@@ -458,7 +492,7 @@
         }
 
         // =========================================================
-        // ASSET SLIDER
+        // ASSET SLIDER - AUTO SLIDE + DRAG + HOVER PAUSE
         // =========================================================
         const slider = document.getElementById('assetSlider');
         const assetDots = document.querySelectorAll('.asset-dot');
@@ -467,15 +501,14 @@
         if (slider && cards.length && assetDots.length) {
             let currentIndex = 0;
             const totalSlides = cards.length;
+            let assetInterval;
 
             function slideAssets(index) {
                 if (index < 0) index = 0;
                 if (index >= totalSlides) index = totalSlides - 1;
-
                 const cardWidth = cards[0].offsetWidth + 12;
                 const offset = cardWidth * index;
                 slider.style.transform = `translateX(-${offset}px)`;
-
                 assetDots.forEach((dot, i) => {
                     if (i === index) {
                         dot.classList.remove('bg-gray-300');
@@ -485,34 +518,105 @@
                         dot.classList.add('bg-gray-300');
                     }
                 });
-
                 currentIndex = index;
+            }
+
+            function nextAssetSlide() {
+                let next = currentIndex + 1;
+                if (next >= totalSlides) next = 0;
+                slideAssets(next);
+            }
+
+            function startAssetSlider() {
+                clearInterval(assetInterval);
+                assetInterval = setInterval(nextAssetSlide, 3000);
+            }
+
+            function stopAssetSlider() {
+                clearInterval(assetInterval);
             }
 
             assetDots.forEach((dot) => {
                 dot.addEventListener('click', function() {
                     const index = Number(this.dataset.slide);
                     slideAssets(index);
+                    startAssetSlider();
                 });
             });
 
-            let assetInterval = setInterval(() => {
-                let next = currentIndex + 1;
-                if (next >= totalSlides) next = 0;
-                slideAssets(next);
-            }, 4000);
-
             const assetContainer = slider.closest('.relative');
             if (assetContainer) {
-                assetContainer.addEventListener('mouseenter', () => clearInterval(assetInterval));
-                assetContainer.addEventListener('mouseleave', () => {
-                    assetInterval = setInterval(() => {
-                        let next = currentIndex + 1;
-                        if (next >= totalSlides) next = 0;
-                        slideAssets(next);
-                    }, 4000);
-                });
+                assetContainer.addEventListener('mouseenter', stopAssetSlider);
+                assetContainer.addEventListener('mouseleave', startAssetSlider);
             }
+
+            // Drag support
+            let startX = 0;
+            let currentX = 0;
+            let isDragging = false;
+
+            slider.addEventListener('mousedown', (e) => {
+                startX = e.clientX;
+                isDragging = true;
+                stopAssetSlider();
+            });
+
+            slider.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                currentX = e.clientX;
+            });
+
+            slider.addEventListener('mouseup', (e) => {
+                if (!isDragging) return;
+                isDragging = false;
+                const diff = startX - currentX;
+                if (Math.abs(diff) > 50) {
+                    if (diff > 0) {
+                        nextAssetSlide();
+                    } else {
+                        slideAssets(currentIndex - 1);
+                    }
+                }
+                startAssetSlider();
+            });
+
+            slider.addEventListener('mouseleave', () => {
+                if (isDragging) {
+                    isDragging = false;
+                    startAssetSlider();
+                }
+            });
+
+            // Touch support
+            let touchStartX = 0;
+            slider.addEventListener('touchstart', (e) => {
+                touchStartX = e.touches[0].clientX;
+                stopAssetSlider();
+            });
+
+            slider.addEventListener('touchend', (e) => {
+                const touchEndX = e.changedTouches[0].clientX;
+                const diff = touchStartX - touchEndX;
+                if (Math.abs(diff) > 50) {
+                    if (diff > 0) {
+                        nextAssetSlide();
+                    } else {
+                        slideAssets(currentIndex - 1);
+                    }
+                }
+                startAssetSlider();
+            });
+
+            slideAssets(0);
+            startAssetSlider();
+
+            let resizeTimeout;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(() => {
+                    slideAssets(currentIndex);
+                }, 200);
+            });
         }
     });
 </script>

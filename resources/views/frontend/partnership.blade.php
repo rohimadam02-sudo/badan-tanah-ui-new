@@ -221,14 +221,16 @@
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-            @forelse ($skemaList as $skema)
+            @forelse ($skemaList as $index => $skema)
                 <div
+                    id="skema-{{ $index }}"
                     class="bg-white rounded-2xl
                             border border-gray-200
                             shadow-sm
                             p-7
                             hover:shadow-md
-                            transition">
+                            transition group
+                            scroll-mt-24">
 
                     <div
                         class="w-12 h-12 rounded-xl
@@ -255,14 +257,14 @@
 
                     <div class="mt-5 pt-4 border-t border-gray-100">
 
-                        <span class="text-xs font-semibold
-                                     link-secondary">
+                        <a href="#skema-{{ $index }}"
+                           class="text-xs font-semibold link-secondary hover:underline inline-flex items-center gap-1 transition group">
 
                             Informasi skema
 
-                            <i class="fas fa-arrow-right ml-1"></i>
+                            <i class="fas fa-arrow-right text-[10px] transition-transform group-hover:translate-x-1"></i>
 
-                        </span>
+                        </a>
 
                     </div>
 
@@ -318,12 +320,14 @@
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-            @forelse ($kerjasamaList as $item)
+            @forelse ($kerjasamaList as $index => $item)
                 <div
+                    id="kerjasama-{{ $index }}"
                     class="rounded-2xl
                             border border-gray-200
                             p-6
-                            bg-gray-50">
+                            bg-gray-50
+                            scroll-mt-24">
 
                     <div class="flex items-center justify-between">
 
@@ -561,8 +565,10 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 
-            @forelse ($prosedurList as $step)
-                <div class="relative">
+            @forelse ($prosedurList as $index => $step)
+                <div
+                    id="prosedur-{{ $index }}"
+                    class="relative scroll-mt-24">
 
                     <div
                         class="bg-white rounded-2xl

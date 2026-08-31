@@ -53,7 +53,10 @@
         border-radius: 0.5rem;
         margin-bottom: 0.5rem;
     }
-    .dokumen-item input {
+    .dokumen-item input[type="text"] {
+        flex: 1;
+    }
+    .dokumen-item input[type="file"] {
         flex: 1;
     }
     .btn-remove {
@@ -97,6 +100,37 @@
     .btn-delete-image:hover {
         background: #dc2626;
         transform: scale(1.1);
+    }
+    .dokumen-file-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 10px;
+        background: #f0fdf4;
+        border-radius: 6px;
+        font-size: 12px;
+        margin-top: 4px;
+    }
+    .dokumen-file-item a {
+        color: #006400;
+        text-decoration: none;
+    }
+    .dokumen-file-item a:hover {
+        text-decoration: underline;
+    }
+    .dokumen-file-item .file-size {
+        color: #6b7280;
+        font-size: 10px;
+    }
+    .dokumen-file-item .btn-hapus-file {
+        color: #ef4444;
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 12px;
+    }
+    .dokumen-file-item .btn-hapus-file:hover {
+        color: #dc2626;
     }
 </style>
 
@@ -303,21 +337,48 @@
                         
                         <div id="dokumenContainer">
                             @php
-                                $dokumenList = old('dokumen', $aset->dokumen ?? []);
-                                if (empty($dokumenList)) {
-                                    $dokumenList = [''];
+                                $dokumenFiles = old('dokumen_files', $aset->dokumen_files ?? []);
+                                if (empty($dokumenFiles)) {
+                                    $dokumenFiles = [['nama' => '', 'file' => null, 'size' => null, 'type' => null]];
                                 }
                             @endphp
-                            @foreach ($dokumenList as $dok)
-                                @if (!empty($dok) || $loop->first)
-                                    <div class="dokumen-item">
-                                        <input type="text" name="dokumen[]" value="{{ $dok }}" placeholder="Nama dokumen..." class="flex-1 border-gray-300 rounded-lg p-2 text-sm">
-                                        <button type="button" onclick="removeDokumen(this)" class="btn-remove"><i class="fas fa-times"></i></button>
+
+                            @foreach ($dokumenFiles as $index => $item)
+                                <div class="dokumen-item flex flex-col sm:flex-row items-start sm:items-center gap-3 p-3 bg-gray-50 rounded-lg mb-3">
+                                    <div class="flex-1 w-full">
+                                        <input type="text" name="dokumen[]" value="{{ $item['nama'] ?? '' }}" 
+                                               placeholder="Nama dokumen..." class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
                                     </div>
-                                @endif
+                                    <div class="flex-1 w-full">
+                                        @if ($item['file'] ?? false)
+                                            <div class="dokumen-file-item flex flex-wrap items-center gap-2 mb-2">
+                                                <i class="fas fa-file-pdf text-red-500"></i>
+                                                <a href="{{ asset('storage/' . $item['file']) }}" target="_blank" 
+                                                   class="text-sm text-blue-600 hover:underline truncate max-w-[150px]">
+                                                    {{ basename($item['file']) }}
+                                                </a>
+                                                <span class="file-size">{{ $item['size'] ?? '' }}</span>
+                                                <button type="button" onclick="hapusDokumen({{ $index }})" 
+                                                        class="btn-hapus-file text-red-500 hover:text-red-700">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                                <input type="hidden" name="hapus_dokumen[]" id="hapus_dokumen_{{ $index }}" value="">
+                                            </div>
+                                            <input type="file" name="dokumen_file[]" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt" 
+                                                   class="w-full text-sm text-gray-600 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100">
+                                        @else
+                                            <input type="file" name="dokumen_file[]" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt" 
+                                                   class="w-full text-sm text-gray-600 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100">
+                                        @endif
+                                        <p class="text-[8px] text-gray-400 mt-1">PDF, Word, Excel, PPT (Max 10MB)</p>
+                                    </div>
+                                    <button type="button" onclick="removeDokumen(this)" class="btn-remove text-red-500 hover:text-red-700 flex-shrink-0">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
                             @endforeach
                         </div>
-                        <p class="text-xs text-gray-400 mt-2">Tambahkan nama dokumen pendukung aset.</p>
+                        <p class="text-xs text-gray-400 mt-2">Upload dokumen pendukung aset (PDF, Word, Excel, PPT, TXT).</p>
                     </div>
                 </div>
 
@@ -485,10 +546,19 @@
     function addDokumen() {
         const container = document.getElementById('dokumenContainer');
         const div = document.createElement('div');
-        div.className = 'dokumen-item';
+        div.className = 'dokumen-item flex flex-col sm:flex-row items-start sm:items-center gap-3 p-3 bg-gray-50 rounded-lg mb-3';
         div.innerHTML = `
-            <input type="text" name="dokumen[]" placeholder="Nama dokumen..." class="flex-1 border-gray-300 rounded-lg p-2 text-sm">
-            <button type="button" onclick="removeDokumen(this)" class="btn-remove"><i class="fas fa-times"></i></button>
+            <div class="flex-1 w-full">
+                <input type="text" name="dokumen[]" placeholder="Nama dokumen..." class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
+            </div>
+            <div class="flex-1 w-full">
+                <input type="file" name="dokumen_file[]" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt" 
+                       class="w-full text-sm text-gray-600 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100">
+                <p class="text-[8px] text-gray-400 mt-1">PDF, Word, Excel, PPT (Max 10MB)</p>
+            </div>
+            <button type="button" onclick="removeDokumen(this)" class="btn-remove text-red-500 hover:text-red-700 flex-shrink-0">
+                <i class="fas fa-times"></i>
+            </button>
         `;
         container.appendChild(div);
     }
@@ -496,9 +566,20 @@
     function removeDokumen(button) {
         const container = document.getElementById('dokumenContainer');
         if (container.children.length > 1) {
-            button.parentElement.remove();
+            button.closest('.dokumen-item').remove();
         } else {
             alert('Minimal harus ada 1 dokumen.');
+        }
+    }
+
+    function hapusDokumen(index) {
+        if (confirm('Apakah Anda yakin ingin menghapus dokumen ini?')) {
+            document.getElementById('hapus_dokumen_' + index).value = '1';
+            const item = document.getElementById('hapus_dokumen_' + index).closest('.dokumen-item');
+            if (item) {
+                item.style.opacity = '0.3';
+                item.style.pointerEvents = 'none';
+            }
         }
     }
 

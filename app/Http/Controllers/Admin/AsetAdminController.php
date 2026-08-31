@@ -47,9 +47,10 @@ class AsetAdminController extends Controller
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'dokumen' => 'nullable|array',
             'dokumen.*' => 'nullable|string',
+            'dokumen_file.*' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,txt|max:10240',
         ]);
 
-        $data = $request->except(['gambar', 'dokumen']);
+        $data = $request->except(['gambar', 'dokumen', 'dokumen_file']);
 
         // Upload Gambar
         if ($request->hasFile('gambar') && $request->file('gambar')->isValid()) {
@@ -58,13 +59,42 @@ class AsetAdminController extends Controller
             $data['gambar'] = $file->storeAs('asets', $filename, 'public');
         }
 
-        // Dokumen - filter array kosong
-        if ($request->has('dokumen')) {
-            $data['dokumen'] = array_filter($request->dokumen, function($item) {
-                return !empty(trim($item));
-            });
-            $data['dokumen'] = array_values($data['dokumen']); // reindex
+        // =========================================================
+        // UPLOAD DOKUMEN FILE (PDF, WORD, DLL)
+        // =========================================================
+        $dokumenFiles = [];
+        $dokumenNames = $request->dokumen ?? [];
+
+        if ($request->hasFile('dokumen_file')) {
+            foreach ($request->file('dokumen_file') as $index => $file) {
+                if ($file && $file->isValid()) {
+                    $originalName = $file->getClientOriginalName();
+                    $filename = 'dokumen_' . time() . '_' . rand(1000, 9999) . '_' . $originalName;
+                    $path = $file->storeAs('asets/dokumen', $filename, 'public');
+                    
+                    $dokumenFiles[] = [
+                        'nama' => $dokumenNames[$index] ?? $originalName,
+                        'file' => $path,
+                        'size' => $this->formatFileSize($file->getSize()),
+                        'type' => $file->getClientMimeType(),
+                    ];
+                }
+            }
         }
+
+        // Jika ada dokumen nama tanpa file, tetap simpan
+        foreach ($dokumenNames as $index => $nama) {
+            if (!empty($nama) && !isset($dokumenFiles[$index])) {
+                $dokumenFiles[] = [
+                    'nama' => $nama,
+                    'file' => null,
+                    'size' => null,
+                    'type' => null,
+                ];
+            }
+        }
+
+        $data['dokumen_files'] = $dokumenFiles;
 
         $aset = AsetTanah::create($data);
 
@@ -110,9 +140,10 @@ class AsetAdminController extends Controller
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'dokumen' => 'nullable|array',
             'dokumen.*' => 'nullable|string',
+            'dokumen_file.*' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,txt|max:10240',
         ]);
 
-        $data = $request->except(['gambar', 'dokumen']);
+        $data = $request->except(['gambar', 'dokumen', 'dokumen_file', 'hapus_dokumen']);
 
         // Upload Gambar
         if ($request->hasFile('gambar') && $request->file('gambar')->isValid()) {
@@ -124,15 +155,58 @@ class AsetAdminController extends Controller
             $data['gambar'] = $file->storeAs('asets', $filename, 'public');
         }
 
-        // Dokumen - filter array kosong
-        if ($request->has('dokumen')) {
-            $data['dokumen'] = array_filter($request->dokumen, function($item) {
-                return !empty(trim($item));
-            });
-            $data['dokumen'] = array_values($data['dokumen']); // reindex
-        } else {
-            $data['dokumen'] = [];
+        // =========================================================
+        // UPLOAD DOKUMEN FILE
+        // =========================================================
+        // Ambil dokumen lama
+        $dokumenFiles = $aset->dokumen_files ?? [];
+
+        // Hapus dokumen yang dipilih
+        if ($request->has('hapus_dokumen')) {
+            foreach ($request->hapus_dokumen as $index) {
+                if (isset($dokumenFiles[$index])) {
+                    if ($dokumenFiles[$index]['file']) {
+                        Storage::disk('public')->delete($dokumenFiles[$index]['file']);
+                    }
+                    unset($dokumenFiles[$index]);
+                }
+            }
+            $dokumenFiles = array_values($dokumenFiles);
         }
+
+        // Tambah dokumen baru
+        $dokumenNames = $request->dokumen ?? [];
+
+        if ($request->hasFile('dokumen_file')) {
+            foreach ($request->file('dokumen_file') as $index => $file) {
+                if ($file && $file->isValid()) {
+                    $originalName = $file->getClientOriginalName();
+                    $filename = 'dokumen_' . time() . '_' . rand(1000, 9999) . '_' . $originalName;
+                    $path = $file->storeAs('asets/dokumen', $filename, 'public');
+                    
+                    $dokumenFiles[] = [
+                        'nama' => $dokumenNames[$index] ?? $originalName,
+                        'file' => $path,
+                        'size' => $this->formatFileSize($file->getSize()),
+                        'type' => $file->getClientMimeType(),
+                    ];
+                }
+            }
+        }
+
+        // Tambah dokumen nama tanpa file
+        foreach ($dokumenNames as $index => $nama) {
+            if (!empty($nama) && !isset($dokumenFiles[$index])) {
+                $dokumenFiles[] = [
+                    'nama' => $nama,
+                    'file' => null,
+                    'size' => null,
+                    'type' => null,
+                ];
+            }
+        }
+
+        $data['dokumen_files'] = $dokumenFiles;
 
         $aset->update($data);
 
@@ -156,8 +230,18 @@ class AsetAdminController extends Controller
         $aset = AsetTanah::findOrFail($id);
         $nama = $aset->nama_lokasi;
 
+        // Hapus gambar
         if ($aset->gambar) {
             Storage::disk('public')->delete($aset->gambar);
+        }
+
+        // Hapus semua dokumen file
+        if ($aset->dokumen_files) {
+            foreach ($aset->dokumen_files as $dokumen) {
+                if ($dokumen['file'] ?? false) {
+                    Storage::disk('public')->delete($dokumen['file']);
+                }
+            }
         }
 
         $aset->delete();
@@ -227,6 +311,13 @@ class AsetAdminController extends Controller
             if ($aset->gambar) {
                 Storage::disk('public')->delete($aset->gambar);
             }
+            if ($aset->dokumen_files) {
+                foreach ($aset->dokumen_files as $dokumen) {
+                    if ($dokumen['file'] ?? false) {
+                        Storage::disk('public')->delete($dokumen['file']);
+                    }
+                }
+            }
             $aset->delete();
         }
 
@@ -234,5 +325,19 @@ class AsetAdminController extends Controller
             'success' => true,
             'message' => count($ids) . ' aset berhasil dihapus.'
         ]);
+    }
+
+    /**
+     * Helper function untuk format ukuran file
+     */
+    private function formatFileSize($bytes)
+    {
+        if ($bytes >= 1048576) {
+            return number_format($bytes / 1048576, 2) . ' MB';
+        }
+        if ($bytes >= 1024) {
+            return number_format($bytes / 1024, 2) . ' KB';
+        }
+        return $bytes . ' B';
     }
 }

@@ -27,10 +27,12 @@ class AsetTanah extends Model
         'lng',
         'gambar',
         'dokumen',
+        'dokumen_files', // TAMBAHKAN INI UNTUK FILE DOKUMEN
     ];
 
     protected $casts = [
         'dokumen' => 'array',
+        'dokumen_files' => 'array', // TAMBAHKAN INI UNTUK FILE DOKUMEN
     ];
 
     public function getActivitylogOptions(): LogOptions
@@ -72,5 +74,10 @@ class AsetTanah extends Model
     public function getDokumenListAttribute()
     {
         return $this->dokumen ?? [];
+    }
+
+    public function getDokumenFilesListAttribute()
+    {
+        return $this->dokumen_files ?? [];
     }
 }

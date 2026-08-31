@@ -15,322 +15,178 @@
             </div>
         </div>
 
-        <!-- Tab Navigasi Aset (SEMUA TERHUBUNG) -->
-
-        <!-- TAB NAVIGASI ASET -->
-        <div class="grid grid-cols-9 border-b border-gray-200 mb-6">
-
-            <!-- DATA ASET -->
+        <!-- TAB NAVIGASI ASET - RESPONSIVE -->
+        <div class="flex flex-wrap items-center gap-1.5 border-b border-gray-200 pb-3 mb-6">
             <a href="{{ route('admin.aset.index') }}"
-                class="flex flex-col items-center justify-start
-               gap-2 py-3 px-2 min-w-0
-               border-b-2 border-[#006400]
-               text-[#006400]
-               font-semibold text-[11px]
-               text-center leading-tight">
-
-                <i class="fas fa-database text-sm flex-shrink-0"></i>
-
-                <span class="w-full">
-                    Data Aset
-                </span>
-
+                class="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition
+                {{ request()->routeIs('admin.aset.index') 
+                    ? 'bg-[#006400] text-white shadow-sm' 
+                    : 'text-gray-600 hover:bg-gray-100 hover:text-[#006400]' 
+                }}">
+                <i class="fas fa-database text-sm"></i>
+                <span>Data Aset</span>
             </a>
 
-
-            <!-- PETA INTERAKTIF -->
             <a href="{{ route('admin.aset.peta') }}"
-                class="flex flex-col items-center justify-start
-               gap-2 py-3 px-2 min-w-0
-               border-b-2 border-transparent
-               text-gray-500 hover:text-gray-700
-               font-semibold text-[11px]
-               text-center leading-tight transition">
-
-                <i class="fas fa-map-location-dot text-sm flex-shrink-0"></i>
-
-                <span class="w-full">
-                    Peta Interaktif
-                </span>
-
+                class="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition
+                {{ request()->routeIs('admin.aset.peta') 
+                    ? 'bg-[#006400] text-white shadow-sm' 
+                    : 'text-gray-600 hover:bg-gray-100 hover:text-[#006400]' 
+                }}">
+                <i class="fas fa-map-location-dot text-sm"></i>
+                <span>Peta Interaktif</span>
             </a>
 
-
-            <!-- PROFIL PERSEDIAAN -->
             <a href="{{ route('admin.aset.profil') }}"
-                class="flex flex-col items-center justify-start
-               gap-2 py-3 px-2 min-w-0
-               border-b-2 border-transparent
-               text-gray-500 hover:text-gray-700
-               font-semibold text-[11px]
-               text-center leading-tight transition">
-
-                <i class="fas fa-layer-group text-sm flex-shrink-0"></i>
-
-                <span class="w-full">
-                    Profil Persediaan
-                    <br>
-                    Tanah
-                </span>
-
+                class="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition
+                {{ request()->routeIs('admin.aset.profil') 
+                    ? 'bg-[#006400] text-white shadow-sm' 
+                    : 'text-gray-600 hover:bg-gray-100 hover:text-[#006400]' 
+                }}">
+                <i class="fas fa-layer-group text-sm"></i>
+                <span>Profil Persediaan Tanah</span>
             </a>
 
-
-            <!-- PENGELOLAAN -->
             <a href="{{ route('admin.aset.pengelolaan') }}"
-                class="flex flex-col items-center justify-start
-               gap-2 py-3 px-2 min-w-0
-               border-b-2 border-transparent
-               text-gray-500 hover:text-gray-700
-               font-semibold text-[11px]
-               text-center leading-tight transition">
-
-                <i class="fas fa-gear text-sm flex-shrink-0"></i>
-
-                <span class="w-full">
-                    Pengelolaan
-                    <br>
-                    Tanah
-                </span>
-
+                class="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition
+                {{ request()->routeIs('admin.aset.pengelolaan') 
+                    ? 'bg-[#006400] text-white shadow-sm' 
+                    : 'text-gray-600 hover:bg-gray-100 hover:text-[#006400]' 
+                }}">
+                <i class="fas fa-gear text-sm"></i>
+                <span>Pengelolaan Tanah</span>
             </a>
 
-
-            <!-- PENGEMBANGAN -->
             <a href="{{ route('admin.aset.pengembangan') }}"
-                class="flex flex-col items-center justify-start
-               gap-2 py-3 px-2 min-w-0
-               border-b-2 border-transparent
-               text-gray-500 hover:text-gray-700
-               font-semibold text-[11px]
-               text-center leading-tight transition">
-
-                <i class="fas fa-chart-line text-sm flex-shrink-0"></i>
-
-                <span class="w-full">
-                    Pengembangan
-                    <br>
-                    Tanah
-                </span>
-
+                class="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition
+                {{ request()->routeIs('admin.aset.pengembangan') 
+                    ? 'bg-[#006400] text-white shadow-sm' 
+                    : 'text-gray-600 hover:bg-gray-100 hover:text-[#006400]' 
+                }}">
+                <i class="fas fa-chart-line text-sm"></i>
+                <span>Pengembangan Tanah</span>
             </a>
 
-
-            <!-- WILAYAH -->
             <a href="{{ route('admin.aset.wilayah') }}"
-                class="flex flex-col items-center justify-start
-               gap-2 py-3 px-2 min-w-0
-               border-b-2 border-transparent
-               text-gray-500 hover:text-gray-700
-               font-semibold text-[11px]
-               text-center leading-tight transition">
-
-                <i class="fas fa-map text-sm flex-shrink-0"></i>
-
-                <span class="w-full">
-                    Wilayah
-                </span>
-
+                class="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition
+                {{ request()->routeIs('admin.aset.wilayah') 
+                    ? 'bg-[#006400] text-white shadow-sm' 
+                    : 'text-gray-600 hover:bg-gray-100 hover:text-[#006400]' 
+                }}">
+                <i class="fas fa-map text-sm"></i>
+                <span>Wilayah</span>
             </a>
 
-
-            <!-- STATUS TANAH -->
             <a href="{{ route('admin.aset.status') }}"
-                class="flex flex-col items-center justify-start
-               gap-2 py-3 px-2 min-w-0
-               border-b-2 border-transparent
-               text-gray-500 hover:text-gray-700
-               font-semibold text-[11px]
-               text-center leading-tight transition">
-
-                <i class="fas fa-circle-check text-sm flex-shrink-0"></i>
-
-                <span class="w-full">
-                    Status
-                    <br>
-                    Tanah
-                </span>
-
+                class="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition
+                {{ request()->routeIs('admin.aset.status') 
+                    ? 'bg-[#006400] text-white shadow-sm' 
+                    : 'text-gray-600 hover:bg-gray-100 hover:text-[#006400]' 
+                }}">
+                <i class="fas fa-circle-check text-sm"></i>
+                <span>Status Tanah</span>
             </a>
 
-
-            <!-- DOKUMEN -->
             <a href="{{ route('admin.aset.dokumen') }}"
-                class="flex flex-col items-center justify-start
-               gap-2 py-3 px-2 min-w-0
-               border-b-2 border-transparent
-               text-gray-500 hover:text-gray-700
-               font-semibold text-[11px]
-               text-center leading-tight transition">
-
-                <i class="fas fa-file-lines text-sm flex-shrink-0"></i>
-
-                <span class="w-full">
-                    Dokumen
-                </span>
-
+                class="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition
+                {{ request()->routeIs('admin.aset.dokumen') 
+                    ? 'bg-[#006400] text-white shadow-sm' 
+                    : 'text-gray-600 hover:bg-gray-100 hover:text-[#006400]' 
+                }}">
+                <i class="fas fa-file-lines text-sm"></i>
+                <span>Dokumen</span>
             </a>
 
-
-            <!-- STATISTIK -->
             <a href="{{ route('admin.aset.statistik') }}"
-                class="flex flex-col items-center justify-start
-               gap-2 py-3 px-2 min-w-0
-               border-b-2 border-transparent
-               text-gray-500 hover:text-gray-700
-               font-semibold text-[11px]
-               text-center leading-tight transition">
-
-                <i class="fas fa-chart-pie text-sm flex-shrink-0"></i>
-
-                <span class="w-full">
-                    Statistik
-                </span>
-
+                class="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition
+                {{ request()->routeIs('admin.aset.statistik') 
+                    ? 'bg-[#006400] text-white shadow-sm' 
+                    : 'text-gray-600 hover:bg-gray-100 hover:text-[#006400]' 
+                }}">
+                <i class="fas fa-chart-pie text-sm"></i>
+                <span>Statistik</span>
             </a>
-
         </div>
 
+        <!-- KARTU STATISTIK ASET - DATA REAL -->
+        @php
+            $totalAset = \App\Models\AsetTanah::count();
+            $totalLokasi = \App\Models\AsetTanah::count();
+            $totalProvinsi = \App\Models\AsetTanah::distinct('provinsi')->count('provinsi');
+            $totalKabupaten = \App\Models\AsetTanah::distinct('kabupaten')->count('kabupaten');
+            $totalLuas = \App\Models\AsetTanah::sum('luas_hektar');
+            $totalNilai = 68450000000000; // Rp 68,45 T (bisa diambil dari setting nanti)
+        @endphp
 
-        <!-- KARTU STATISTIK ASET -->
-        <div class="grid grid-cols-5 gap-3 mb-6">
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-6">
 
             <!-- TOTAL ASET -->
-            <div class="bg-white px-3 py-3 rounded-xl shadow-sm border border-gray-100 min-w-0">
+            <div class="bg-white px-3 py-3 rounded-xl shadow-sm border border-gray-100">
                 <div class="flex items-center gap-2">
-
-                    <div
-                        class="w-8 h-8 rounded-full bg-green-50
-                        flex items-center justify-center shrink-0">
+                    <div class="w-8 h-8 rounded-full bg-green-50 flex items-center justify-center shrink-0">
                         <i class="fas fa-layer-group text-green-600 text-xs"></i>
                     </div>
-
-                    <div class="min-w-0">
-                        <p class="text-[9px] text-gray-500 truncate">
-                            Total Aset
-                        </p>
-
-                        <p class="text-sm font-bold text-gray-900 leading-tight">
-                            {{ $totalAset }}
-                        </p>
-
-                        <p class="text-[8px] text-green-600 truncate">
-                            Data aset terdaftar
-                        </p>
+                    <div>
+                        <p class="text-[9px] text-gray-500 truncate">Total Aset</p>
+                        <p class="text-sm font-bold text-gray-900">{{ number_format($totalAset) }}</p>
+                        <p class="text-[8px] text-green-600 truncate">Data aset terdaftar</p>
                     </div>
-
                 </div>
             </div>
-
 
             <!-- LOKASI ASET -->
-            <div class="bg-white px-3 py-3 rounded-xl shadow-sm border border-gray-100 min-w-0">
+            <div class="bg-white px-3 py-3 rounded-xl shadow-sm border border-gray-100">
                 <div class="flex items-center gap-2">
-
-                    <div
-                        class="w-8 h-8 rounded-full bg-blue-50
-                        flex items-center justify-center shrink-0">
+                    <div class="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center shrink-0">
                         <i class="fas fa-location-dot text-blue-600 text-xs"></i>
                     </div>
-
-                    <div class="min-w-0">
-                        <p class="text-[9px] text-gray-500 truncate">
-                            Lokasi Aset
-                        </p>
-
-                        <p class="text-sm font-bold text-gray-900 leading-tight">
-                            1.248
-                        </p>
-
-                        <p class="text-[8px] text-blue-600 truncate">
-                            Lokasi terdata
-                        </p>
+                    <div>
+                        <p class="text-[9px] text-gray-500 truncate">Lokasi Aset</p>
+                        <p class="text-sm font-bold text-gray-900">{{ number_format($totalLokasi) }}</p>
+                        <p class="text-[8px] text-blue-600 truncate">Lokasi terdata</p>
                     </div>
-
                 </div>
             </div>
-
 
             <!-- WILAYAH -->
-            <div class="bg-white px-3 py-3 rounded-xl shadow-sm border border-gray-100 min-w-0">
+            <div class="bg-white px-3 py-3 rounded-xl shadow-sm border border-gray-100">
                 <div class="flex items-center gap-2">
-
-                    <div
-                        class="w-8 h-8 rounded-full bg-yellow-50
-                        flex items-center justify-center shrink-0">
+                    <div class="w-8 h-8 rounded-full bg-yellow-50 flex items-center justify-center shrink-0">
                         <i class="fas fa-map text-yellow-600 text-xs"></i>
                     </div>
-
-                    <div class="min-w-0">
-                        <p class="text-[9px] text-gray-500 truncate">
-                            Wilayah
-                        </p>
-
-                        <p class="text-sm font-bold text-gray-900 leading-tight">
-                            18
-                        </p>
-
-                        <p class="text-[8px] text-yellow-600 truncate">
-                            Wilayah terdata
-                        </p>
+                    <div>
+                        <p class="text-[9px] text-gray-500 truncate">Wilayah</p>
+                        <p class="text-sm font-bold text-gray-900">{{ number_format($totalProvinsi) }}</p>
+                        <p class="text-[8px] text-yellow-600 truncate">Wilayah terdata</p>
                     </div>
-
                 </div>
             </div>
-
 
             <!-- KABUPATEN / KOTA -->
-            <div class="bg-white px-3 py-3 rounded-xl shadow-sm border border-gray-100 min-w-0">
+            <div class="bg-white px-3 py-3 rounded-xl shadow-sm border border-gray-100">
                 <div class="flex items-center gap-2">
-
-                    <div
-                        class="w-8 h-8 rounded-full bg-purple-50
-                        flex items-center justify-center shrink-0">
+                    <div class="w-8 h-8 rounded-full bg-purple-50 flex items-center justify-center shrink-0">
                         <i class="fas fa-city text-purple-600 text-xs"></i>
                     </div>
-
-                    <div class="min-w-0">
-                        <p class="text-[9px] text-gray-500 truncate">
-                            Kabupaten/Kota
-                        </p>
-
-                        <p class="text-sm font-bold text-gray-900 leading-tight">
-                            56
-                        </p>
-
-                        <p class="text-[8px] text-purple-600 truncate">
-                            Daerah terdata
-                        </p>
+                    <div>
+                        <p class="text-[9px] text-gray-500 truncate">Kabupaten/Kota</p>
+                        <p class="text-sm font-bold text-gray-900">{{ number_format($totalKabupaten) }}</p>
+                        <p class="text-[8px] text-purple-600 truncate">Daerah terdata</p>
                     </div>
-
                 </div>
             </div>
 
-
             <!-- NILAI INDIKATIF -->
-            <div class="bg-white px-3 py-3 rounded-xl shadow-sm border border-gray-100 min-w-0">
+            <div class="bg-white px-3 py-3 rounded-xl shadow-sm border border-gray-100">
                 <div class="flex items-center gap-2">
-
-                    <div
-                        class="w-8 h-8 rounded-full bg-teal-50
-                        flex items-center justify-center shrink-0">
+                    <div class="w-8 h-8 rounded-full bg-teal-50 flex items-center justify-center shrink-0">
                         <i class="fas fa-money-bill-trend-up text-teal-600 text-xs"></i>
                     </div>
-
-                    <div class="min-w-0">
-                        <p class="text-[9px] text-gray-500 truncate">
-                            Nilai Indikatif
-                        </p>
-
-                        <p class="text-sm font-bold text-gray-900 leading-tight whitespace-nowrap">
-                            Rp 68,45 T
-                        </p>
-
-                        <p class="text-[8px] text-teal-600 truncate">
-                            Nilai estimasi aset
-                        </p>
+                    <div>
+                        <p class="text-[9px] text-gray-500 truncate">Nilai Indikatif</p>
+                        <p class="text-sm font-bold text-gray-900 whitespace-nowrap">Rp 68,45 T</p>
+                        <p class="text-[8px] text-teal-600 truncate">Nilai estimasi aset</p>
                     </div>
-
                 </div>
             </div>
 
@@ -349,58 +205,56 @@
                 <a href="{{ route('admin.aset.create') }}"
                     class="bg-[#006400] hover:bg-[#005500] text-white px-4 py-2 rounded text-sm font-bold">+ Tambah Aset</a>
             </div>
-            <table class="w-full text-left text-sm">
-                <thead class="bg-gray-50 border-b-2 border-gray-200">
-                    <tr>
-                        <th class="px-6 py-3 font-semibold text-gray-600">Kode Aset</th>
-                        <th class="px-6 py-3 font-semibold text-gray-600">Nama Lokasi</th>
-                        <th class="px-6 py-3 font-semibold text-gray-600">Provinsi</th>
-                        <th class="px-6 py-3 font-semibold text-gray-600">Kabupaten</th>
-                        <th class="px-6 py-3 font-semibold text-gray-600">Luas (Ha)</th>
-                        <th class="px-6 py-3 font-semibold text-gray-600">Status</th>
-                        <th class="px-6 py-3 font-semibold text-gray-600">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y-2 divide-gray-100">
-                    @foreach ($asets as $aset)
-                        <tr class="hover:bg-gray-50">
-                            <td class="px-6 py-4">BT-2025-{{ sprintf('%04d', $aset->id) }}</td>
-                            <td class="px-6 py-4">
-                                <div class="flex items-center gap-3">
-                                    @if ($aset->gambar)
-                                        <img src="{{ asset('storage/' . $aset->gambar) }}"
-                                            class="w-10 h-10 rounded object-cover">
-                                    @else
-                                        <img src="https://picsum.photos/50/50?random={{ $loop->index }}"
-                                            class="w-10 h-10 rounded object-cover">
-                                    @endif
-                                    <span class="font-medium">{{ $aset->nama_lokasi }}</span>
-                                </div>
-                            </td>
-                            <td class="px-6 py-4">{{ $aset->provinsi }}</td>
-                            <td class="px-6 py-4">{{ $aset->kabupaten }}</td>
-                            <td class="px-6 py-4">{{ number_format($aset->luas_hektar, 2, ',', '.') }}</td>
-                            <td class="px-6 py-4">
-                                <span
-                                    class="bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-bold">{{ $aset->status }}</span>
-                            </td>
-                            <td class="px-6 py-4">
-                                <div class="flex gap-2 text-gray-500">
-                                    <a href="{{ route('admin.aset.edit', $aset->id) }}" class="hover:text-[#006400]"><i
-                                            class="fas fa-pen"></i></a>
-                                    <form action="{{ route('admin.aset.destroy', $aset->id) }}" method="POST"
-                                        class="inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="hover:text-red-600"><i
-                                                class="fas fa-trash"></i></button>
-                                    </form>
-                                </div>
-                            </td>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm">
+                    <thead class="bg-gray-50 border-b-2 border-gray-200">
+                        <tr>
+                            <th class="px-6 py-3 font-semibold text-gray-600">Kode Aset</th>
+                            <th class="px-6 py-3 font-semibold text-gray-600">Nama Lokasi</th>
+                            <th class="px-6 py-3 font-semibold text-gray-600">Provinsi</th>
+                            <th class="px-6 py-3 font-semibold text-gray-600">Kabupaten</th>
+                            <th class="px-6 py-3 font-semibold text-gray-600">Luas (Ha)</th>
+                            <th class="px-6 py-3 font-semibold text-gray-600">Status</th>
+                            <th class="px-6 py-3 font-semibold text-gray-600">Aksi</th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody class="divide-y-2 divide-gray-100">
+                        @foreach ($asets as $aset)
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4">BT-2025-{{ sprintf('%04d', $aset->id) }}</td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-3">
+                                        @if ($aset->gambar)
+                                            <img src="{{ asset('storage/' . $aset->gambar) }}"
+                                                class="w-10 h-10 rounded object-cover">
+                                        @else
+                                            <img src="https://picsum.photos/50/50?random={{ $loop->index }}"
+                                                class="w-10 h-10 rounded object-cover">
+                                        @endif
+                                        <span class="font-medium">{{ $aset->nama_lokasi }}</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">{{ $aset->provinsi }}</td>
+                                <td class="px-6 py-4">{{ $aset->kabupaten }}</td>
+                                <td class="px-6 py-4">{{ number_format($aset->luas_hektar, 2, ',', '.') }}</td>
+                                <td class="px-6 py-4">
+                                    <span class="bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-bold">{{ $aset->status }}</span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex gap-2 text-gray-500">
+                                        <a href="{{ route('admin.aset.edit', $aset->id) }}" class="hover:text-[#006400]"><i class="fas fa-pen"></i></a>
+                                        <form action="{{ route('admin.aset.destroy', $aset->id) }}" method="POST" class="inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="hover:text-red-600"><i class="fas fa-trash"></i></button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 @endsection

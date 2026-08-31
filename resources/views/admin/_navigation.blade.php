@@ -13,17 +13,17 @@
         [
             'route' => 'admin.aset.profil',
             'icon' => 'fa-layer-group',
-            'label' => "Profil Persediaan\nTanah",
+            'label' => 'Profil Persediaan Tanah',
         ],
         [
             'route' => 'admin.aset.pengelolaan',
             'icon' => 'fa-gear',
-            'label' => "Pengelolaan\nTanah",
+            'label' => 'Pengelolaan Tanah',
         ],
         [
             'route' => 'admin.aset.pengembangan',
             'icon' => 'fa-chart-line',
-            'label' => "Pengembangan\nTanah",
+            'label' => 'Pengembangan Tanah',
         ],
         [
             'route' => 'admin.aset.wilayah',
@@ -33,7 +33,7 @@
         [
             'route' => 'admin.aset.status',
             'icon' => 'fa-circle-check',
-            'label' => "Status\nTanah",
+            'label' => 'Status Tanah',
         ],
         [
             'route' => 'admin.aset.dokumen',
@@ -48,41 +48,23 @@
     ];
 @endphp
 
+{{-- =========================================================
+    NAVIGASI ASET - RESPONSIVE (FLEX-WRAP)
+    ========================================================= --}}
+<div class="flex flex-wrap items-center gap-1.5 border-b border-gray-200 pb-3 mb-5">
+    @foreach ($navigationItems as $item)
+        @php
+            $active = request()->routeIs($item['route']);
+        @endphp
 
-<div class="overflow-x-auto">
-
-    <div class="min-w-[900px] grid grid-cols-9
-                border-b border-gray-200 mb-5">
-
-        @foreach ($navigationItems as $item)
-
-            @php
-                $active = request()->routeIs($item['route']);
-            @endphp
-
-            <a href="{{ route($item['route']) }}"
-                class="relative flex flex-col items-center
-                       justify-start gap-2
-                       py-3 px-2
-                       border-b-2
-                       transition
-                       {{ $active
-                            ? 'border-[#006400] text-[#006400]'
-                            : 'border-transparent text-gray-500 hover:text-gray-700'
-                       }}">
-
-                <i class="fas {{ $item['icon'] }} text-sm"></i>
-
-                <span class="text-[10px] font-semibold
-                             text-center leading-tight
-                             whitespace-pre-line">
-                    {{ $item['label'] }}
-                </span>
-
-            </a>
-
-        @endforeach
-
-    </div>
-
+        <a href="{{ route($item['route']) }}"
+            class="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition whitespace-nowrap
+            {{ $active
+                ? 'bg-[#006400] text-white shadow-sm'
+                : 'text-gray-600 hover:bg-gray-100 hover:text-[#006400]'
+            }}">
+            <i class="fas {{ $item['icon'] }} text-sm"></i>
+            <span>{{ $item['label'] }}</span>
+        </a>
+    @endforeach
 </div>

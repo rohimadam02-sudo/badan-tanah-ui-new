@@ -23,6 +23,10 @@
         font-size: 0.875rem;
         cursor: pointer;
         transition: all 0.2s;
+        background: none;
+        border-top: none;
+        border-left: none;
+        border-right: none;
     }
     .tab-btn:hover {
         color: #374151;
@@ -49,14 +53,53 @@
         border-radius: 0.5rem;
         margin-bottom: 0.5rem;
     }
-    .dokumen-item input {
+    .dokumen-item input[type="text"] {
         flex: 1;
     }
-    .dokumen-item .btn-remove {
+    .dokumen-item input[type="file"] {
+        flex: 1;
+    }
+    .btn-remove {
         color: #ef4444;
         background: none;
         border: none;
         cursor: pointer;
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+    }
+    .btn-remove:hover {
+        color: #dc2626;
+    }
+    .image-preview-container {
+        position: relative;
+        display: inline-block;
+    }
+    .image-preview-container img {
+        max-height: 200px;
+        object-fit: cover;
+        border-radius: 0.5rem;
+        border: 1px solid #e5e7eb;
+    }
+    .btn-delete-image {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        background: #ef4444;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        cursor: pointer;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+    }
+    .btn-delete-image:hover {
+        background: #dc2626;
+        transform: scale(1.1);
     }
 </style>
 
@@ -101,20 +144,20 @@
                                     <label class="block text-sm font-semibold mb-1">Kategori Aset <span class="text-red-500">*</span></label>
                                     <select name="peruntukan" class="w-full border-gray-300 rounded-lg p-3 text-sm" required>
                                         <option value="">Pilih kategori</option>
-                                        <option value="Industri">Industri</option>
-                                        <option value="Pertanian">Pertanian</option>
-                                        <option value="Perumahan">Perumahan</option>
-                                        <option value="Komersial">Komersial</option>
-                                        <option value="Sosial">Sosial</option>
+                                        <option value="Industri" {{ old('peruntukan') == 'Industri' ? 'selected' : '' }}>Industri</option>
+                                        <option value="Pertanian" {{ old('peruntukan') == 'Pertanian' ? 'selected' : '' }}>Pertanian</option>
+                                        <option value="Perumahan" {{ old('peruntukan') == 'Perumahan' ? 'selected' : '' }}>Perumahan</option>
+                                        <option value="Komersial" {{ old('peruntukan') == 'Komersial' ? 'selected' : '' }}>Komersial</option>
+                                        <option value="Sosial" {{ old('peruntukan') == 'Sosial' ? 'selected' : '' }}>Sosial</option>
                                     </select>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-semibold mb-1">Status Aset <span class="text-red-500">*</span></label>
                                     <select name="status" class="w-full border-gray-300 rounded-lg p-3 text-sm" required>
-                                        <option value="Tersedia">Tersedia</option>
-                                        <option value="Dalam Pengembangan">Dalam Pengembangan</option>
-                                        <option value="Dalam Proses">Dalam Proses</option>
-                                        <option value="Terikat">Terikat</option>
+                                        <option value="Tersedia" {{ old('status') == 'Tersedia' ? 'selected' : '' }}>Tersedia</option>
+                                        <option value="Dalam Pengembangan" {{ old('status') == 'Dalam Pengembangan' ? 'selected' : '' }}>Dalam Pengembangan</option>
+                                        <option value="Dalam Proses" {{ old('status') == 'Dalam Proses' ? 'selected' : '' }}>Dalam Proses</option>
+                                        <option value="Terikat" {{ old('status') == 'Terikat' ? 'selected' : '' }}>Terikat</option>
                                     </select>
                                 </div>
                             </div>
@@ -128,9 +171,9 @@
                                     <label class="block text-sm font-semibold mb-1">Skema</label>
                                     <select name="skema" class="w-full border-gray-300 rounded-lg p-3 text-sm">
                                         <option value="">Pilih skema</option>
-                                        <option value="Sewa">Sewa</option>
-                                        <option value="Kerjasama">Kerjasama</option>
-                                        <option value="Pemanfaatan">Pemanfaatan</option>
+                                        <option value="Sewa" {{ old('skema') == 'Sewa' ? 'selected' : '' }}>Sewa</option>
+                                        <option value="Kerjasama" {{ old('skema') == 'Kerjasama' ? 'selected' : '' }}>Kerjasama</option>
+                                        <option value="Pemanfaatan" {{ old('skema') == 'Pemanfaatan' ? 'selected' : '' }}>Pemanfaatan</option>
                                     </select>
                                 </div>
                             </div>
@@ -174,6 +217,7 @@
                             <div class="map-container">
                                 <div id="map" style="height:100%;width:100%;"></div>
                             </div>
+                            <p class="text-xs text-gray-400 mt-1">Klik pada peta untuk mengatur koordinat secara langsung.</p>
                         </div>
                     </div>
                 </div>
@@ -201,17 +245,17 @@
                                 <label class="block text-sm font-semibold mb-1">Sumber Perolehan</label>
                                 <select name="sumber_perolehan" class="w-full border-gray-300 rounded-lg p-3 text-sm">
                                     <option value="">Pilih sumber perolehan</option>
-                                    <option value="Pembelian">Pembelian</option>
-                                    <option value="Sewa">Sewa</option>
-                                    <option value="Hibah">Hibah</option>
-                                    <option value="Tukar Menukar">Tukar Menukar</option>
-                                    <option value="Lelang">Lelang</option>
-                                    <option value="Pengadaan">Pengadaan</option>
+                                    <option value="Pembelian" {{ old('sumber_perolehan') == 'Pembelian' ? 'selected' : '' }}>Pembelian</option>
+                                    <option value="Sewa" {{ old('sumber_perolehan') == 'Sewa' ? 'selected' : '' }}>Sewa</option>
+                                    <option value="Hibah" {{ old('sumber_perolehan') == 'Hibah' ? 'selected' : '' }}>Hibah</option>
+                                    <option value="Tukar Menukar" {{ old('sumber_perolehan') == 'Tukar Menukar' ? 'selected' : '' }}>Tukar Menukar</option>
+                                    <option value="Lelang" {{ old('sumber_perolehan') == 'Lelang' ? 'selected' : '' }}>Lelang</option>
+                                    <option value="Pengadaan" {{ old('sumber_perolehan') == 'Pengadaan' ? 'selected' : '' }}>Pengadaan</option>
                                 </select>
                             </div>
                             <div>
                                 <label class="block text-sm font-semibold mb-1">Nilai Perkiraan</label>
-                                <input type="text" name="nilai_perkiraan" placeholder="Rp" class="w-full border-gray-300 rounded-lg p-3 text-sm">
+                                <input type="text" name="nilai_perkiraan" value="{{ old('nilai_perkiraan') }}" placeholder="Rp" class="w-full border-gray-300 rounded-lg p-3 text-sm">
                             </div>
                         </div>
                     </div>
@@ -228,21 +272,21 @@
                         </div>
                         
                         <div id="dokumenContainer">
-                            @if (old('dokumen'))
-                                @foreach (old('dokumen') as $dok)
-                                    <div class="dokumen-item">
-                                        <input type="text" name="dokumen[]" value="{{ $dok }}" placeholder="Nama dokumen..." class="flex-1 border-gray-300 rounded-lg p-2 text-sm">
-                                        <button type="button" onclick="removeDokumen(this)" class="btn-remove"><i class="fas fa-times"></i></button>
-                                    </div>
-                                @endforeach
-                            @else
-                                <div class="dokumen-item">
-                                    <input type="text" name="dokumen[]" placeholder="Nama dokumen..." class="flex-1 border-gray-300 rounded-lg p-2 text-sm">
-                                    <button type="button" onclick="removeDokumen(this)" class="btn-remove"><i class="fas fa-times"></i></button>
+                            <div class="dokumen-item flex flex-col sm:flex-row items-start sm:items-center gap-3 p-3 bg-gray-50 rounded-lg mb-3">
+                                <div class="flex-1 w-full">
+                                    <input type="text" name="dokumen[]" placeholder="Nama dokumen..." class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
                                 </div>
-                            @endif
+                                <div class="flex-1 w-full">
+                                    <input type="file" name="dokumen_file[]" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt" 
+                                           class="w-full text-sm text-gray-600 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100">
+                                    <p class="text-[8px] text-gray-400 mt-1">PDF, Word, Excel, PPT (Max 10MB)</p>
+                                </div>
+                                <button type="button" onclick="removeDokumen(this)" class="btn-remove text-red-500 hover:text-red-700 flex-shrink-0">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
                         </div>
-                        <p class="text-xs text-gray-400 mt-2">Tambahkan nama dokumen pendukung aset.</p>
+                        <p class="text-xs text-gray-400 mt-2">Upload dokumen pendukung aset (PDF, Word, Excel, PPT, TXT).</p>
                     </div>
                 </div>
 
@@ -256,14 +300,14 @@
                                 <label class="block text-sm font-semibold mb-1">Peruntukan Rencana</label>
                                 <select name="skema" class="w-full border-gray-300 rounded-lg p-3 text-sm">
                                     <option value="">Pilih peruntukan rencana</option>
-                                    <option value="Sewa">Sewa</option>
-                                    <option value="Kerjasama">Kerjasama</option>
-                                    <option value="Pemanfaatan">Pemanfaatan</option>
+                                    <option value="Sewa" {{ old('skema') == 'Sewa' ? 'selected' : '' }}>Sewa</option>
+                                    <option value="Kerjasama" {{ old('skema') == 'Kerjasama' ? 'selected' : '' }}>Kerjasama</option>
+                                    <option value="Pemanfaatan" {{ old('skema') == 'Pemanfaatan' ? 'selected' : '' }}>Pemanfaatan</option>
                                 </select>
                             </div>
                             <div>
                                 <label class="block text-sm font-semibold mb-1">Tahun Perolehan</label>
-                                <input type="number" name="tahun_perolehan" placeholder="2025" class="w-full border-gray-300 rounded-lg p-3 text-sm">
+                                <input type="number" name="tahun_perolehan" value="{{ old('tahun_perolehan') }}" placeholder="2025" class="w-full border-gray-300 rounded-lg p-3 text-sm">
                             </div>
                         </div>
                     </div>
@@ -275,7 +319,7 @@
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                     <h2 class="font-bold text-lg mb-4">Gambar Aset</h2>
                     
-                    <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center mb-4 hover:border-[#006400] transition cursor-pointer"
+                    <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-[#006400] transition cursor-pointer"
                          onclick="document.getElementById('gambarInput').click()">
                         <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-2"></i>
                         <p class="text-sm font-medium text-gray-600">Drag & drop gambar atau klik untuk upload</p>
@@ -400,10 +444,19 @@
     function addDokumen() {
         const container = document.getElementById('dokumenContainer');
         const div = document.createElement('div');
-        div.className = 'dokumen-item';
+        div.className = 'dokumen-item flex flex-col sm:flex-row items-start sm:items-center gap-3 p-3 bg-gray-50 rounded-lg mb-3';
         div.innerHTML = `
-            <input type="text" name="dokumen[]" placeholder="Nama dokumen..." class="flex-1 border-gray-300 rounded-lg p-2 text-sm">
-            <button type="button" onclick="removeDokumen(this)" class="btn-remove"><i class="fas fa-times"></i></button>
+            <div class="flex-1 w-full">
+                <input type="text" name="dokumen[]" placeholder="Nama dokumen..." class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
+            </div>
+            <div class="flex-1 w-full">
+                <input type="file" name="dokumen_file[]" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt" 
+                       class="w-full text-sm text-gray-600 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100">
+                <p class="text-[8px] text-gray-400 mt-1">PDF, Word, Excel, PPT (Max 10MB)</p>
+            </div>
+            <button type="button" onclick="removeDokumen(this)" class="btn-remove text-red-500 hover:text-red-700 flex-shrink-0">
+                <i class="fas fa-times"></i>
+            </button>
         `;
         container.appendChild(div);
     }
@@ -411,7 +464,7 @@
     function removeDokumen(button) {
         const container = document.getElementById('dokumenContainer');
         if (container.children.length > 1) {
-            button.parentElement.remove();
+            button.closest('.dokumen-item').remove();
         } else {
             alert('Minimal harus ada 1 dokumen.');
         }

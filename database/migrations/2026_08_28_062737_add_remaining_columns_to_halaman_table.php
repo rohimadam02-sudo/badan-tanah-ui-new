@@ -9,7 +9,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('halaman', function (Blueprint $table) {
-            // Tambahkan kolom yang belum ada
+            // PASTIKAN KOLOM 'foto' ADA DULU
+            if (!Schema::hasColumn('halaman', 'foto')) {
+                $table->string('foto')->nullable()->after('gambar');
+            }
+            
+            // Tambahkan kolom lainnya
             if (!Schema::hasColumn('halaman', 'is_active')) {
                 $table->boolean('is_active')->default(true)->after('foto');
             }
@@ -28,7 +33,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('halaman', function (Blueprint $table) {
-            $columns = ['is_active', 'slug', 'meta_title', 'meta_description'];
+            $columns = ['foto', 'is_active', 'slug', 'meta_title', 'meta_description'];
             foreach ($columns as $column) {
                 if (Schema::hasColumn('halaman', $column)) {
                     $table->dropColumn($column);

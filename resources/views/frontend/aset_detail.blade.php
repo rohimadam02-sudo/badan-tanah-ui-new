@@ -35,9 +35,7 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-            {{-- =================================================
-                KOLOM KIRI (2/3) - Informasi Aset
-            ================================================== --}}
+            {{-- KOLOM KIRI (2/3) - Informasi Aset --}}
             <div class="lg:col-span-2 space-y-6">
 
                 {{-- Gambar Aset --}}
@@ -146,9 +144,7 @@
 
             </div>
 
-            {{-- =================================================
-                KOLOM KANAN (1/3) - Peta & Dokumen
-            ================================================== --}}
+            {{-- KOLOM KANAN (1/3) - Peta & Dokumen --}}
             <div class="space-y-6">
 
                 {{-- Peta --}}
@@ -187,44 +183,72 @@
                     @endif
                 </div>
 
-                {{-- Dokumen --}}
+                {{-- DOKUMEN ASET --}}
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
                     <div class="flex items-center gap-2 mb-4">
                         <i class="fas fa-file-lines text-[#006400]"></i>
                         <h3 class="font-bold text-sm text-gray-900">Dokumen Aset</h3>
                     </div>
-                    <div class="space-y-2">
-                        <div class="flex items-center gap-3 p-3 border border-gray-200 rounded-xl hover:bg-gray-50 transition">
-                            <div class="w-9 h-9 rounded-lg bg-red-50 text-red-500 flex items-center justify-center flex-shrink-0">
-                                <i class="fas fa-file-pdf"></i>
-                            </div>
-                            <div class="flex-1 min-w-0">
-                                <p class="text-xs font-medium text-gray-800 truncate">Sertifikat Tanah</p>
-                                <p class="text-[10px] text-gray-400">PDF • 2.4 MB</p>
-                            </div>
-                            <a href="#" class="text-xs font-semibold text-blue-600 hover:underline">Unduh</a>
+
+                    @php
+                        // Ambil dokumen dari kolom dokumen_files (yang baru) atau dokumen (yang lama)
+                        $dokumenList = $aset->dokumen_files ?? [];
+                        $dokumenLama = $aset->dokumen ?? [];
+                    @endphp
+
+                    @if (count($dokumenList) > 0 || count($dokumenLama) > 0)
+                        <div class="space-y-2">
+                            {{-- DOKUMEN DARI KOLOM dokumen_files (DENGAN FILE) --}}
+                            @foreach ($dokumenList as $dokumen)
+                                <div class="flex items-center gap-3 p-3 border border-gray-200 rounded-xl hover:bg-gray-50 transition group">
+                                    <div class="w-9 h-9 rounded-lg bg-red-50 text-red-500 flex items-center justify-center flex-shrink-0">
+                                        <i class="fas {{ str_contains($dokumen['type'] ?? '', 'pdf') ? 'fa-file-pdf' : 
+                                                        (str_contains($dokumen['type'] ?? '', 'word') || str_contains($dokumen['type'] ?? '', 'doc') ? 'fa-file-word' : 
+                                                        (str_contains($dokumen['type'] ?? '', 'excel') || str_contains($dokumen['type'] ?? '', 'sheet') ? 'fa-file-excel' : 
+                                                        (str_contains($dokumen['type'] ?? '', 'ppt') || str_contains($dokumen['type'] ?? '', 'powerpoint') ? 'fa-file-powerpoint' : 
+                                                        'fa-file-lines'))) }}"></i>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-xs font-medium text-gray-800 truncate">{{ $dokumen['nama'] ?? 'Dokumen' }}</p>
+                                        <p class="text-[10px] text-gray-400">
+                                            {{ $dokumen['size'] ?? '' }}
+                                            @if ($dokumen['file'] ?? false)
+                                                <span class="ml-2 text-green-600">✓ Terupload</span>
+                                            @endif
+                                        </p>
+                                    </div>
+                                    @if ($dokumen['file'] ?? false)
+                                        <a href="{{ asset('storage/' . $dokumen['file']) }}" 
+                                           target="_blank"
+                                           class="text-xs font-semibold text-blue-600 hover:underline flex-shrink-0 group-hover:translate-x-0.5 transition">
+                                            <i class="fas fa-download mr-1"></i>
+                                            Unduh
+                                        </a>
+                                    @else
+                                        <span class="text-xs text-gray-400 flex-shrink-0">Belum ada file</span>
+                                    @endif
+                                </div>
+                            @endforeach
+
+                            {{-- DOKUMEN DARI KOLOM dokumen (LAMA - HANYA NAMA) --}}
+                            @foreach ($dokumenLama as $nama)
+                                @if (!empty($nama))
+                                    <div class="flex items-center gap-3 p-3 border border-gray-200 rounded-xl hover:bg-gray-50 transition">
+                                        <div class="w-9 h-9 rounded-lg bg-gray-50 text-gray-500 flex items-center justify-center flex-shrink-0">
+                                            <i class="fas fa-file-lines"></i>
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <p class="text-xs font-medium text-gray-800 truncate">{{ $nama }}</p>
+                                            <p class="text-[10px] text-gray-400">Dokumen pendukung</p>
+                                        </div>
+                                        <span class="text-xs text-gray-400 flex-shrink-0">Belum ada file</span>
+                                    </div>
+                                @endif
+                            @endforeach
                         </div>
-                        <div class="flex items-center gap-3 p-3 border border-gray-200 rounded-xl hover:bg-gray-50 transition">
-                            <div class="w-9 h-9 rounded-lg bg-blue-50 text-blue-500 flex items-center justify-center flex-shrink-0">
-                                <i class="fas fa-file-pdf"></i>
-                            </div>
-                            <div class="flex-1 min-w-0">
-                                <p class="text-xs font-medium text-gray-800 truncate">Peta Bidang</p>
-                                <p class="text-[10px] text-gray-400">PDF • 1.8 MB</p>
-                            </div>
-                            <a href="#" class="text-xs font-semibold text-blue-600 hover:underline">Unduh</a>
-                        </div>
-                        <div class="flex items-center gap-3 p-3 border border-gray-200 rounded-xl hover:bg-gray-50 transition">
-                            <div class="w-9 h-9 rounded-lg bg-green-50 text-green-500 flex items-center justify-center flex-shrink-0">
-                                <i class="fas fa-file-pdf"></i>
-                            </div>
-                            <div class="flex-1 min-w-0">
-                                <p class="text-xs font-medium text-gray-800 truncate">Legalitas Lainnya</p>
-                                <p class="text-[10px] text-gray-400">PDF • 3.1 MB</p>
-                            </div>
-                            <a href="#" class="text-xs font-semibold text-blue-600 hover:underline">Unduh</a>
-                        </div>
-                    </div>
+                    @else
+                        <p class="text-sm text-gray-500">Belum ada dokumen untuk aset ini.</p>
+                    @endif
                 </div>
 
                 {{-- Tombol Kembali --}}
