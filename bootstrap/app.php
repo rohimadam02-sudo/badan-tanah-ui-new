@@ -15,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
         // Daftarkan alias middleware untuk role
         $middleware->alias([
             'role' => \App\Http\Middleware\CheckRole::class,
+            'cache.response' => \App\Http\Middleware\CacheResponse::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

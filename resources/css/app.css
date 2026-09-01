@@ -1,5 +1,760 @@
-@import './chatbot.css';
+@import "./chatbot.css";
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* =========================================================
+   CHATBOT BADAN BANK TANAH
+   ========================================================= */
+
+/* =========================================================
+   FLOATING CHATBOT
+   ========================================================= */
+
+#chatbot-widget {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+
+  width: 70px;
+  height: 70px;
+
+  z-index: 999999;
+
+  margin: 0;
+  padding: 0;
+
+  font-family: "Inter", sans-serif;
+}
+
+/* =========================================================
+   CHATBOT BUTTON
+   ========================================================= */
+
+#chatbot-toggle {
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 70px;
+  height: 70px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+  margin: 0;
+
+  background: transparent;
+  background-color: transparent;
+
+  border: none;
+  border-radius: 0;
+
+  outline: none;
+  box-shadow: none;
+
+  cursor: pointer;
+
+  appearance: none;
+  -webkit-appearance: none;
+
+  transition: transform 0.2s ease;
+}
+
+#chatbot-toggle:hover {
+  background: transparent;
+  box-shadow: none;
+  transform: scale(1.06);
+}
+
+#chatbot-toggle:active {
+  transform: scale(0.96);
+}
+
+/* =========================================================
+   CHATBOT LOGO
+   ========================================================= */
+
+#chatbot-toggle img {
+  display: block;
+
+  width: 70px;
+  height: auto;
+
+  max-width: none;
+  max-height: none;
+
+  padding: 0;
+  margin: 0;
+
+  object-fit: contain;
+
+  background: transparent;
+  border: none;
+  border-radius: 0;
+
+  box-shadow: none;
+}
+
+/* =========================================================
+   CHAT WINDOW
+   ========================================================= */
+
+#chatbot-window {
+  position: absolute;
+
+  right: 0;
+  bottom: 82px;
+
+  width: 380px;
+  height: 540px;
+
+  display: none;
+  flex-direction: column;
+
+  overflow: hidden;
+
+  background: #ffffff;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.18);
+}
+
+#chatbot-window.active {
+  display: flex;
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.chatbot-header {
+  height: 70px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  flex-shrink: 0;
+
+  padding: 12px 16px;
+
+  background: #006400;
+  color: #ffffff;
+}
+
+.chatbot-header-info {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+}
+
+.chatbot-avatar {
+  width: 40px;
+  height: 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: #ffffff;
+  color: #006400;
+}
+
+.chatbot-header h3 {
+  margin: 0;
+
+  font-size: 14px;
+  line-height: 1.3;
+
+  font-weight: 700;
+}
+
+.chatbot-status {
+  display: flex;
+  align-items: center;
+
+  gap: 5px;
+
+  margin-top: 3px;
+}
+
+.chatbot-status span {
+  width: 7px;
+  height: 7px;
+
+  display: block;
+
+  border-radius: 50%;
+
+  background: #22c55e;
+}
+
+.chatbot-status small {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.chatbot-close {
+  width: 32px;
+  height: 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  border: none;
+  background: transparent;
+
+  color: #ffffff;
+
+  font-size: 16px;
+
+  cursor: pointer;
+}
+
+/* =========================================================
+   MESSAGE AREA
+   ========================================================= */
+
+.chatbot-messages {
+  flex: 1;
+
+  min-height: 0;
+
+  overflow-y: auto;
+
+  padding: 16px;
+
+  background: #f8fafc;
+}
+
+.chat-message {
+  display: flex;
+
+  gap: 8px;
+
+  margin-bottom: 14px;
+}
+
+.message-avatar {
+  width: 28px;
+  height: 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: #dcfce7;
+  color: #006400;
+
+  font-size: 12px;
+}
+
+.message-content {
+  max-width: calc(100% - 36px);
+}
+
+.message-bubble {
+  display: inline-block;
+
+  max-width: 270px;
+
+  padding: 10px 12px;
+
+  border-radius: 12px;
+
+  background: #ffffff;
+  color: #1f2937;
+
+  font-size: 13px;
+  line-height: 1.5;
+
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+/* =========================================================
+   USER MESSAGE
+   ========================================================= */
+
+.chat-message.user {
+  justify-content: flex-end;
+}
+
+.chat-message.user .message-bubble {
+  background: #006400;
+  color: #ffffff;
+
+  border-radius: 12px 12px 3px 12px;
+}
+
+/* =========================================================
+   QUICK QUESTIONS
+   ========================================================= */
+
+.chatbot-quick {
+  display: flex;
+  flex-direction: column;
+
+  gap: 7px;
+
+  margin-top: 10px;
+}
+
+.chatbot-quick button {
+  width: 100%;
+
+  padding: 9px 11px;
+
+  border: 1px solid #d1d5db;
+  border-radius: 9px;
+
+  background: #ffffff;
+  color: #374151;
+
+  font-size: 12px;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.2s ease,
+    color 0.2s ease,
+    background 0.2s ease;
+}
+
+.chatbot-quick button:hover {
+  border-color: #006400;
+
+  color: #006400;
+
+  background: #f0fdf4;
+}
+
+/* =========================================================
+   INPUT
+   ========================================================= */
+
+.chatbot-input-area {
+  height: 64px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  flex-shrink: 0;
+
+  padding: 10px 12px;
+
+  border-top: 1px solid #e5e7eb;
+
+  background: #ffffff;
+}
+
+.chatbot-input-area input {
+  flex: 1;
+
+  min-width: 0;
+
+  height: 40px;
+
+  padding: 0 12px;
+
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+
+  outline: none;
+
+  background: #ffffff;
+  color: #1f2937;
+
+  font-size: 13px;
+}
+
+.chatbot-input-area input:focus {
+  border-color: #006400;
+
+  box-shadow: 0 0 0 2px rgba(0, 100, 0, 0.08);
+}
+
+.chatbot-input-area button {
+  width: 40px;
+  height: 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  padding: 0;
+
+  border: none;
+  border-radius: 50%;
+
+  background: #006400;
+  color: #ffffff;
+
+  cursor: pointer;
+
+  font-size: 14px;
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 640px) {
+  #chatbot-widget {
+    right: 15px;
+    bottom: 15px;
+
+    width: 60px;
+    height: 60px;
+  }
+
+  #chatbot-toggle {
+    width: 60px;
+    height: 60px;
+  }
+
+  #chatbot-toggle img {
+    width: 60px;
+  }
+
+  #chatbot-window {
+    right: 0;
+    bottom: 70px;
+
+    width: calc(100vw - 30px);
+    height: 70vh;
+
+    border-radius: 16px;
+  }
+}
+
+/* =========================================================
+   LOADING SKELETON
+========================================================= */
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 0.5rem;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton-text {
+  height: 12px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+}
+
+.skeleton-text-sm {
+  height: 10px;
+  margin-bottom: 6px;
+  border-radius: 4px;
+}
+
+.skeleton-text-lg {
+  height: 18px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+}
+
+.skeleton-image {
+  width: 100%;
+  height: 200px;
+  border-radius: 0.5rem;
+}
+
+.skeleton-card {
+  background: white;
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+  padding: 1rem;
+}
+
+.skeleton-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+/* Dark mode skeleton */
+body.dark-mode .skeleton {
+  background: linear-gradient(90deg, #2a2a2a 25%, #3a3a3a 50%, #2a2a2a 75%);
+}
+
+body.dark-mode .skeleton-card {
+  background: #1f2937;
+  border-color: #374151;
+}
+
+/* =========================================================
+   TOOLTIP SIDEBAR
+========================================================= */
+.tooltip-container {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
+}
+
+.tooltip-container .tooltip-text {
+  visibility: hidden;
+  opacity: 0;
+  width: auto;
+  background: #1f2937;
+  color: #fff;
+  text-align: center;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  position: absolute;
+  z-index: 99999;
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%) translateY(5px);
+  transition: all 0.25s ease;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.tooltip-container .tooltip-text::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: #1f2937;
+}
+
+.tooltip-container:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.tooltip-container .tooltip-text-left {
+  left: 120%;
+  transform: translateY(-50%) translateX(0);
+  bottom: auto;
+  top: 50%;
+}
+
+.tooltip-container .tooltip-text-left::after {
+  top: 50%;
+  left: -10px;
+  transform: translateY(-50%);
+  border-top-color: transparent;
+  border-right-color: #1f2937;
+  border-left: none;
+}
+
+/* =========================================================
+   FRONTEND DARK MODE
+========================================================= */
+body.dark-mode {
+  background-color: #111827 !important;
+  color: #e5e7eb !important;
+}
+
+body.dark-mode .bg-white {
+  background-color: #1f2937 !important;
+  color: #e5e7eb !important;
+}
+
+body.dark-mode .bg-gray-50 {
+  background-color: #111827 !important;
+}
+
+body.dark-mode .bg-gray-100 {
+  background-color: #1f2937 !important;
+}
+
+body.dark-mode .text-gray-900 {
+  color: #f9fafb !important;
+}
+
+body.dark-mode .text-gray-700 {
+  color: #e5e7eb !important;
+}
+
+body.dark-mode .text-gray-600 {
+  color: #d1d5db !important;
+}
+
+body.dark-mode .text-gray-500 {
+  color: #9ca3af !important;
+}
+
+body.dark-mode .border-gray-200 {
+  border-color: #374151 !important;
+}
+
+body.dark-mode .border-gray-100 {
+  border-color: #374151 !important;
+}
+
+body.dark-mode .shadow-sm,
+body.dark-mode .shadow-md,
+body.dark-mode .shadow-lg {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Dark Mode Toggle Button */
+#darkModeToggle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: transparent;
+  border: none;
+  color: #4b5563;
+}
+
+#darkModeToggle:hover {
+  background: #f3f4f6;
+}
+
+body.dark-mode #darkModeToggle {
+  color: #facc15;
+}
+
+body.dark-mode #darkModeToggle:hover {
+  background: #374151;
+}
+
+/* =========================================================
+   SCROLL REVEAL ANIMATION
+========================================================= */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-40px);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.reveal-left.active {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.reveal-right {
+  opacity: 0;
+  transform: translateX(40px);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.reveal-right.active {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.9);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.reveal-scale.active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Delay classes */
+.delay-1 {
+  transition-delay: 0.1s;
+}
+.delay-2 {
+  transition-delay: 0.2s;
+}
+.delay-3 {
+  transition-delay: 0.3s;
+}
+.delay-4 {
+  transition-delay: 0.4s;
+}
+.delay-5 {
+  transition-delay: 0.5s;
+}
+
+/* =========================================================
+   RESPONSIVE TABLE
+========================================================= */
+@media (max-width: 640px) {
+  .table-responsive {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .table-responsive table {
+    min-width: 600px;
+  }
+}
+
+/* =========================================================
+   TOAST ANIMATION
+========================================================= */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-in {
+  animation: slideIn 0.3s ease forwards;
+}

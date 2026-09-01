@@ -2,6 +2,11 @@
 
 @section('title', $berita->judul . ' - Badan Bank Tanah')
 
+@php
+    $metaTitle = $berita->meta_title ?? $berita->judul . ' - Badan Bank Tanah';
+    $metaDescription = $berita->meta_description ?? strip_tags($berita->ringkasan ?? $berita->konten ?? '');
+@endphp
+
 @section('content')
 
 {{-- =========================================================
@@ -89,6 +94,24 @@
                 </div>
             </div>
         </div>
+
+        {{-- QR CODE --}}
+        @if ($berita->qr_code)
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-8">
+            <div class="flex flex-col sm:flex-row sm:items-center gap-6">
+                <div class="flex items-center gap-3">
+                    <i class="fas fa-qrcode text-2xl text-[#006400]"></i>
+                    <div>
+                        <h4 class="font-bold text-gray-900">QR Code Publikasi</h4>
+                        <p class="text-xs text-gray-500">Scan untuk membagikan artikel ini</p>
+                    </div>
+                </div>
+                <div class="flex-1 flex justify-center sm:justify-end">
+                    {!! $berita->qr_code !!}
+                </div>
+            </div>
+        </div>
+        @endif
 
         {{-- Konten Berita --}}
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8 md:p-10 mb-8">
@@ -251,7 +274,6 @@
                 url: window.location.href
             }).catch(() => {});
         } else {
-            // Fallback: copy link
             copyLink();
         }
     }
@@ -283,7 +305,6 @@
 
     function copyLink() {
         navigator.clipboard.writeText(window.location.href).then(() => {
-            // Show toast notification
             const toast = document.createElement('div');
             toast.className = 'fixed bottom-24 left-1/2 -translate-x-1/2 bg-[#006400] text-white px-6 py-3 rounded-xl shadow-lg text-sm font-medium z-50 animate-fade-up';
             toast.innerHTML = '<i class="fas fa-check-circle mr-2"></i> Link berhasil disalin!';
@@ -294,7 +315,6 @@
                 setTimeout(() => toast.remove(), 300);
             }, 3000);
         }).catch(() => {
-            // Fallback
             const input = document.createElement('input');
             input.value = window.location.href;
             document.body.appendChild(input);

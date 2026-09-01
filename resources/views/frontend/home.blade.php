@@ -7,20 +7,20 @@
 <!-- ========================================================= -->
 <!-- HERO SLIDER -->
 <!-- ========================================================= -->
-<div id="heroSlider" class="relative h-[400px] sm:h-[500px] md:h-[600px] lg:h-[650px] overflow-hidden">
+<div id="heroSlider" class="relative h-[400px] sm:h-[500px] md:h-[600px] lg:h-[650px] overflow-hidden select-none">
 
     <!-- Slide 1 -->
-    <div class="hero-slide absolute inset-0 bg-cover bg-center opacity-100 transition-opacity duration-1000"
+    <div class="hero-slide absolute inset-0 bg-cover bg-center opacity-100 transition-opacity duration-700"
         style="background-image: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=2000&auto=format&fit=crop');">
     </div>
 
     <!-- Slide 2 -->
-    <div class="hero-slide absolute inset-0 bg-cover bg-center opacity-0 transition-opacity duration-1000"
+    <div class="hero-slide absolute inset-0 bg-cover bg-center opacity-0 transition-opacity duration-700"
         style="background-image: url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=2000&auto=format&fit=crop');">
     </div>
 
     <!-- Slide 3 -->
-    <div class="hero-slide absolute inset-0 bg-cover bg-center opacity-0 transition-opacity duration-1000"
+    <div class="hero-slide absolute inset-0 bg-cover bg-center opacity-0 transition-opacity duration-700"
         style="background-image: url('https://images.unsplash.com/photo-1500534623283-312aade485b7?q=80&w=2000&auto=format&fit=crop');">
     </div>
 
@@ -57,6 +57,18 @@
             <button type="button" class="hero-dot w-2.5 h-2.5 rounded-full bg-white/50 transition-all duration-300" data-slide="2"></button>
         </div>
     </div>
+
+    <!-- Tombol Panah Kiri & Kanan -->
+    <button type="button" id="heroPrev"
+        class="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 z-30 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-black/30 hover:bg-black/50 text-white flex items-center justify-center transition-all duration-300 hover:scale-110 backdrop-blur-sm border border-white/10">
+        <i class="fas fa-chevron-left text-xs sm:text-base"></i>
+    </button>
+
+    <button type="button" id="heroNext"
+        class="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 z-30 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-black/30 hover:bg-black/50 text-white flex items-center justify-center transition-all duration-300 hover:scale-110 backdrop-blur-sm border border-white/10">
+        <i class="fas fa-chevron-right text-xs sm:text-base"></i>
+    </button>
+
 </div>
 
 <!-- ========================================================= -->
@@ -67,7 +79,6 @@
     $totalAset = \App\Models\AsetTanah::count();
     $totalProvinsi = \App\Models\AsetTanah::distinct('provinsi')->count('provinsi');
     $totalKerjasama = \App\Models\ProyekInvestasi::where('is_active', true)->count();
-    // Nilai Aset - fallback ke 68,45 T
     $nilaiAset = 68450000000000;
 @endphp
 
@@ -176,7 +187,8 @@
                             <div class="relative h-36 sm:h-40 md:h-48 bg-gray-200">
                                 <img src="{{ $aset->gambar ? asset('storage/' . $aset->gambar) : 'https://picsum.photos/600/400?random=' . $aset->id }}"
                                     class="w-full h-full object-cover"
-                                    alt="{{ $aset->nama_lokasi }}">
+                                    alt="{{ $aset->nama_lokasi }}"
+                                    loading="lazy">
                                 <span class="absolute top-2 sm:top-3 left-2 sm:left-3 text-white text-[8px] sm:text-[10px] px-2 sm:px-3 py-0.5 sm:py-1 rounded font-bold uppercase
                                     {{ $aset->status == 'Tersedia' ? 'bg-green-700' : 'bg-blue-700' }}">
                                     {{ $aset->status }}
@@ -341,11 +353,13 @@
                     <div class="w-14 h-14 sm:w-20 sm:h-20 flex-shrink-0 overflow-hidden bg-gray-100 rounded-lg">
                         @if ($item->gambar)
                             <img src="{{ asset('storage/' . $item->gambar) }}" alt="{{ $item->judul }}"
-                                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                loading="lazy">
                         @else
                             <img src="https://picsum.photos/300/200?random={{ $item->id }}"
                                 alt="{{ $item->judul }}"
-                                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                loading="lazy">
                         @endif
                     </div>
 
@@ -393,231 +407,403 @@
 
 @push('scripts')
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // =========================================================
-        // INIT MAP
-        // =========================================================
-        var map = L.map('map').setView([-2.5, 118.0], 5);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; OpenStreetMap contributors'
-        }).addTo(map);
+document.addEventListener('DOMContentLoaded', function() {
+    // =========================================================
+    // HERO SLIDER - LENGKAP (Dots + Panah + Drag + Swipe)
+    // =========================================================
+    const slides = document.querySelectorAll('.hero-slide');
+    const dots = document.querySelectorAll('.hero-dot');
+    const prevBtn = document.getElementById('heroPrev');
+    const nextBtn = document.getElementById('heroNext');
+    const sliderContainer = document.getElementById('heroSlider');
 
-        // =========================================================
-        // MARKER DARI DATABASE
-        // =========================================================
-        @php
-            $markers = \App\Models\AsetTanah::whereNotNull('lat')->whereNotNull('lng')->get();
-        @endphp
+    if (!slides.length) return;
 
-        var markers = [
-            @foreach ($markers as $marker)
-                {
-                    lat: {{ $marker->lat }},
-                    lng: {{ $marker->lng }},
-                    status: '{{ $marker->status }}',
-                    nama: '{{ $marker->nama_lokasi }}',
-                    provinsi: '{{ $marker->provinsi }}',
-                    luas: {{ $marker->luas_hektar }}
-                },
-            @endforeach
-        ];
+    let currentSlide = 0;
+    let slideInterval;
+    let isDragging = false;
+    let startX = 0;
+    let currentX = 0;
+    let isTransitioning = false;
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let isSwiping = false;
 
-        markers.forEach(function(marker) {
-            var color = marker.status === 'Tersedia' ? '#16a34a' :
-                       (marker.status === 'Dalam Pengembangan' ? '#3b82f6' :
-                       (marker.status === 'Dalam Proses' ? '#f97316' : '#6b7280'));
-            L.circleMarker([marker.lat, marker.lng], {
-                color: color,
-                fillColor: color,
-                fillOpacity: 0.6,
-                radius: 8
-            }).addTo(map).bindPopup(`
-                <b>${marker.nama}</b><br>
-                ${marker.provinsi}<br>
-                <strong>${Number(marker.luas).toLocaleString('id-ID')} Ha</strong><br>
-                <span style="color:${color};font-weight:600">${marker.status}</span>
-            `);
+    const totalSlides = slides.length;
+    const slideIntervalTime = 5000;
+
+    function goToSlide(index) {
+        if (isTransitioning) return;
+        if (index < 0) index = totalSlides - 1;
+        if (index >= totalSlides) index = 0;
+
+        isTransitioning = true;
+
+        slides.forEach((slide, i) => {
+            slide.style.opacity = i === index ? '1' : '0';
+            slide.style.transition = 'opacity 0.6s ease';
+        });
+
+        dots.forEach((dot, i) => {
+            if (i === index) {
+                dot.classList.remove('bg-white/50');
+                dot.classList.add('bg-white');
+            } else {
+                dot.classList.remove('bg-white');
+                dot.classList.add('bg-white/50');
+            }
+        });
+
+        currentSlide = index;
+
+        setTimeout(() => {
+            isTransitioning = false;
+        }, 600);
+    }
+
+    function nextSlide() {
+        goToSlide(currentSlide + 1);
+    }
+
+    function prevSlide() {
+        goToSlide(currentSlide - 1);
+    }
+
+    function startAutoSlide() {
+        stopAutoSlide();
+        slideInterval = setInterval(nextSlide, slideIntervalTime);
+    }
+
+    function stopAutoSlide() {
+        if (slideInterval) {
+            clearInterval(slideInterval);
+            slideInterval = null;
+        }
+    }
+
+    function resetAutoSlide() {
+        stopAutoSlide();
+        startAutoSlide();
+    }
+
+    // =========================================================
+    // EVENT: TOMBOL PANAH
+    // =========================================================
+    if (prevBtn) {
+        prevBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            prevSlide();
+            resetAutoSlide();
+        });
+    }
+
+    if (nextBtn) {
+        nextBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            nextSlide();
+            resetAutoSlide();
+        });
+    }
+
+    // =========================================================
+    // EVENT: KLIK DOTS
+    // =========================================================
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', function() {
+            goToSlide(index);
+            resetAutoSlide();
+        });
+    });
+
+    // =========================================================
+    // EVENT: DRAG (Desktop)
+    // =========================================================
+    if (sliderContainer) {
+        sliderContainer.addEventListener('mousedown', function(e) {
+            if (e.target.closest('button, a')) return;
+            isDragging = true;
+            startX = e.clientX;
+            currentX = 0;
+            stopAutoSlide();
+            sliderContainer.style.cursor = 'grabbing';
+        });
+
+        sliderContainer.addEventListener('mousemove', function(e) {
+            if (!isDragging) return;
+            currentX = e.clientX - startX;
+        });
+
+        sliderContainer.addEventListener('mouseup', function(e) {
+            if (!isDragging) return;
+            isDragging = false;
+            sliderContainer.style.cursor = '';
+            const diff = currentX;
+            const threshold = 50;
+
+            if (diff > threshold) {
+                prevSlide();
+            } else if (diff < -threshold) {
+                nextSlide();
+            }
+
+            resetAutoSlide();
+            currentX = 0;
+        });
+
+        sliderContainer.addEventListener('mouseleave', function() {
+            if (isDragging) {
+                isDragging = false;
+                sliderContainer.style.cursor = '';
+                resetAutoSlide();
+            }
         });
 
         // =========================================================
-        // HERO SLIDER
+        // EVENT: SWIPE (Mobile) - FIXED
         // =========================================================
-        const slides = document.querySelectorAll('.hero-slide');
-        const dots = document.querySelectorAll('.hero-dot');
+        sliderContainer.addEventListener('touchstart', function(e) {
+            touchStartX = e.changedTouches[0].screenX;
+            touchStartY = e.changedTouches[0].screenY;
+            isSwiping = false;
+            stopAutoSlide();
+        }, { passive: true });
 
-        if (slides.length) {
-            let currentSlide = 0;
-            let slideInterval;
+        sliderContainer.addEventListener('touchmove', function(e) {
+            const touchEndX = e.changedTouches[0].screenX;
+            const touchEndY = e.changedTouches[0].screenY;
+            const diffX = touchStartX - touchEndX;
+            const diffY = touchStartY - touchEndY;
 
-            function showSlide(index) {
-                slides.forEach((slide, i) => {
-                    slide.style.opacity = i === index ? '1' : '0';
-                });
-                dots.forEach((dot, i) => {
-                    if (i === index) {
-                        dot.classList.remove('bg-white/50');
-                        dot.classList.add('bg-white');
-                    } else {
-                        dot.classList.remove('bg-white');
-                        dot.classList.add('bg-white/50');
-                    }
-                });
-                currentSlide = index;
+            if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 10) {
+                isSwiping = true;
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        sliderContainer.addEventListener('touchend', function(e) {
+            if (!isSwiping) {
+                resetAutoSlide();
+                return;
+            }
+            const touchEndX = e.changedTouches[0].screenX;
+            const diff = touchStartX - touchEndX;
+            const threshold = 50;
+
+            if (diff > threshold) {
+                nextSlide();
+            } else if (diff < -threshold) {
+                prevSlide();
             }
 
-            function nextSlide() {
-                let next = currentSlide + 1;
-                if (next >= slides.length) next = 0;
-                showSlide(next);
-            }
-
-            function startSlider() {
-                slideInterval = setInterval(nextSlide, 5000);
-            }
-
-            function resetSlider() {
-                clearInterval(slideInterval);
-                startSlider();
-            }
-
-            dots.forEach((dot, index) => {
-                dot.addEventListener('click', function() {
-                    showSlide(index);
-                    resetSlider();
-                });
-            });
-
-            showSlide(0);
-            startSlider();
-        }
+            resetAutoSlide();
+        }, { passive: true });
 
         // =========================================================
-        // ASSET SLIDER - AUTO SLIDE + DRAG + HOVER PAUSE
+        // KEYBOARD (Aksesibilitas)
         // =========================================================
-        const slider = document.getElementById('assetSlider');
-        const assetDots = document.querySelectorAll('.asset-dot');
-        const cards = document.querySelectorAll('.asset-card');
-
-        if (slider && cards.length && assetDots.length) {
-            let currentIndex = 0;
-            const totalSlides = cards.length;
-            let assetInterval;
-
-            function slideAssets(index) {
-                if (index < 0) index = 0;
-                if (index >= totalSlides) index = totalSlides - 1;
-                const cardWidth = cards[0].offsetWidth + 12;
-                const offset = cardWidth * index;
-                slider.style.transform = `translateX(-${offset}px)`;
-                assetDots.forEach((dot, i) => {
-                    if (i === index) {
-                        dot.classList.remove('bg-gray-300');
-                        dot.classList.add('bg-blue-700');
-                    } else {
-                        dot.classList.remove('bg-blue-700');
-                        dot.classList.add('bg-gray-300');
-                    }
-                });
-                currentIndex = index;
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowLeft') {
+                prevSlide();
+                resetAutoSlide();
+            } else if (e.key === 'ArrowRight') {
+                nextSlide();
+                resetAutoSlide();
             }
+        });
+    }
 
-            function nextAssetSlide() {
-                let next = currentIndex + 1;
-                if (next >= totalSlides) next = 0;
-                slideAssets(next);
-            }
+    // =========================================================
+    // START
+    // =========================================================
+    goToSlide(0);
+    startAutoSlide();
 
-            function startAssetSlider() {
-                clearInterval(assetInterval);
-                assetInterval = setInterval(nextAssetSlide, 3000);
-            }
+    if (sliderContainer) {
+        sliderContainer.addEventListener('mouseenter', stopAutoSlide);
+        sliderContainer.addEventListener('mouseleave', startAutoSlide);
+    }
 
-            function stopAssetSlider() {
-                clearInterval(assetInterval);
-            }
-
-            assetDots.forEach((dot) => {
-                dot.addEventListener('click', function() {
-                    const index = Number(this.dataset.slide);
-                    slideAssets(index);
-                    startAssetSlider();
-                });
-            });
-
-            const assetContainer = slider.closest('.relative');
-            if (assetContainer) {
-                assetContainer.addEventListener('mouseenter', stopAssetSlider);
-                assetContainer.addEventListener('mouseleave', startAssetSlider);
-            }
-
-            // Drag support
-            let startX = 0;
-            let currentX = 0;
-            let isDragging = false;
-
-            slider.addEventListener('mousedown', (e) => {
-                startX = e.clientX;
-                isDragging = true;
-                stopAssetSlider();
-            });
-
-            slider.addEventListener('mousemove', (e) => {
-                if (!isDragging) return;
-                currentX = e.clientX;
-            });
-
-            slider.addEventListener('mouseup', (e) => {
-                if (!isDragging) return;
-                isDragging = false;
-                const diff = startX - currentX;
-                if (Math.abs(diff) > 50) {
-                    if (diff > 0) {
-                        nextAssetSlide();
-                    } else {
-                        slideAssets(currentIndex - 1);
-                    }
-                }
-                startAssetSlider();
-            });
-
-            slider.addEventListener('mouseleave', () => {
-                if (isDragging) {
-                    isDragging = false;
-                    startAssetSlider();
-                }
-            });
-
-            // Touch support
-            let touchStartX = 0;
-            slider.addEventListener('touchstart', (e) => {
-                touchStartX = e.touches[0].clientX;
-                stopAssetSlider();
-            });
-
-            slider.addEventListener('touchend', (e) => {
-                const touchEndX = e.changedTouches[0].clientX;
-                const diff = touchStartX - touchEndX;
-                if (Math.abs(diff) > 50) {
-                    if (diff > 0) {
-                        nextAssetSlide();
-                    } else {
-                        slideAssets(currentIndex - 1);
-                    }
-                }
-                startAssetSlider();
-            });
-
-            slideAssets(0);
-            startAssetSlider();
-
-            let resizeTimeout;
-            window.addEventListener('resize', () => {
-                clearTimeout(resizeTimeout);
-                resizeTimeout = setTimeout(() => {
-                    slideAssets(currentIndex);
-                }, 200);
-            });
-        }
+    // =========================================================
+    // RESIZE HANDLER
+    // =========================================================
+    let resizeTimer;
+    window.addEventListener('resize', function() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function() {}, 250);
     });
+
+    // =========================================================
+    // ASSET SLIDER - AUTO SLIDE + DRAG + HOVER PAUSE
+    // =========================================================
+    const slider = document.getElementById('assetSlider');
+    const assetDots = document.querySelectorAll('.asset-dot');
+    const cards = document.querySelectorAll('.asset-card');
+
+    if (slider && cards.length && assetDots.length) {
+        let currentIndex = 0;
+        const totalSlides = cards.length;
+        let assetInterval;
+
+        function slideAssets(index) {
+            if (index < 0) index = 0;
+            if (index >= totalSlides) index = totalSlides - 1;
+            const cardWidth = cards[0].offsetWidth + 12;
+            const offset = cardWidth * index;
+            slider.style.transform = `translateX(-${offset}px)`;
+            assetDots.forEach((dot, i) => {
+                if (i === index) {
+                    dot.classList.remove('bg-gray-300');
+                    dot.classList.add('bg-blue-700');
+                } else {
+                    dot.classList.remove('bg-blue-700');
+                    dot.classList.add('bg-gray-300');
+                }
+            });
+            currentIndex = index;
+        }
+
+        function nextAssetSlide() {
+            let next = currentIndex + 1;
+            if (next >= totalSlides) next = 0;
+            slideAssets(next);
+        }
+
+        function startAssetSlider() {
+            clearInterval(assetInterval);
+            assetInterval = setInterval(nextAssetSlide, 3000);
+        }
+
+        function stopAssetSlider() {
+            clearInterval(assetInterval);
+        }
+
+        assetDots.forEach((dot) => {
+            dot.addEventListener('click', function() {
+                const index = Number(this.dataset.slide);
+                slideAssets(index);
+                startAssetSlider();
+            });
+        });
+
+        const assetContainer = slider.closest('.relative');
+        if (assetContainer) {
+            assetContainer.addEventListener('mouseenter', stopAssetSlider);
+            assetContainer.addEventListener('mouseleave', startAssetSlider);
+        }
+
+        // Drag support
+        let assetStartX = 0;
+        let assetCurrentX = 0;
+        let isAssetDragging = false;
+
+        slider.addEventListener('mousedown', (e) => {
+            assetStartX = e.clientX;
+            isAssetDragging = true;
+            stopAssetSlider();
+        });
+
+        slider.addEventListener('mousemove', (e) => {
+            if (!isAssetDragging) return;
+            assetCurrentX = e.clientX;
+        });
+
+        slider.addEventListener('mouseup', (e) => {
+            if (!isAssetDragging) return;
+            isAssetDragging = false;
+            const diff = assetStartX - assetCurrentX;
+            if (Math.abs(diff) > 50) {
+                if (diff > 0) {
+                    nextAssetSlide();
+                } else {
+                    slideAssets(currentIndex - 1);
+                }
+            }
+            startAssetSlider();
+        });
+
+        slider.addEventListener('mouseleave', () => {
+            if (isAssetDragging) {
+                isAssetDragging = false;
+                startAssetSlider();
+            }
+        });
+
+        // Touch support
+        let assetTouchStartX = 0;
+        slider.addEventListener('touchstart', (e) => {
+            assetTouchStartX = e.touches[0].clientX;
+            stopAssetSlider();
+        });
+
+        slider.addEventListener('touchend', (e) => {
+            const touchEndX = e.changedTouches[0].clientX;
+            const diff = assetTouchStartX - touchEndX;
+            if (Math.abs(diff) > 50) {
+                if (diff > 0) {
+                    nextAssetSlide();
+                } else {
+                    slideAssets(currentIndex - 1);
+                }
+            }
+            startAssetSlider();
+        });
+
+        slideAssets(0);
+        startAssetSlider();
+
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                slideAssets(currentIndex);
+            }, 200);
+        });
+    }
+
+    // =========================================================
+    // INIT MAP
+    // =========================================================
+    var map = L.map('map').setView([-2.5, 118.0], 5);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // =========================================================
+    // MARKER DARI DATABASE
+    // =========================================================
+    @php
+        $markers = \App\Models\AsetTanah::whereNotNull('lat')->whereNotNull('lng')->get();
+    @endphp
+
+    var markers = [
+        @foreach ($markers as $marker)
+            {
+                lat: {{ $marker->lat }},
+                lng: {{ $marker->lng }},
+                status: '{{ $marker->status }}',
+                nama: '{{ $marker->nama_lokasi }}',
+                provinsi: '{{ $marker->provinsi }}',
+                luas: {{ $marker->luas_hektar }}
+            },
+        @endforeach
+    ];
+
+    markers.forEach(function(marker) {
+        var color = marker.status === 'Tersedia' ? '#16a34a' :
+                   (marker.status === 'Dalam Pengembangan' ? '#3b82f6' :
+                   (marker.status === 'Dalam Proses' ? '#f97316' : '#6b7280'));
+        L.circleMarker([marker.lat, marker.lng], {
+            color: color,
+            fillColor: color,
+            fillOpacity: 0.6,
+            radius: 8
+        }).addTo(map).bindPopup(`
+            <b>${marker.nama}</b><br>
+            ${marker.provinsi}<br>
+            <strong>${Number(marker.luas).toLocaleString('id-ID')} Ha</strong><br>
+            <span style="color:${color};font-weight:600">${marker.status}</span>
+        `);
+    });
+});
 </script>
 @endpush

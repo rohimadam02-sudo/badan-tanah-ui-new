@@ -7,6 +7,7 @@ use App\Models\Berita;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Spatie\Activitylog\Models\Activity;
 
 class BeritaAdminController extends Controller
@@ -431,5 +432,79 @@ class BeritaAdminController extends Controller
     {
         $count = Berita::where('status_approval', 'Menunggu Approval')->count();
         return response()->json(['count' => $count]);
+    }
+
+    // =========================================================
+    // BULK DELETE
+    // =========================================================
+
+    /**
+     * Bulk delete berita
+     */
+    public function bulkDelete(Request $request)
+    {
+        $ids = $request->input('ids', []);
+
+        if (empty($ids)) {
+            return response()->json(['success' => false, 'message' => 'Tidak ada berita yang dipilih.']);
+        }
+
+        // Cek permission
+        if (!in_array(auth()->user()->role, ['super_admin', 'admin'])) {
+            return response()->json(['success' => false, 'message' => 'Anda tidak memiliki akses untuk menghapus.']);
+        }
+
+        // Ambil berita untuk logging
+        $berita = Berita::whereIn('id', $ids)->get();
+        $judulList = $berita->pluck('judul')->implode(', ');
+
+        // Hapus gambar
+        foreach ($berita as $item) {
+            if ($item->gambar) {
+                Storage::disk('public')->delete($item->gambar);
+            }
+        }
+
+        $count = Berita::whereIn('id', $ids)->delete();
+
+        // Log aktivitas
+        activity()
+            ->withProperties(['ids' => $ids, 'count' => $count])
+            ->log('menghapus ' . $count . ' berita secara massal: ' . $judulList);
+
+        return response()->json([
+            'success' => true,
+            'message' => $count . ' berita berhasil dihapus.'
+        ]);
+    }
+
+    // =========================================================
+    // QR CODE GENERATOR
+    // =========================================================
+
+    /**
+     * Generate QR Code for a berita
+     */
+    public function generateQrCode($id)
+    {
+        $berita = Berita::findOrFail($id);
+        
+        // Generate URL untuk detail berita
+        $url = route('publications.show', $berita->id);
+        
+        // Generate QR Code dalam bentuk SVG
+        $qrCode = QrCode::format('svg')
+            ->size(200)
+            ->errorCorrection('H')
+            ->generate($url);
+        
+        // Simpan ke database
+        $berita->qr_code = $qrCode;
+        $berita->save();
+        
+        return response()->json([
+            'success' => true,
+            'qr_code' => $qrCode,
+        ]);
     }
 }

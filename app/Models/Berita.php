@@ -27,12 +27,56 @@ class Berita extends Model
         'approval_history',
         'gambar',
         'tanggal_publikasi',
+        'meta_title',
+        'meta_description',
+        'qr_code',
     ];
 
     protected $casts = [
         'approval_history' => 'array',
         'tanggal_publikasi' => 'datetime',
     ];
+
+    // =========================================================
+    // BOOT - Auto generate SEO
+    // =========================================================
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $model->generateSEO();
+        });
+
+        static::updating(function ($model) {
+            if ($model->isDirty('judul') || $model->isDirty('konten') || $model->isDirty('ringkasan')) {
+                $model->generateSEO();
+            }
+        });
+    }
+
+    /**
+     * Auto-generate SEO metadata
+     */
+    public function generateSEO()
+    {
+        // Generate slug jika kosong
+        if (empty($this->slug)) {
+            $this->slug = \Illuminate\Support\Str::slug($this->judul);
+        }
+
+        // Generate meta_title dari judul
+        if (empty($this->meta_title)) {
+            $this->meta_title = $this->judul . ' - Badan Bank Tanah';
+        }
+
+        // Generate meta_description dari ringkasan atau konten
+        if (empty($this->meta_description)) {
+            $text = $this->ringkasan ?? strip_tags($this->konten ?? '');
+            $text = preg_replace('/\s+/', ' ', trim($text));
+            $this->meta_description = \Illuminate\Support\Str::limit($text, 160, '...');
+        }
+    }
 
     public function getActivitylogOptions(): LogOptions
     {

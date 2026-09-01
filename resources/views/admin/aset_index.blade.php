@@ -115,7 +115,7 @@
             $totalProvinsi = \App\Models\AsetTanah::distinct('provinsi')->count('provinsi');
             $totalKabupaten = \App\Models\AsetTanah::distinct('kabupaten')->count('kabupaten');
             $totalLuas = \App\Models\AsetTanah::sum('luas_hektar');
-            $totalNilai = 68450000000000; // Rp 68,45 T (bisa diambil dari setting nanti)
+            $totalNilai = 68450000000000;
         @endphp
 
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-6">
@@ -199,30 +199,71 @@
         @endif
 
         <!-- Daftar Aset Tabel -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div class="p-4 border-b border-gray-100 flex justify-between items-center">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden table-container">
+            <div class="p-4 border-b border-gray-100 flex justify-between items-center flex-wrap gap-3">
                 <h3 class="font-bold text-gray-900">Daftar Aset Persediaan Tanah</h3>
-                <a href="{{ route('admin.aset.create') }}"
-                    class="bg-[#006400] hover:bg-[#005500] text-white px-4 py-2 rounded text-sm font-bold">+ Tambah Aset</a>
+                <div class="flex items-center gap-3 flex-wrap">
+                    <a href="{{ route('admin.aset.create') }}"
+                        class="bg-[#006400] hover:bg-[#005500] text-white px-4 py-2 rounded text-sm font-bold">
+                        + Tambah Aset
+                    </a>
+                </div>
             </div>
+
+            <!-- ========================================================= -->
+            <!-- BULK ACTION BAR -->
+            <!-- ========================================================= -->
+            <div class="bulk-action-bar hidden items-center gap-3 px-4 py-2.5 bg-green-50 border-b border-green-100">
+                <span class="text-sm font-medium text-green-800">
+                    <span class="bulk-count">0</span> item dipilih
+                </span>
+                <span class="text-gray-300">|</span>
+                <button type="button" class="bulk-delete-btn text-sm font-semibold text-red-600 hover:text-red-800 transition"
+                        data-url="{{ route('admin.aset.bulk-delete') }}">
+                    <i class="fas fa-trash mr-1"></i> Hapus Terpilih
+                </button>
+                <button type="button" class="ml-auto text-sm text-gray-400 hover:text-gray-600 transition"
+                        onclick="this.closest('.bulk-action-bar').querySelectorAll('.bulk-item').forEach(cb => cb.checked = false); this.closest('.bulk-action-bar').style.display = 'none';">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
             <div class="overflow-x-auto">
-                <table class="w-full text-left text-sm">
+                <table class="w-full text-left text-sm sortable-table">
                     <thead class="bg-gray-50 border-b-2 border-gray-200">
                         <tr>
-                            <th class="px-6 py-3 font-semibold text-gray-600">Kode Aset</th>
-                            <th class="px-6 py-3 font-semibold text-gray-600">Nama Lokasi</th>
-                            <th class="px-6 py-3 font-semibold text-gray-600">Provinsi</th>
-                            <th class="px-6 py-3 font-semibold text-gray-600">Kabupaten</th>
-                            <th class="px-6 py-3 font-semibold text-gray-600">Luas (Ha)</th>
-                            <th class="px-6 py-3 font-semibold text-gray-600">Status</th>
+                            <th class="px-4 py-3 w-10">
+                                <input type="checkbox" class="bulk-select-all rounded border-gray-300 text-[#006400] focus:ring-[#006400]/30">
+                            </th>
+                            <th class="px-6 py-3 font-semibold text-gray-600 cursor-pointer hover:text-[#006400] transition" data-sort="kode">
+                                Kode Aset <span class="sort-icon text-[10px]"></span>
+                            </th>
+                            <th class="px-6 py-3 font-semibold text-gray-600 cursor-pointer hover:text-[#006400] transition" data-sort="nama">
+                                Nama Lokasi <span class="sort-icon text-[10px]"></span>
+                            </th>
+                            <th class="px-6 py-3 font-semibold text-gray-600 cursor-pointer hover:text-[#006400] transition" data-sort="provinsi">
+                                Provinsi <span class="sort-icon text-[10px]"></span>
+                            </th>
+                            <th class="px-6 py-3 font-semibold text-gray-600 cursor-pointer hover:text-[#006400] transition" data-sort="kabupaten">
+                                Kabupaten <span class="sort-icon text-[10px]"></span>
+                            </th>
+                            <th class="px-6 py-3 font-semibold text-gray-600 cursor-pointer hover:text-[#006400] transition" data-sort="luas">
+                                Luas (Ha) <span class="sort-icon text-[10px]"></span>
+                            </th>
+                            <th class="px-6 py-3 font-semibold text-gray-600 cursor-pointer hover:text-[#006400] transition" data-sort="status">
+                                Status <span class="sort-icon text-[10px]"></span>
+                            </th>
                             <th class="px-6 py-3 font-semibold text-gray-600">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y-2 divide-gray-100">
                         @foreach ($asets as $aset)
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-6 py-4">BT-2025-{{ sprintf('%04d', $aset->id) }}</td>
-                                <td class="px-6 py-4">
+                            <tr class="hover:bg-gray-50 transition">
+                                <td class="px-4 py-4">
+                                    <input type="checkbox" class="bulk-item rounded border-gray-300 text-[#006400] focus:ring-[#006400]/30" value="{{ $aset->id }}">
+                                </td>
+                                <td class="px-6 py-4" data-column="kode">BT-2025-{{ sprintf('%04d', $aset->id) }}</td>
+                                <td class="px-6 py-4" data-column="nama">
                                     <div class="flex items-center gap-3">
                                         @if ($aset->gambar)
                                             <img src="{{ asset('storage/' . $aset->gambar) }}"
@@ -234,20 +275,25 @@
                                         <span class="font-medium">{{ $aset->nama_lokasi }}</span>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4">{{ $aset->provinsi }}</td>
-                                <td class="px-6 py-4">{{ $aset->kabupaten }}</td>
-                                <td class="px-6 py-4">{{ number_format($aset->luas_hektar, 2, ',', '.') }}</td>
-                                <td class="px-6 py-4">
+                                <td class="px-6 py-4" data-column="provinsi">{{ $aset->provinsi }}</td>
+                                <td class="px-6 py-4" data-column="kabupaten">{{ $aset->kabupaten }}</td>
+                                <td class="px-6 py-4" data-column="luas">{{ number_format($aset->luas_hektar, 2, ',', '.') }}</td>
+                                <td class="px-6 py-4" data-column="status">
                                     <span class="bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-bold">{{ $aset->status }}</span>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <div class="flex gap-2 text-gray-500">
+                                    <div class="flex gap-2 text-gray-500 flex-wrap">
                                         <a href="{{ route('admin.aset.edit', $aset->id) }}" class="hover:text-[#006400]"><i class="fas fa-pen"></i></a>
                                         <form action="{{ route('admin.aset.destroy', $aset->id) }}" method="POST" class="inline">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="hover:text-red-600"><i class="fas fa-trash"></i></button>
                                         </form>
+                                        <!-- TOMBOL QR CODE -->
+                                        <button type="button" onclick="generateQR('aset', {{ $aset->id }})" 
+                                                class="hover:text-purple-600" title="Generate QR Code">
+                                            <i class="fas fa-qrcode"></i>
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
@@ -257,4 +303,96 @@
             </div>
         </div>
     </div>
+
+    <script>
+    function generateQR(type, id) {
+        const url = `/admin/${type}/${id}/generate-qr`;
+        
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showQRModal(data.qr_code);
+            } else {
+                showToast('Gagal generate QR Code', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showToast('Terjadi kesalahan', 'error');
+        });
+    }
+
+    function showQRModal(qrCode) {
+        // Buat modal sederhana
+        const modal = document.createElement('div');
+        modal.className = 'fixed inset-0 z-[99999] flex items-center justify-center bg-black/50 px-4';
+        modal.innerHTML = `
+            <div class="bg-white rounded-2xl p-8 max-w-sm w-full text-center shadow-2xl">
+                <div class="mb-4 flex justify-center">${qrCode}</div>
+                <h3 class="font-bold text-gray-900 mb-2">QR Code Aset</h3>
+                <p class="text-sm text-gray-500 mb-4">Scan untuk membuka halaman aset ini</p>
+                <button onclick="this.closest('.fixed').remove()" 
+                        class="px-6 py-2.5 bg-[#006400] hover:bg-[#005500] text-white rounded-lg font-semibold text-sm transition">
+                    Tutup
+                </button>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        
+        // Tutup dengan klik di luar
+        modal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.remove();
+            }
+        });
+    }
+
+    function showToast(message, type = 'success') {
+        let container = document.getElementById('toastContainer');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'toastContainer';
+            container.className = 'fixed top-20 right-4 z-[99999] space-y-3 max-w-sm w-full';
+            document.body.appendChild(container);
+        }
+
+        const colors = {
+            success: 'bg-green-50 border-green-400 text-green-800',
+            error: 'bg-red-50 border-red-400 text-red-800',
+            warning: 'bg-yellow-50 border-yellow-400 text-yellow-800',
+            info: 'bg-blue-50 border-blue-400 text-blue-800'
+        };
+        const icons = {
+            success: 'fa-check-circle',
+            error: 'fa-exclamation-circle',
+            warning: 'fa-triangle-exclamation',
+            info: 'fa-circle-info'
+        };
+
+        const toast = document.createElement('div');
+        toast.className = `flex items-start gap-3 p-4 border rounded-xl shadow-lg ${colors[type] || colors.success} animate-slide-in`;
+        toast.innerHTML = `
+            <i class="fas ${icons[type] || icons.success} text-lg mt-0.5"></i>
+            <div class="flex-1 text-sm font-medium">${message}</div>
+            <button onclick="this.parentElement.remove()" class="text-gray-400 hover:text-gray-600 transition">
+                <i class="fas fa-times"></i>
+            </button>
+        `;
+        container.appendChild(toast);
+
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateX(100px)';
+            toast.style.transition = 'all 0.3s ease';
+            setTimeout(() => toast.remove(), 300);
+        }, 5000);
+    }
+    </script>
 @endsection

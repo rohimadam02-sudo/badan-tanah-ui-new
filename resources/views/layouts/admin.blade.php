@@ -165,13 +165,78 @@
         .animate-slide-in {
             animation: slideIn 0.3s ease forwards;
         }
+
+        /* =========================================================
+           TOOLTIP SIDEBAR
+        ========================================================= */
+        .tooltip-container {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .tooltip-container .tooltip-text {
+            visibility: hidden;
+            opacity: 0;
+            width: auto;
+            background: #1f2937;
+            color: #fff;
+            text-align: center;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 500;
+            position: absolute;
+            z-index: 99999;
+            bottom: 120%;
+            left: 50%;
+            transform: translateX(-50%) translateY(5px);
+            transition: all 0.25s ease;
+            white-space: nowrap;
+            pointer-events: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .tooltip-container .tooltip-text::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 5px solid transparent;
+            border-top-color: #1f2937;
+        }
+
+        .tooltip-container:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .tooltip-container .tooltip-text-left {
+            left: 120%;
+            transform: translateY(-50%) translateX(0);
+            bottom: auto;
+            top: 50%;
+        }
+
+        .tooltip-container .tooltip-text-left::after {
+            top: 50%;
+            left: -10px;
+            transform: translateY(-50%);
+            border-top-color: transparent;
+            border-right-color: #1f2937;
+            border-left: none;
+        }
     </style>
 </head>
 
 <body class="bg-gray-100 flex h-screen overflow-hidden text-gray-800 transition-colors duration-300">
 
     @php
-        $role = auth()->user()->role;
+        $user = auth()->user();
+        $role = $user->role;
         $roleLabel = [
             'super_admin' => 'Super Admin',
             'admin' => 'Admin',
@@ -193,17 +258,17 @@
     <!-- ========================================================= -->
     <!-- SIDEBAR OVERLAY (Mobile) -->
     <!-- ========================================================= -->
-    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()" aria-hidden="true"></div>
 
     <!-- ========================================================= -->
     <!-- SIDEBAR -->
     <!-- ========================================================= -->
-    <aside class="sidebar-desktop w-64 bg-white border-r border-gray-200 flex-shrink-0 flex flex-col sidebar-transition" id="adminSidebar">
-        <!-- Logo - Tanpa Background Hijau, Lebih Besar -->
+    <aside class="sidebar-desktop w-64 bg-white border-r border-gray-200 flex-shrink-0 flex flex-col sidebar-transition" id="adminSidebar" aria-label="Admin Sidebar Navigation">
+        <!-- Logo -->
         <div class="p-4 sm:p-5 border-b border-gray-100">
             <div class="flex items-center gap-3">
                 <div class="flex items-center justify-center w-14 h-14 flex-shrink-0">
-                    <img src="{{ asset('images/Logo-badan-bank-tanah.png') }}" alt="Logo" class="w-12 h-12 object-contain">
+                    <img src="{{ asset('images/Logo-badan-bank-tanah.png') }}" alt="Badan Bank Tanah Logo" class="w-12 h-12 object-contain">
                 </div>
                 <div class="leading-tight min-w-0">
                     <h1 class="font-bold text-sm text-gray-900 truncate">Badan Bank Tanah</h1>
@@ -220,17 +285,20 @@
         </div>
 
         <!-- Menu Navigasi -->
-        <nav class="flex-1 p-3 space-y-0.5 sidebar-scroll">
+        <nav class="flex-1 p-3 space-y-0.5 sidebar-scroll" aria-label="Main Navigation">
 
             <!-- ============================================= -->
             <!-- DASHBOARD (Semua Role) -->
             <!-- ============================================= -->
-            <a href="{{ route('admin.dashboard') }}"
-                class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition sidebar-transition
-                {{ request()->routeIs('admin.dashboard') ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-700 hover:bg-gray-100 hover:text-[#006400]' }}">
-                <i class="fas fa-home w-5 text-center {{ request()->routeIs('admin.dashboard') ? 'text-white' : 'text-gray-400' }}"></i>
-                <span>Dashboard</span>
-            </a>
+            <div class="tooltip-container">
+                <a href="{{ route('admin.dashboard') }}"
+                    class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition sidebar-transition w-full
+                    {{ request()->routeIs('admin.dashboard') ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-700 hover:bg-gray-100 hover:text-[#006400]' }}">
+                    <i class="fas fa-home w-5 text-center {{ request()->routeIs('admin.dashboard') ? 'text-white' : 'text-gray-400' }}"></i>
+                    <span>Dashboard</span>
+                </a>
+                <span class="tooltip-text">Dashboard</span>
+            </div>
 
             <!-- ============================================= -->
             <!-- WEBSITE (Hanya Super Admin & Admin) -->
@@ -254,7 +322,8 @@
             <div x-data="{ open: {{ $websiteOpen ? 'true' : 'false' }} }" class="relative">
                 <button @click="open = !open"
                     class="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium transition sidebar-transition
-                    {{ $websiteOpen ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-700 hover:bg-gray-100 hover:text-[#006400]' }}">
+                    {{ $websiteOpen ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-700 hover:bg-gray-100 hover:text-[#006400]' }}"
+                    aria-expanded="{{ $websiteOpen ? 'true' : 'false' }}">
                     <i class="fas fa-globe w-5 text-center {{ $websiteOpen ? 'text-white' : 'text-gray-400' }}"></i>
                     <span>Website</span>
                     <i class="fas fa-chevron-down ml-auto text-[10px] transition-transform duration-200"
@@ -262,78 +331,114 @@
                 </button>
 
                 <div x-show="open" x-transition:enter.duration.200ms x-transition:leave.duration.150ms
-                    class="mt-0.5 pl-7 space-y-0.5 overflow-hidden">
+                    class="mt-0.5 pl-7 space-y-0.5 overflow-hidden" role="menu">
 
-                    <a href="{{ route('admin.website') }}"
-                        class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition
-                        {{ request()->routeIs('admin.website') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}">
-                        <i class="fas fa-house-chimney w-4 text-center text-[10px]"></i>
-                        <span>Homepage</span>
-                    </a>
+                    <div class="tooltip-container">
+                        <a href="{{ route('admin.website') }}"
+                            class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
+                            {{ request()->routeIs('admin.website') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            role="menuitem">
+                            <i class="fas fa-house-chimney w-4 text-center text-[10px]"></i>
+                            <span>Homepage</span>
+                        </a>
+                        <span class="tooltip-text">Homepage</span>
+                    </div>
 
-                    <a href="{{ route('admin.halaman.edit.tentang') }}"
-                        class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition
-                        {{ request()->routeIs('admin.halaman.edit.tentang') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}">
-                        <i class="fas fa-circle-info w-4 text-center text-[10px]"></i>
-                        <span>Tentang</span>
-                    </a>
+                    <div class="tooltip-container">
+                        <a href="{{ route('admin.halaman.edit.tentang') }}"
+                            class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
+                            {{ request()->routeIs('admin.halaman.edit.tentang') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            role="menuitem">
+                            <i class="fas fa-circle-info w-4 text-center text-[10px]"></i>
+                            <span>Tentang</span>
+                        </a>
+                        <span class="tooltip-text">Tentang</span>
+                    </div>
 
-                    <a href="{{ route('admin.halaman.index') }}"
-                        class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition
-                        {{ request()->routeIs('admin.halaman.index') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}">
-                        <i class="fas fa-file-lines w-4 text-center text-[10px]"></i>
-                        <span>Halaman</span>
-                    </a>
+                    <div class="tooltip-container">
+                        <a href="{{ route('admin.halaman.index') }}"
+                            class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
+                            {{ request()->routeIs('admin.halaman.index') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            role="menuitem">
+                            <i class="fas fa-file-lines w-4 text-center text-[10px]"></i>
+                            <span>Halaman</span>
+                        </a>
+                        <span class="tooltip-text">Halaman</span>
+                    </div>
 
-                    <a href="{{ route('admin.menu_navigasi') }}"
-                        class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition
-                        {{ request()->routeIs('admin.menu_navigasi') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}">
-                        <i class="fas fa-bars w-4 text-center text-[10px]"></i>
-                        <span>Menu Navigasi</span>
-                    </a>
+                    <div class="tooltip-container">
+                        <a href="{{ route('admin.menu_navigasi') }}"
+                            class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
+                            {{ request()->routeIs('admin.menu_navigasi') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            role="menuitem">
+                            <i class="fas fa-bars w-4 text-center text-[10px]"></i>
+                            <span>Menu Navigasi</span>
+                        </a>
+                        <span class="tooltip-text">Menu Navigasi</span>
+                    </div>
 
-                    <a href="{{ route('admin.footer.index') }}"
-                        class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition
-                        {{ request()->routeIs('admin.footer.index') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}">
-                        <i class="fas fa-shoe-prints w-4 text-center text-[10px]"></i>
-                        <span>Footer</span>
-                    </a>
+                    <div class="tooltip-container">
+                        <a href="{{ route('admin.footer.index') }}"
+                            class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
+                            {{ request()->routeIs('admin.footer.index') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            role="menuitem">
+                            <i class="fas fa-shoe-prints w-4 text-center text-[10px]"></i>
+                            <span>Footer</span>
+                        </a>
+                        <span class="tooltip-text">Footer</span>
+                    </div>
 
-                    <a href="{{ route('admin.faq.index') }}"
-                        class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition
-                        {{ request()->routeIs('admin.faq.index') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}">
-                        <i class="fas fa-circle-question w-4 text-center text-[10px]"></i>
-                        <span>FAQ</span>
-                    </a>
+                    <div class="tooltip-container">
+                        <a href="{{ route('admin.faq.index') }}"
+                            class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
+                            {{ request()->routeIs('admin.faq.index') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            role="menuitem">
+                            <i class="fas fa-circle-question w-4 text-center text-[10px]"></i>
+                            <span>FAQ</span>
+                        </a>
+                        <span class="tooltip-text">FAQ</span>
+                    </div>
 
-                    <a href="{{ route('admin.karier.index') }}"
-                        class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition
-                        {{ request()->routeIs('admin.karier.index') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}">
-                        <i class="fas fa-briefcase w-4 text-center text-[10px]"></i>
-                        <span>Karier</span>
-                    </a>
+                    <div class="tooltip-container">
+                        <a href="{{ route('admin.karier.index') }}"
+                            class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
+                            {{ request()->routeIs('admin.karier.index') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            role="menuitem">
+                            <i class="fas fa-briefcase w-4 text-center text-[10px]"></i>
+                            <span>Karier</span>
+                        </a>
+                        <span class="tooltip-text">Karier</span>
+                    </div>
 
-                    <a href="{{ route('admin.kontak.index') }}"
-                        class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition
-                        {{ request()->routeIs('admin.kontak.index') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}">
-                        <i class="fas fa-envelope w-4 text-center text-[10px]"></i>
-                        <span>Kontak Kami</span>
-                        @php
-                            $unreadCount = \App\Models\Kontak::where('is_read', 0)->count();
-                        @endphp
-                        @if($unreadCount > 0)
-                            <span class="ml-auto bg-red-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full min-w-[16px] text-center">
-                                {{ $unreadCount }}
-                            </span>
-                        @endif
-                    </a>
+                    <div class="tooltip-container">
+                        <a href="{{ route('admin.kontak.index') }}"
+                            class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
+                            {{ request()->routeIs('admin.kontak.index') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            role="menuitem">
+                            <i class="fas fa-envelope w-4 text-center text-[10px]"></i>
+                            <span>Kontak Kami</span>
+                            @php
+                                $unreadCount = \App\Models\Kontak::where('is_read', 0)->count();
+                            @endphp
+                            @if($unreadCount > 0)
+                                <span class="ml-auto bg-red-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full min-w-[16px] text-center">
+                                    {{ $unreadCount }}
+                                </span>
+                            @endif
+                        </a>
+                        <span class="tooltip-text">Kontak Kami</span>
+                    </div>
 
-                    <a href="{{ route('admin.halaman.edit.partnership') }}"
-                        class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition
-                        {{ request()->routeIs('admin.halaman.edit.partnership') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}">
-                        <i class="fas fa-handshake w-4 text-center text-[10px]"></i>
-                        <span>Pemanfaatan & Kerjasama</span>
-                    </a>
+                    <div class="tooltip-container">
+                        <a href="{{ route('admin.halaman.edit.partnership') }}"
+                            class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
+                            {{ request()->routeIs('admin.halaman.edit.partnership') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            role="menuitem">
+                            <i class="fas fa-handshake w-4 text-center text-[10px]"></i>
+                            <span>Pemanfaatan & Kerjasama</span>
+                        </a>
+                        <span class="tooltip-text">Pemanfaatan & Kerjasama</span>
+                    </div>
                 </div>
             </div>
             @endif
@@ -353,7 +458,8 @@
             <div x-data="{ open: {{ $asetOpen ? 'true' : 'false' }} }" class="relative">
                 <button @click="open = !open"
                     class="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium transition sidebar-transition
-                    {{ $asetOpen ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-700 hover:bg-gray-100 hover:text-[#006400]' }}">
+                    {{ $asetOpen ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-700 hover:bg-gray-100 hover:text-[#006400]' }}"
+                    aria-expanded="{{ $asetOpen ? 'true' : 'false' }}">
                     <i class="fas fa-map-marked-alt w-5 text-center {{ $asetOpen ? 'text-white' : 'text-gray-400' }}"></i>
                     <span>Aset Persediaan Tanah</span>
                     <i class="fas fa-chevron-down ml-auto text-[10px] transition-transform duration-200"
@@ -361,70 +467,106 @@
                 </button>
 
                 <div x-show="open" x-transition:enter.duration.200ms x-transition:leave.duration.150ms
-                    class="mt-0.5 pl-7 space-y-0.5 overflow-hidden">
+                    class="mt-0.5 pl-7 space-y-0.5 overflow-hidden" role="menu">
 
-                    <a href="{{ route('admin.aset.index') }}"
-                        class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition
-                        {{ request()->routeIs('admin.aset.index') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}">
-                        <i class="fas fa-database w-4 text-center text-[10px]"></i>
-                        <span>Data Aset</span>
-                    </a>
+                    <div class="tooltip-container">
+                        <a href="{{ route('admin.aset.index') }}"
+                            class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
+                            {{ request()->routeIs('admin.aset.index') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            role="menuitem">
+                            <i class="fas fa-database w-4 text-center text-[10px]"></i>
+                            <span>Data Aset</span>
+                        </a>
+                        <span class="tooltip-text">Data Aset</span>
+                    </div>
 
-                    <a href="{{ route('admin.aset.peta') }}"
-                        class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition
-                        {{ request()->routeIs('admin.aset.peta') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}">
-                        <i class="fas fa-map-location-dot w-4 text-center text-[10px]"></i>
-                        <span>Peta Interaktif</span>
-                    </a>
+                    <div class="tooltip-container">
+                        <a href="{{ route('admin.aset.peta') }}"
+                            class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
+                            {{ request()->routeIs('admin.aset.peta') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            role="menuitem">
+                            <i class="fas fa-map-location-dot w-4 text-center text-[10px]"></i>
+                            <span>Peta Interaktif</span>
+                        </a>
+                        <span class="tooltip-text">Peta Interaktif</span>
+                    </div>
 
-                    <a href="{{ route('admin.aset.profil') }}"
-                        class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition
-                        {{ request()->routeIs('admin.aset.profil') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}">
-                        <i class="fas fa-layer-group w-4 text-center text-[10px]"></i>
-                        <span>Profil Persediaan Tanah</span>
-                    </a>
+                    <div class="tooltip-container">
+                        <a href="{{ route('admin.aset.profil') }}"
+                            class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
+                            {{ request()->routeIs('admin.aset.profil') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            role="menuitem">
+                            <i class="fas fa-layer-group w-4 text-center text-[10px]"></i>
+                            <span>Profil Persediaan Tanah</span>
+                        </a>
+                        <span class="tooltip-text">Profil Persediaan Tanah</span>
+                    </div>
 
-                    <a href="{{ route('admin.aset.pengelolaan') }}"
-                        class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition
-                        {{ request()->routeIs('admin.aset.pengelolaan') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}">
-                        <i class="fas fa-gear w-4 text-center text-[10px]"></i>
-                        <span>Pengelolaan Tanah</span>
-                    </a>
+                    <div class="tooltip-container">
+                        <a href="{{ route('admin.aset.pengelolaan') }}"
+                            class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
+                            {{ request()->routeIs('admin.aset.pengelolaan') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            role="menuitem">
+                            <i class="fas fa-gear w-4 text-center text-[10px]"></i>
+                            <span>Pengelolaan Tanah</span>
+                        </a>
+                        <span class="tooltip-text">Pengelolaan Tanah</span>
+                    </div>
 
-                    <a href="{{ route('admin.aset.pengembangan') }}"
-                        class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition
-                        {{ request()->routeIs('admin.aset.pengembangan') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}">
-                        <i class="fas fa-chart-line w-4 text-center text-[10px]"></i>
-                        <span>Pengembangan Tanah</span>
-                    </a>
+                    <div class="tooltip-container">
+                        <a href="{{ route('admin.aset.pengembangan') }}"
+                            class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
+                            {{ request()->routeIs('admin.aset.pengembangan') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            role="menuitem">
+                            <i class="fas fa-chart-line w-4 text-center text-[10px]"></i>
+                            <span>Pengembangan Tanah</span>
+                        </a>
+                        <span class="tooltip-text">Pengembangan Tanah</span>
+                    </div>
 
-                    <a href="{{ route('admin.aset.wilayah') }}"
-                        class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition
-                        {{ request()->routeIs('admin.aset.wilayah') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}">
-                        <i class="fas fa-map w-4 text-center text-[10px]"></i>
-                        <span>Wilayah</span>
-                    </a>
+                    <div class="tooltip-container">
+                        <a href="{{ route('admin.aset.wilayah') }}"
+                            class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
+                            {{ request()->routeIs('admin.aset.wilayah') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            role="menuitem">
+                            <i class="fas fa-map w-4 text-center text-[10px]"></i>
+                            <span>Wilayah</span>
+                        </a>
+                        <span class="tooltip-text">Wilayah</span>
+                    </div>
 
-                    <a href="{{ route('admin.aset.status') }}"
-                        class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition
-                        {{ request()->routeIs('admin.aset.status') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}">
-                        <i class="fas fa-circle-check w-4 text-center text-[10px]"></i>
-                        <span>Status Tanah</span>
-                    </a>
+                    <div class="tooltip-container">
+                        <a href="{{ route('admin.aset.status') }}"
+                            class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
+                            {{ request()->routeIs('admin.aset.status') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            role="menuitem">
+                            <i class="fas fa-circle-check w-4 text-center text-[10px]"></i>
+                            <span>Status Tanah</span>
+                        </a>
+                        <span class="tooltip-text">Status Tanah</span>
+                    </div>
 
-                    <a href="{{ route('admin.aset.dokumen') }}"
-                        class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition
-                        {{ request()->routeIs('admin.aset.dokumen') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}">
-                        <i class="fas fa-file-lines w-4 text-center text-[10px]"></i>
-                        <span>Dokumen</span>
-                    </a>
+                    <div class="tooltip-container">
+                        <a href="{{ route('admin.aset.dokumen') }}"
+                            class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
+                            {{ request()->routeIs('admin.aset.dokumen') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            role="menuitem">
+                            <i class="fas fa-file-lines w-4 text-center text-[10px]"></i>
+                            <span>Dokumen</span>
+                        </a>
+                        <span class="tooltip-text">Dokumen</span>
+                    </div>
 
-                    <a href="{{ route('admin.aset.statistik') }}"
-                        class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition
-                        {{ request()->routeIs('admin.aset.statistik') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}">
-                        <i class="fas fa-chart-pie w-4 text-center text-[10px]"></i>
-                        <span>Statistik</span>
-                    </a>
+                    <div class="tooltip-container">
+                        <a href="{{ route('admin.aset.statistik') }}"
+                            class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
+                            {{ request()->routeIs('admin.aset.statistik') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            role="menuitem">
+                            <i class="fas fa-chart-pie w-4 text-center text-[10px]"></i>
+                            <span>Statistik</span>
+                        </a>
+                        <span class="tooltip-text">Statistik</span>
+                    </div>
                 </div>
             </div>
             @endif
@@ -444,7 +586,8 @@
             <div x-data="{ open: {{ $pemanfaatanOpen ? 'true' : 'false' }} }" class="relative">
                 <button @click="open = !open"
                     class="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium transition sidebar-transition
-                    {{ $pemanfaatanOpen ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-700 hover:bg-gray-100 hover:text-[#006400]' }}">
+                    {{ $pemanfaatanOpen ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-700 hover:bg-gray-100 hover:text-[#006400]' }}"
+                    aria-expanded="{{ $pemanfaatanOpen ? 'true' : 'false' }}">
                     <i class="fas fa-handshake w-5 text-center {{ $pemanfaatanOpen ? 'text-white' : 'text-gray-400' }}"></i>
                     <span>Pemanfaatan & Kerjasama</span>
                     <i class="fas fa-chevron-down ml-auto text-[10px] transition-transform duration-200"
@@ -452,22 +595,29 @@
                 </button>
 
                 <div x-show="open" x-transition:enter.duration.200ms x-transition:leave.duration.150ms
-                    class="mt-0.5 pl-7 space-y-0.5 overflow-hidden">
+                    class="mt-0.5 pl-7 space-y-0.5 overflow-hidden" role="menu">
 
-                    <a href="{{ route('admin.proyek-investasi.index') }}"
-                        class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition
-                        {{ request()->routeIs('admin.proyek-investasi.*') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}">
-                        <i class="fas fa-chart-line w-4 text-center text-[10px]"></i>
-                        <span>Proyek Investasi</span>
-                    </a>
+                    <div class="tooltip-container">
+                        <a href="{{ route('admin.proyek-investasi.index') }}"
+                            class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
+                            {{ request()->routeIs('admin.proyek-investasi.*') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            role="menuitem">
+                            <i class="fas fa-chart-line w-4 text-center text-[10px]"></i>
+                            <span>Proyek Investasi</span>
+                        </a>
+                        <span class="tooltip-text">Proyek Investasi</span>
+                    </div>
 
-                    <a href="{{ route('admin.dokumen-kerjasama.index') }}"
-                        class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition
-                        {{ request()->routeIs('admin.dokumen-kerjasama.*') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}">
-                        <i class="fas fa-file-lines w-4 text-center text-[10px]"></i>
-                        <span>Dokumen Kerjasama</span>
-                    </a>
-
+                    <div class="tooltip-container">
+                        <a href="{{ route('admin.dokumen-kerjasama.index') }}"
+                            class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
+                            {{ request()->routeIs('admin.dokumen-kerjasama.*') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            role="menuitem">
+                            <i class="fas fa-file-lines w-4 text-center text-[10px]"></i>
+                            <span>Dokumen Kerjasama</span>
+                        </a>
+                        <span class="tooltip-text">Dokumen Kerjasama</span>
+                    </div>
                 </div>
             </div>
             @endif
@@ -487,7 +637,8 @@
             <div x-data="{ open: {{ $pubOpen ? 'true' : 'false' }} }" class="relative">
                 <button @click="open = !open"
                     class="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium transition sidebar-transition
-                    {{ $pubOpen ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-700 hover:bg-gray-100 hover:text-[#006400]' }}">
+                    {{ $pubOpen ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-700 hover:bg-gray-100 hover:text-[#006400]' }}"
+                    aria-expanded="{{ $pubOpen ? 'true' : 'false' }}">
                     <i class="fas fa-newspaper w-5 text-center {{ $pubOpen ? 'text-white' : 'text-gray-400' }}"></i>
                     <span>Publikasi</span>
                     <i class="fas fa-chevron-down ml-auto text-[10px] transition-transform duration-200"
@@ -495,46 +646,121 @@
                 </button>
 
                 <div x-show="open" x-transition:enter.duration.200ms x-transition:leave.duration.150ms
-                    class="mt-0.5 pl-7 space-y-0.5 overflow-hidden">
+                    class="mt-0.5 pl-7 space-y-0.5 overflow-hidden" role="menu">
 
-                    <a href="{{ route('admin.berita.index') }}"
-                        class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition
-                        {{ request()->routeIs('admin.berita.index') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}">
-                        <i class="fas fa-newspaper w-4 text-center text-[10px]"></i>
-                        <span>Berita</span>
-                        @php
-                            $pendingCount = \App\Models\Berita::where('status_approval', 'Menunggu Approval')->count();
-                        @endphp
-                        @if($pendingCount > 0 && $role == 'publisher')
-                            <span class="ml-auto bg-orange-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full min-w-[16px] text-center">
-                                {{ $pendingCount }}
-                            </span>
-                        @endif
-                    </a>
+                    <div class="tooltip-container">
+                        <a href="{{ route('admin.berita.index') }}"
+                            class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
+                            {{ request()->routeIs('admin.berita.index') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            role="menuitem">
+                            <i class="fas fa-newspaper w-4 text-center text-[10px]"></i>
+                            <span>Berita</span>
+                            @php
+                                $pendingCount = \App\Models\Berita::where('status_approval', 'Menunggu Approval')->count();
+                            @endphp
+                            @if($pendingCount > 0 && $role == 'publisher')
+                                <span class="ml-auto bg-orange-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full min-w-[16px] text-center">
+                                    {{ $pendingCount }}
+                                </span>
+                            @endif
+                        </a>
+                        <span class="tooltip-text">Berita</span>
+                    </div>
 
-                    <a href="{{ route('admin.berita.siaran_pers') }}"
-                        class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition
-                        {{ request()->routeIs('admin.berita.siaran_pers') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}">
-                        <i class="fas fa-bullhorn w-4 text-center text-[10px]"></i>
-                        <span>Siaran Pers</span>
-                    </a>
+                    <div class="tooltip-container">
+                        <a href="{{ route('admin.berita.siaran_pers') }}"
+                            class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
+                            {{ request()->routeIs('admin.berita.siaran_pers') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            role="menuitem">
+                            <i class="fas fa-bullhorn w-4 text-center text-[10px]"></i>
+                            <span>Siaran Pers</span>
+                        </a>
+                        <span class="tooltip-text">Siaran Pers</span>
+                    </div>
 
-                    <a href="{{ route('admin.berita.pengumuman') }}"
-                        class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition
-                        {{ request()->routeIs('admin.berita.pengumuman') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}">
-                        <i class="fas fa-circle-info w-4 text-center text-[10px]"></i>
-                        <span>Pengumuman</span>
-                    </a>
+                    <div class="tooltip-container">
+                        <a href="{{ route('admin.berita.pengumuman') }}"
+                            class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
+                            {{ request()->routeIs('admin.berita.pengumuman') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            role="menuitem">
+                            <i class="fas fa-circle-info w-4 text-center text-[10px]"></i>
+                            <span>Pengumuman</span>
+                        </a>
+                        <span class="tooltip-text">Pengumuman</span>
+                    </div>
 
                     @if (in_array($role, ['super_admin', 'admin', 'editor']))
                     <div class="pt-1">
-                        <a href="{{ route('admin.berita.create') }}"
-                            class="flex items-center gap-2.5 py-1.5 px-3 rounded-md text-xs font-medium text-[#006400] hover:bg-green-50 transition sidebar-transition">
-                            <i class="fas fa-plus-circle w-4 text-center text-[10px]"></i>
-                            <span>Tambah Berita</span>
-                        </a>
+                        <div class="tooltip-container">
+                            <a href="{{ route('admin.berita.create') }}"
+                                class="flex items-center gap-2.5 py-1.5 px-3 rounded-md text-xs font-medium text-[#006400] hover:bg-green-50 transition sidebar-transition w-full">
+                                <i class="fas fa-plus-circle w-4 text-center text-[10px]"></i>
+                                <span>Tambah Berita</span>
+                            </a>
+                            <span class="tooltip-text">Tambah Berita</span>
+                        </div>
                     </div>
                     @endif
+                </div>
+            </div>
+            @endif
+
+            <!-- ============================================= -->
+            <!-- MICROSITE (Hanya Super Admin & Admin) -->
+            <!-- ============================================= -->
+            @if (in_array($role, ['super_admin', 'admin']))
+            <div class="pt-3 pb-1.5">
+                <p class="px-3 text-[9px] font-bold text-gray-400 uppercase tracking-wider">Microsite</p>
+            </div>
+
+            @php
+                $micrositeOpen = request()->routeIs('admin.microsite.*');
+            @endphp
+
+            <div x-data="{ open: {{ $micrositeOpen ? 'true' : 'false' }} }" class="relative">
+                <button @click="open = !open"
+                    class="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium transition sidebar-transition
+                    {{ $micrositeOpen ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-700 hover:bg-gray-100 hover:text-[#006400]' }}"
+                    aria-expanded="{{ $micrositeOpen ? 'true' : 'false' }}">
+                    <i class="fas fa-file-lines w-5 text-center {{ $micrositeOpen ? 'text-white' : 'text-gray-400' }}"></i>
+                    <span>Microsite / Event</span>
+                    <i class="fas fa-chevron-down ml-auto text-[10px] transition-transform duration-200"
+                        :class="open ? 'rotate-180' : ''"></i>
+                </button>
+
+                <div x-show="open" x-transition:enter.duration.200ms x-transition:leave.duration.150ms
+                    class="mt-0.5 pl-7 space-y-0.5 overflow-hidden" role="menu">
+
+                    <div class="tooltip-container">
+                        <a href="{{ route('admin.microsite.index') }}"
+                            class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
+                            {{ request()->routeIs('admin.microsite.index') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            role="menuitem">
+                            <i class="fas fa-list w-4 text-center text-[10px]"></i>
+                            <span>Semua Microsite</span>
+                        </a>
+                        <span class="tooltip-text">Semua Microsite</span>
+                    </div>
+
+                    <div class="tooltip-container">
+                        <a href="{{ route('admin.microsite.create') }}"
+                            class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
+                            {{ request()->routeIs('admin.microsite.create') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            role="menuitem">
+                            <i class="fas fa-plus-circle w-4 text-center text-[10px]"></i>
+                            <span>Buat Microsite</span>
+                        </a>
+                        <span class="tooltip-text">Buat Microsite</span>
+                    </div>
+
+                    <div class="tooltip-container">
+                        <a href="{{ route('microsite.index') }}" target="_blank"
+                            class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full text-gray-500 hover:bg-gray-50 hover:text-[#006400]">
+                            <i class="fas fa-external-link-alt w-4 text-center text-[10px]"></i>
+                            <span>Lihat di Frontend</span>
+                        </a>
+                        <span class="tooltip-text">Lihat di Frontend</span>
+                    </div>
                 </div>
             </div>
             @endif
@@ -547,89 +773,107 @@
                 <p class="px-3 text-[9px] font-bold text-gray-400 uppercase tracking-wider">Lainnya</p>
             </div>
 
-            <a href="{{ route('admin.kontak.index') }}"
-                class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition sidebar-transition
-                {{ request()->routeIs('admin.kontak.index') ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-700 hover:bg-gray-100 hover:text-[#006400]' }}">
-                <i class="fas fa-envelope w-5 text-center {{ request()->routeIs('admin.kontak.index') ? 'text-white' : 'text-gray-400' }}"></i>
-                <span>Kontak</span>
-                @php
-                    $unreadCount = \App\Models\Kontak::where('is_read', 0)->count();
-                @endphp
-                @if($unreadCount > 0)
-                    <span class="ml-auto bg-red-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full min-w-[16px] text-center">
-                        {{ $unreadCount }}
-                    </span>
-                @endif
-            </a>
+            <div class="tooltip-container">
+                <a href="{{ route('admin.kontak.index') }}"
+                    class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition sidebar-transition w-full
+                    {{ request()->routeIs('admin.kontak.index') ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-700 hover:bg-gray-100 hover:text-[#006400]' }}">
+                    <i class="fas fa-envelope w-5 text-center {{ request()->routeIs('admin.kontak.index') ? 'text-white' : 'text-gray-400' }}"></i>
+                    <span>Kontak</span>
+                    @php
+                        $unreadCount = \App\Models\Kontak::where('is_read', 0)->count();
+                    @endphp
+                    @if($unreadCount > 0)
+                        <span class="ml-auto bg-red-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full min-w-[16px] text-center">
+                            {{ $unreadCount }}
+                        </span>
+                    @endif
+                </a>
+                <span class="tooltip-text">Kontak</span>
+            </div>
 
-            <a href="{{ route('admin.user.index') }}"
-                class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition sidebar-transition
-                {{ request()->routeIs('admin.user.*') ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-700 hover:bg-gray-100 hover:text-[#006400]' }}">
-                <i class="fas fa-users w-5 text-center {{ request()->routeIs('admin.user.*') ? 'text-white' : 'text-gray-400' }}"></i>
-                <span>Pengguna</span>
-                @php
-                    $userCount = \App\Models\User::count();
-                @endphp
-                <span class="ml-auto text-[8px] text-gray-400">{{ $userCount }}</span>
-            </a>
+            <div class="tooltip-container">
+                <a href="{{ route('admin.user.index') }}"
+                    class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition sidebar-transition w-full
+                    {{ request()->routeIs('admin.user.*') ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-700 hover:bg-gray-100 hover:text-[#006400]' }}">
+                    <i class="fas fa-users w-5 text-center {{ request()->routeIs('admin.user.*') ? 'text-white' : 'text-gray-400' }}"></i>
+                    <span>Pengguna</span>
+                    @php
+                        $userCount = \App\Models\User::count();
+                    @endphp
+                    <span class="ml-auto text-[8px] text-gray-400">{{ $userCount }}</span>
+                </a>
+                <span class="tooltip-text">Pengguna</span>
+            </div>
 
-            <a href="{{ route('admin.integrasi') }}"
-                class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition sidebar-transition
-                {{ request()->routeIs('admin.integrasi') ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-700 hover:bg-gray-100 hover:text-[#006400]' }}">
-                <i class="fas fa-plug w-5 text-center {{ request()->routeIs('admin.integrasi') ? 'text-white' : 'text-gray-400' }}"></i>
-                <span>Integrasi</span>
-            </a>
+            <div class="tooltip-container">
+                <a href="{{ route('admin.integrasi') }}"
+                    class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition sidebar-transition w-full
+                    {{ request()->routeIs('admin.integrasi') ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-700 hover:bg-gray-100 hover:text-[#006400]' }}">
+                    <i class="fas fa-plug w-5 text-center {{ request()->routeIs('admin.integrasi') ? 'text-white' : 'text-gray-400' }}"></i>
+                    <span>Integrasi</span>
+                </a>
+                <span class="tooltip-text">Integrasi</span>
+            </div>
 
-            <a href="{{ route('admin.pengaturan') }}"
-                class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition sidebar-transition
-                {{ request()->routeIs('admin.pengaturan') ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-700 hover:bg-gray-100 hover:text-[#006400]' }}">
-                <i class="fas fa-gear w-5 text-center {{ request()->routeIs('admin.pengaturan') ? 'text-white' : 'text-gray-400' }}"></i>
-                <span>Pengaturan</span>
-            </a>
+            <div class="tooltip-container">
+                <a href="{{ route('admin.pengaturan') }}"
+                    class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition sidebar-transition w-full
+                    {{ request()->routeIs('admin.pengaturan') ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-700 hover:bg-gray-100 hover:text-[#006400]' }}">
+                    <i class="fas fa-gear w-5 text-center {{ request()->routeIs('admin.pengaturan') ? 'text-white' : 'text-gray-400' }}"></i>
+                    <span>Pengaturan</span>
+                </a>
+                <span class="tooltip-text">Pengaturan</span>
+            </div>
             @endif
 
             <div class="h-4"></div>
 
-            <a href="{{ route('home') }}" target="_blank"
-                class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition sidebar-transition text-gray-500 hover:bg-gray-100 hover:text-[#006400] border border-dashed border-gray-200 mt-2">
-                <i class="fas fa-external-link-alt w-5 text-center text-gray-400"></i>
-                <span>Lihat Website</span>
-                <span class="ml-auto text-[8px] text-gray-400">
-                    <i class="fas fa-arrow-up-right-from-square"></i>
-                </span>
-            </a>
+            <div class="tooltip-container">
+                <a href="{{ route('home') }}" target="_blank"
+                    class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition sidebar-transition text-gray-500 hover:bg-gray-100 hover:text-[#006400] border border-dashed border-gray-200 mt-2 w-full">
+                    <i class="fas fa-external-link-alt w-5 text-center text-gray-400"></i>
+                    <span>Lihat Website</span>
+                    <span class="ml-auto text-[8px] text-gray-400">
+                        <i class="fas fa-arrow-up-right-from-square"></i>
+                    </span>
+                </a>
+                <span class="tooltip-text">Lihat Website</span>
+            </div>
         </nav>
 
-        <!-- Profil Admin -->
-        <div class="p-3 border-t border-gray-200 bg-gray-50/80">
+        <!-- ========================================================= -->
+        <!-- PROFIL ADMIN - SIDEBAR (DIPERBAIKI DENGAN FOTO + CACHE BUSTER) -->
+        <!-- ========================================================= -->
+        <div class="p-3 border-t border-gray-200 bg-gray-50/80" role="contentinfo">
             <div class="flex items-center gap-3">
-                @if (auth()->user()->foto)
-                    <img src="{{ asset('storage/' . auth()->user()->foto) }}"
+                @if ($user->foto)
+                    <img src="{{ asset('storage/' . $user->foto) }}?v={{ time() }}"
                         class="w-9 h-9 rounded-full object-cover border-2 border-gray-200 flex-shrink-0"
-                        alt="{{ auth()->user()->name }}">
+                        alt="Profile photo of {{ $user->name }}">
                 @else
-                    <div class="w-9 h-9 bg-[#006400] rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
-                        {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                    <div class="w-9 h-9 bg-[#006400] rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0" aria-hidden="true">
+                        {{ strtoupper(substr($user->name, 0, 1)) }}
                     </div>
                 @endif
 
                 <div class="flex-1 min-w-0">
-                    <p class="text-xs font-bold text-gray-900 truncate">{{ auth()->user()->name }}</p>
+                    <p class="text-xs font-bold text-gray-900 truncate">{{ $user->name }}</p>
                     <p class="text-[9px] text-gray-500 capitalize flex items-center gap-1.5">
                         <span class="inline-block w-1.5 h-1.5 rounded-full
-                            {{ auth()->user()->role == 'super_admin' ? 'bg-purple-500' :
-                               (auth()->user()->role == 'admin' ? 'bg-blue-500' :
-                               (auth()->user()->role == 'editor' ? 'bg-yellow-500' :
-                               (auth()->user()->role == 'publisher' ? 'bg-green-500' : 'bg-gray-500'))) }}">
+                            {{ $user->role == 'super_admin' ? 'bg-purple-500' :
+                               ($user->role == 'admin' ? 'bg-blue-500' :
+                               ($user->role == 'editor' ? 'bg-yellow-500' :
+                               ($user->role == 'publisher' ? 'bg-green-500' : 'bg-gray-500'))) }}" aria-hidden="true">
                         </span>
-                        {{ ucfirst(str_replace('_', ' ', auth()->user()->role)) }}
+                        {{ ucfirst(str_replace('_', ' ', $user->role)) }}
                     </p>
                 </div>
 
                 <form method="POST" action="{{ route('logout') }}" class="flex-shrink-0">
                     @csrf
-                    <button type="submit" class="text-gray-400 hover:text-red-600 transition p-1.5 rounded-lg hover:bg-red-50">
-                        <i class="fas fa-sign-out-alt text-sm"></i>
+                    <button type="submit" class="text-gray-400 hover:text-red-600 transition p-1.5 rounded-lg hover:bg-red-50"
+                            aria-label="Logout">
+                        <i class="fas fa-sign-out-alt text-sm" aria-hidden="true"></i>
                     </button>
                 </form>
             </div>
@@ -642,11 +886,14 @@
     <div class="flex-1 flex flex-col overflow-hidden main-content">
 
         <!-- HEADER -->
-        <header class="admin-header bg-white h-16 border-b border-gray-200 flex items-center justify-between px-4 sm:px-6 shrink-0 shadow-sm">
+        <header class="admin-header bg-white h-16 border-b border-gray-200 flex items-center justify-between px-4 sm:px-6 shrink-0 shadow-sm" role="banner">
             <div class="flex items-center gap-3 flex-1">
                 <!-- Mobile Toggle -->
-                <button class="sidebar-mobile-toggle text-gray-500 hover:text-gray-700 lg:hidden" onclick="toggleSidebar()">
-                    <i class="fas fa-bars text-lg"></i>
+                <button class="sidebar-mobile-toggle text-gray-500 hover:text-gray-700 lg:hidden"
+                        onclick="toggleSidebar()"
+                        aria-label="Toggle sidebar navigation"
+                        aria-expanded="false">
+                    <i class="fas fa-bars text-lg" aria-hidden="true"></i>
                 </button>
 
                 <!-- ========================================================= -->
@@ -698,6 +945,9 @@
                         'admin.dokumen-kerjasama.edit' => 'Edit Dokumen',
                         'admin.integrasi' => 'Integrasi',
                         'admin.pengaturan' => 'Pengaturan',
+                        'admin.microsite.index' => 'Microsite',
+                        'admin.microsite.create' => 'Buat Microsite',
+                        'admin.microsite.edit' => 'Edit Microsite',
                     ];
 
                     $currentRoute = Route::currentRouteName();
@@ -707,14 +957,14 @@
                     $parentTitle = $breadcrumbs[$parentRoute] ?? null;
                 @endphp
 
-                <div class="hidden sm:flex items-center gap-2 text-xs text-gray-500">
-                    <a href="{{ route('admin.dashboard') }}" class="hover:text-[#006400] transition">
-                        <i class="fas fa-home"></i>
+                <div class="hidden sm:flex items-center gap-2 text-xs text-gray-500" aria-label="Breadcrumb">
+                    <a href="{{ route('admin.dashboard') }}" class="hover:text-[#006400] transition" aria-label="Home">
+                        <i class="fas fa-home" aria-hidden="true"></i>
                     </a>
-                    <i class="fas fa-chevron-right text-gray-300 text-[8px]"></i>
+                    <i class="fas fa-chevron-right text-gray-300 text-[8px]" aria-hidden="true"></i>
                     @if ($parentTitle && $parentTitle != $breadcrumbTitle)
                         <span class="text-gray-400">{{ $parentTitle }}</span>
-                        <i class="fas fa-chevron-right text-gray-300 text-[8px]"></i>
+                        <i class="fas fa-chevron-right text-gray-300 text-[8px]" aria-hidden="true"></i>
                     @endif
                     <span class="font-medium text-gray-700">{{ $breadcrumbTitle }}</span>
                 </div>
@@ -724,26 +974,28 @@
 
                 <!-- Search Bar -->
                 <div class="relative hidden md:block header-search">
-                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" aria-hidden="true">
                         <i class="fas fa-search text-xs"></i>
                     </span>
                     <input type="text" id="adminSearch"
                         placeholder="Cari menu..."
+                        aria-label="Search menu"
                         class="bg-gray-50 border border-gray-200 rounded-lg pl-9 pr-4 py-2 text-sm w-40 lg:w-56 focus:outline-none focus:ring-2 focus:ring-[#006400]/30 focus:border-[#006400] transition">
-                    <span class="absolute right-3 top-1/2 -translate-y-1/2 text-[8px] text-gray-400 bg-gray-200 px-1.5 py-0.5 rounded hidden xl:block">Ctrl+K</span>
+                    <span class="absolute right-3 top-1/2 -translate-y-1/2 text-[8px] text-gray-400 bg-gray-200 px-1.5 py-0.5 rounded hidden xl:block" aria-hidden="true">Ctrl+K</span>
                 </div>
 
                 <!-- Dark Mode Button -->
                 <button id="darkModeButton" type="button"
                     class="text-gray-400 hover:text-gray-700 transition w-8 h-8 rounded-lg hover:bg-gray-100 flex items-center justify-center"
+                    aria-label="Toggle dark mode"
                     title="Toggle Dark Mode">
-                    <i id="darkModeIcon" class="fas fa-moon"></i>
+                    <i id="darkModeIcon" class="fas fa-moon" aria-hidden="true"></i>
                 </button>
 
                 <!-- ========================================================= -->
                 <!-- NOTIFICATION DROPDOWN -->
                 <!-- ========================================================= -->
-                <div x-data="{ open: false, notifications: [], total: 0, loading: true }" 
+                <div x-data="{ open: false, notifications: [], total: 0, loading: true }"
                      x-init="
                         fetch('{{ route('admin.notifications.index') }}?limit=10')
                             .then(res => res.json())
@@ -752,18 +1004,21 @@
                      "
                      @click.outside="open = false"
                      class="relative">
-                    
-                    <button @click="open = !open" 
+
+                    <button @click="open = !open"
                         class="text-gray-400 hover:text-gray-700 transition w-8 h-8 rounded-lg hover:bg-gray-100 flex items-center justify-center relative"
+                        aria-label="Notifications"
+                        aria-expanded="false"
                         title="Notifikasi">
-                        <i class="fas fa-bell"></i>
-                        <span x-show="total > 0" x-text="total > 9 ? '9+' : total" 
-                            class="absolute -top-0.5 -right-0.5 bg-red-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full min-w-[14px] text-center notification-pulse">
+                        <i class="fas fa-bell" aria-hidden="true"></i>
+                        <span x-show="total > 0" x-text="total > 9 ? '9+' : total"
+                            class="absolute -top-0.5 -right-0.5 bg-red-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full min-w-[14px] text-center notification-pulse"
+                            role="status">
                         </span>
                     </button>
 
                     <!-- Dropdown -->
-                    <div x-show="open" 
+                    <div x-show="open"
                         x-transition:enter="transition ease-out duration-200"
                         x-transition:enter-start="opacity-0 scale-95"
                         x-transition:enter-end="opacity-100 scale-100"
@@ -771,7 +1026,9 @@
                         x-transition:leave-start="opacity-100 scale-100"
                         x-transition:leave-end="opacity-0 scale-95"
                         class="absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden z-50"
-                        style="display: none;">
+                        style="display: none;"
+                        role="dialog"
+                        aria-label="Notifications">
 
                         <!-- Header -->
                         <div class="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
@@ -779,16 +1036,18 @@
                             <div class="flex items-center gap-2">
                                 <span x-show="total > 0" x-text="total" class="text-[10px] text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full"></span>
                                 <button x-show="total > 0" @click="
-                                    fetch('{{ route('admin.notifications.mark-all-read') }}', { 
-                                        method: 'POST', 
-                                        headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' } 
+                                    fetch('{{ route('admin.notifications.mark-all-read') }}', {
+                                        method: 'POST',
+                                        headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
                                     })
-                                    .then(() => { 
-                                        total = 0; 
-                                        notifications = []; 
+                                    .then(() => {
+                                        total = 0;
+                                        notifications = [];
                                     })
                                     .catch(() => {})
-                                " class="text-[10px] text-blue-600 hover:underline">Tandai semua dibaca</button>
+                                " class="text-[10px] text-blue-600 hover:underline">
+                                    Tandai semua dibaca
+                                </button>
                             </div>
                         </div>
 
@@ -796,13 +1055,13 @@
                         <div class="max-h-80 overflow-y-auto divide-y divide-gray-50">
                             <!-- Loading -->
                             <div x-show="loading" class="px-4 py-8 text-center">
-                                <i class="fas fa-spinner fa-spin text-gray-400 text-xl"></i>
+                                <i class="fas fa-spinner fa-spin text-gray-400 text-xl" aria-hidden="true"></i>
                                 <p class="text-sm text-gray-400 mt-2">Memuat notifikasi...</p>
                             </div>
 
                             <!-- Empty -->
                             <div x-show="!loading && notifications.length === 0" class="px-4 py-8 text-center">
-                                <i class="fas fa-check-circle text-3xl text-gray-300 block mb-2"></i>
+                                <i class="fas fa-check-circle text-3xl text-gray-300 block mb-2" aria-hidden="true"></i>
                                 <p class="text-sm text-gray-400">Tidak ada notifikasi</p>
                                 <p class="text-xs text-gray-300 mt-1">Semua sudah dibaca</p>
                             </div>
@@ -830,14 +1089,16 @@
                     </div>
                 </div>
 
-                <!-- User Avatar (Header) -->
-                @if (auth()->user()->foto)
-                    <img src="{{ asset('storage/' . auth()->user()->foto) }}"
+                <!-- ========================================================= -->
+                <!-- USER AVATAR - HEADER (DIPERBAIKI DENGAN FOTO + CACHE BUSTER) -->
+                <!-- ========================================================= -->
+                @if ($user->foto)
+                    <img src="{{ asset('storage/' . $user->foto) }}?v={{ time() }}"
                         class="w-8 h-8 rounded-full object-cover border-2 border-gray-200 hidden sm:block"
-                        alt="{{ auth()->user()->name }}">
+                        alt="Profile photo of {{ $user->name }}">
                 @else
-                    <div class="w-8 h-8 bg-[#006400] rounded-full flex items-center justify-center text-white font-bold text-xs hidden sm:block">
-                        {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                    <div class="w-8 h-8 bg-[#006400] rounded-full flex items-center justify-center text-white font-bold text-xs hidden sm:block" aria-hidden="true">
+                        {{ strtoupper(substr($user->name, 0, 1)) }}
                     </div>
                 @endif
 
@@ -845,7 +1106,7 @@
         </header>
 
         <!-- CONTENT -->
-        <main class="admin-content flex-1 overflow-y-auto p-4 sm:p-6 bg-gray-50/80">
+        <main class="admin-content flex-1 overflow-y-auto p-4 sm:p-6 bg-gray-50/80" role="main">
             @yield('content')
         </main>
     </div>
@@ -853,22 +1114,22 @@
     <!-- ========================================================= -->
     <!-- TOAST NOTIFICATION -->
     <!-- ========================================================= -->
-    <div id="toastContainer" class="fixed top-20 right-4 z-[99999] space-y-3 max-w-sm w-full"></div>
+    <div id="toastContainer" class="fixed top-20 right-4 z-[99999] space-y-3 max-w-sm w-full" role="alert" aria-live="polite"></div>
 
     <!-- ========================================================= -->
     <!-- COMING SOON MODAL -->
     <!-- ========================================================= -->
-    <div id="comingSoonModal" class="fixed inset-0 z-[99999] flex items-center justify-center px-4 hidden">
-        <div class="absolute inset-0 bg-black/50" onclick="closeComingSoon()"></div>
+    <div id="comingSoonModal" class="fixed inset-0 z-[99999] flex items-center justify-center px-4 hidden" role="dialog" aria-modal="true" aria-labelledby="comingSoonTitle">
+        <div class="absolute inset-0 bg-black/50" onclick="closeComingSoon()" aria-hidden="true"></div>
         <div class="relative bg-white rounded-2xl max-w-md w-full p-8 text-center shadow-2xl animate-fade-up">
-            <div class="w-16 h-16 mx-auto rounded-full bg-green-50 flex items-center justify-center mb-4">
+            <div class="w-16 h-16 mx-auto rounded-full bg-green-50 flex items-center justify-center mb-4" aria-hidden="true">
                 <i class="fas fa-rocket text-3xl text-[#006400]"></i>
             </div>
-            <h3 class="text-xl font-bold text-gray-900 mb-2">Fitur Segera Hadir</h3>
+            <h3 id="comingSoonTitle" class="text-xl font-bold text-gray-900 mb-2">Fitur Segera Hadir</h3>
             <p class="text-sm text-gray-500 mb-6">
                 Fitur <span id="featureName" class="font-semibold text-gray-700"></span> sedang dalam pengembangan.
             </p>
-            <button onclick="closeComingSoon()" class="px-6 py-2.5 bg-[#006400] hover:bg-[#005500] text-white rounded-lg font-semibold text-sm transition">
+            <button onclick="closeComingSoon()" class="px-6 py-2.5 bg-[#006400] hover:bg-[#005500] text-white rounded-lg font-semibold text-sm transition" aria-label="Close">
                 Mengerti
             </button>
         </div>
@@ -884,16 +1145,31 @@
         function toggleSidebar() {
             const sidebar = document.getElementById('adminSidebar');
             const overlay = document.getElementById('sidebarOverlay');
+            const toggleBtn = document.querySelector('.sidebar-mobile-toggle');
+
             sidebar.classList.toggle('open');
             overlay.classList.toggle('active');
+
+            if (toggleBtn) {
+                const isOpen = sidebar.classList.contains('open');
+                toggleBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+            }
+
             document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
         }
 
         // Tutup sidebar saat resize ke desktop
         window.addEventListener('resize', function() {
             if (window.innerWidth >= 1024) {
-                document.getElementById('adminSidebar')?.classList.remove('open');
-                document.getElementById('sidebarOverlay')?.classList.remove('active');
+                const sidebar = document.getElementById('adminSidebar');
+                const overlay = document.getElementById('sidebarOverlay');
+                const toggleBtn = document.querySelector('.sidebar-mobile-toggle');
+
+                sidebar?.classList.remove('open');
+                overlay?.classList.remove('active');
+                if (toggleBtn) {
+                    toggleBtn.setAttribute('aria-expanded', 'false');
+                }
                 document.body.style.overflow = '';
             }
         });
@@ -1002,10 +1278,10 @@
             const toast = document.createElement('div');
             toast.className = `flex items-start gap-3 p-4 border rounded-xl shadow-lg ${colors[type] || colors.info} animate-slide-in`;
             toast.innerHTML = `
-                <i class="fas ${icons[type] || icons.info} text-lg mt-0.5"></i>
+                <i class="fas ${icons[type] || icons.info} text-lg mt-0.5" aria-hidden="true"></i>
                 <div class="flex-1 text-sm font-medium">${message}</div>
-                <button onclick="this.parentElement.remove()" class="text-gray-400 hover:text-gray-600 transition">
-                    <i class="fas fa-times"></i>
+                <button onclick="this.parentElement.remove()" class="text-gray-400 hover:text-gray-600 transition" aria-label="Close notification">
+                    <i class="fas fa-times" aria-hidden="true"></i>
                 </button>
             `;
             container.appendChild(toast);

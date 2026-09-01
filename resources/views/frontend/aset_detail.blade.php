@@ -2,6 +2,11 @@
 
 @section('title', $aset->nama_lokasi . ' - Badan Bank Tanah')
 
+@php
+    $metaTitle = $aset->meta_title ?? $aset->nama_lokasi . ' - Aset Tanah Badan Bank Tanah';
+    $metaDescription = $aset->meta_description ?? 'Detail aset tanah ' . $aset->nama_lokasi . ' di ' . $aset->provinsi . ', ' . $aset->kabupaten . ' dengan luas ' . number_format($aset->luas_hektar, 2, ',', '.') . ' Ha.';
+@endphp
+
 @section('content')
 
 {{-- =========================================================
@@ -44,7 +49,7 @@
                         @if ($aset->gambar)
                             <img src="{{ asset('storage/' . $aset->gambar) }}"
                                 class="w-full h-full object-cover"
-                                alt="{{ $aset->nama_lokasi }}">
+                                alt="{{ $aset->nama_lokasi }}" loading="lazy">
                         @else
                             <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#0B2A4A] to-[#163F66]">
                                 <div class="text-center text-white/50">
@@ -183,6 +188,20 @@
                     @endif
                 </div>
 
+                {{-- QR CODE (FIXED - Menggunakan {!! !!}) --}}
+                @if ($aset->qr_code)
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+                    <div class="flex items-center gap-2 mb-4">
+                        <i class="fas fa-qrcode text-[#006400]"></i>
+                        <h3 class="font-bold text-sm text-gray-900">QR Code Aset</h3>
+                    </div>
+                    <div class="flex justify-center">
+                        {!! $aset->qr_code !!}
+                    </div>
+                    <p class="text-xs text-gray-400 text-center mt-3">Scan untuk mengakses halaman ini</p>
+                </div>
+                @endif
+
                 {{-- DOKUMEN ASET --}}
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
                     <div class="flex items-center gap-2 mb-4">
@@ -191,7 +210,6 @@
                     </div>
 
                     @php
-                        // Ambil dokumen dari kolom dokumen_files (yang baru) atau dokumen (yang lama)
                         $dokumenList = $aset->dokumen_files ?? [];
                         $dokumenLama = $aset->dokumen ?? [];
                     @endphp
@@ -270,35 +288,35 @@
 @push('scripts')
 @if ($hasValidCoordinates)
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const mapElement = document.getElementById('assetMap');
+document.addEventListener('DOMContentLoaded', function() {
+    const mapElement = document.getElementById('assetMap');
 
-        if (mapElement) {
-            var lat = {{ $aset->lat }};
-            var lng = {{ $aset->lng }};
+    if (mapElement) {
+        var lat = {{ $aset->lat }};
+        var lng = {{ $aset->lng }};
 
-            var map = L.map('assetMap').setView([lat, lng], 12);
+        var map = L.map('assetMap').setView([lat, lng], 12);
 
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; OpenStreetMap contributors'
-            }).addTo(map);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
 
-            var marker = L.marker([lat, lng]).addTo(map)
-                .bindPopup(`
-                    <div style="min-width:180px">
-                        <strong>{{ $aset->nama_lokasi }}</strong>
-                        <br>
-                        <span>{{ $aset->provinsi }}, {{ $aset->kabupaten }}</span>
-                        <br>
-                        <span class="text-[#006400] font-bold">{{ number_format($aset->luas_hektar, 2, ',', '.') }} Ha</span>
-                    </div>
-                `);
+        var marker = L.marker([lat, lng]).addTo(map)
+            .bindPopup(`
+                <div style="min-width:180px">
+                    <strong>{{ $aset->nama_lokasi }}</strong>
+                    <br>
+                    <span>{{ $aset->provinsi }}, {{ $aset->kabupaten }}</span>
+                    <br>
+                    <span class="text-[#006400] font-bold">{{ number_format($aset->luas_hektar, 2, ',', '.') }} Ha</span>
+                </div>
+            `);
 
-            setTimeout(function() {
-                map.setView([lat, lng], 14);
-            }, 300);
-        }
-    });
+        setTimeout(function() {
+            map.setView([lat, lng], 14);
+        }, 300);
+    }
+});
 </script>
 @endif
 @endpush

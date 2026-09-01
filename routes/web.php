@@ -29,6 +29,8 @@ use App\Http\Controllers\Admin\IntegrasiController;
 use App\Http\Controllers\Admin\PengaturanController;
 use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\MicrositeController;
+use App\Http\Controllers\Admin\MicrositeAdminController;
 
 // ================= FRONTEND (PUBLIK) =================
 
@@ -70,6 +72,12 @@ Route::get('/karier', [KarierController::class, 'index'])->name('karier');
 // Download Dokumen (Frontend)
 Route::get('/dokumen/download/{id}', [DokumenKerjasamaController::class, 'download'])->name('dokumen.download');
 
+// =========================================================
+// MICROSITE FRONTEND
+// =========================================================
+Route::get('/event', [MicrositeController::class, 'index'])->name('microsite.index');
+Route::get('/event/{slug}', [MicrositeController::class, 'show'])->name('microsite.show');
+
 // ================= ADMIN (HANYA BISA DIAKSES JIKA LOGIN) =================
 
 // Halaman Admin Dashboard
@@ -104,6 +112,9 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::get('/aset/map-data', [AsetAdminController::class, 'getMapData'])->name('aset.map-data');
     Route::get('/aset/export', [AsetAdminController::class, 'export'])->name('aset.export');
     Route::post('/aset/bulk-delete', [AsetAdminController::class, 'bulkDelete'])->name('aset.bulk-delete');
+    
+    // QR Code
+    Route::post('/aset/{id}/generate-qr', [AsetAdminController::class, 'generateQrCode'])->name('aset.generate-qr');
 });
 
 // =========================================================
@@ -121,7 +132,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
 });
 
 // =========================================================
-// ADMIN BERITA (CRUD + APPROVAL WORKFLOW)
+// ADMIN BERITA (CRUD + APPROVAL WORKFLOW + BULK DELETE + QR)
 // =========================================================
 Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     // CRUD Berita
@@ -134,6 +145,12 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::put('/berita/{id}', [BeritaAdminController::class, 'update'])->name('berita.update');
     Route::delete('/berita/{id}', [BeritaAdminController::class, 'destroy'])->name('berita.destroy');
 
+    // BULK DELETE
+    Route::post('/berita/bulk-delete', [BeritaAdminController::class, 'bulkDelete'])->name('berita.bulk-delete');
+
+    // QR CODE
+    Route::post('/berita/{id}/generate-qr', [BeritaAdminController::class, 'generateQrCode'])->name('berita.generate-qr');
+
     // APPROVAL WORKFLOW
     Route::post('/berita/{id}/submit', [BeritaAdminController::class, 'submit'])->name('berita.submit');
     Route::post('/berita/{id}/approve', [BeritaAdminController::class, 'approve'])->name('berita.approve');
@@ -142,6 +159,19 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
 
     // API
     Route::get('/berita/pending-count', [BeritaAdminController::class, 'getPendingCount'])->name('berita.pending-count');
+});
+
+// =========================================================
+// ADMIN MICROSITE
+// =========================================================
+Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
+    Route::get('/microsite', [MicrositeAdminController::class, 'index'])->name('microsite.index');
+    Route::get('/microsite/create', [MicrositeAdminController::class, 'create'])->name('microsite.create');
+    Route::post('/microsite', [MicrositeAdminController::class, 'store'])->name('microsite.store');
+    Route::get('/microsite/{id}/edit', [MicrositeAdminController::class, 'edit'])->name('microsite.edit');
+    Route::put('/microsite/{id}', [MicrositeAdminController::class, 'update'])->name('microsite.update');
+    Route::delete('/microsite/{id}', [MicrositeAdminController::class, 'destroy'])->name('microsite.destroy');
+    Route::post('/microsite/{id}/toggle', [MicrositeAdminController::class, 'toggleStatus'])->name('microsite.toggle');
 });
 
 // =========================================================

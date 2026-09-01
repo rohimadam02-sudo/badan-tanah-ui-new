@@ -4,7 +4,18 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
-    <title>@yield('title', 'Badan Bank Tanah')</title>
+    
+    @php
+        $metaTitle = $metaTitle ?? 'Badan Bank Tanah - Mengelola Tanah, Memajukan Negeri';
+        $metaDescription = $metaDescription ?? 'Badan Bank Tanah mengelola aset tanah negara secara profesional, transparan, dan berkelanjutan untuk kepentingan rakyat.';
+    @endphp
+    
+    <title>{{ $metaTitle }}</title>
+    <meta name="description" content="{{ $metaDescription }}">
+    <meta property="og:title" content="{{ $metaTitle }}">
+    <meta property="og:description" content="{{ $metaDescription }}">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -457,6 +468,138 @@
                 max-height: 78px;
             }
         }
+
+        /* =========================================================
+           SCROLL REVEAL ANIMATION
+        ========================================================= */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-40px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal-left.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(40px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal-right.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .reveal-scale {
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal-scale.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Delay classes */
+        .delay-1 { transition-delay: 0.1s; }
+        .delay-2 { transition-delay: 0.2s; }
+        .delay-3 { transition-delay: 0.3s; }
+        .delay-4 { transition-delay: 0.4s; }
+        .delay-5 { transition-delay: 0.5s; }
+
+        /* =========================================================
+           FRONTEND DARK MODE
+        ========================================================= */
+        body.dark-mode {
+            background-color: #111827 !important;
+            color: #e5e7eb !important;
+        }
+
+        body.dark-mode .bg-white {
+            background-color: #1f2937 !important;
+            color: #e5e7eb !important;
+        }
+
+        body.dark-mode .bg-gray-50 {
+            background-color: #111827 !important;
+        }
+
+        body.dark-mode .bg-gray-100 {
+            background-color: #1f2937 !important;
+        }
+
+        body.dark-mode .text-gray-900 {
+            color: #f9fafb !important;
+        }
+
+        body.dark-mode .text-gray-700 {
+            color: #e5e7eb !important;
+        }
+
+        body.dark-mode .text-gray-600 {
+            color: #d1d5db !important;
+        }
+
+        body.dark-mode .text-gray-500 {
+            color: #9ca3af !important;
+        }
+
+        body.dark-mode .border-gray-200 {
+            border-color: #374151 !important;
+        }
+
+        body.dark-mode .border-gray-100 {
+            border-color: #374151 !important;
+        }
+
+        body.dark-mode .shadow-sm,
+        body.dark-mode .shadow-md,
+        body.dark-mode .shadow-lg {
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3) !important;
+        }
+
+        /* Dark Mode Toggle Button */
+        #darkModeToggle {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: transparent;
+            border: none;
+            color: #4b5563;
+        }
+
+        #darkModeToggle:hover {
+            background: #f3f4f6;
+        }
+
+        body.dark-mode #darkModeToggle {
+            color: #facc15;
+        }
+
+        body.dark-mode #darkModeToggle:hover {
+            background: #374151;
+        }
     </style>
 </head>
 
@@ -509,24 +652,24 @@
     <!-- ========================================================= -->
     <!-- MOBILE OVERLAY -->
     <!-- ========================================================= -->
-    <div class="mobile-overlay" id="mobileOverlay"></div>
+    <div class="mobile-overlay" id="mobileOverlay" aria-hidden="true"></div>
 
     <!-- ========================================================= -->
     <!-- MOBILE NAV -->
     <!-- ========================================================= -->
-    <nav class="mobile-nav" id="mobileNav">
+    <nav class="mobile-nav" id="mobileNav" role="navigation" aria-label="Mobile Navigation">
         <div class="mobile-nav-header">
             <span class="logo-text">Badan <span>Bank Tanah</span></span>
-            <button class="mobile-nav-close" id="mobileNavClose" aria-label="Tutup menu">
-                <i class="fas fa-xmark"></i>
+            <button class="mobile-nav-close" id="mobileNavClose" aria-label="Close navigation menu">
+                <i class="fas fa-xmark" aria-hidden="true"></i>
             </button>
         </div>
 
         <div class="nav-list">
             <div class="nav-section-title">Menu Utama</div>
 
-            <a href="{{ route('home') }}" class="nav-item {{ request()->routeIs('home') ? 'active' : '' }}">
-                <i class="fas fa-house"></i>
+            <a href="{{ route('home') }}" class="nav-item {{ request()->routeIs('home') ? 'active' : '' }}" aria-current="{{ request()->routeIs('home') ? 'page' : 'false' }}">
+                <i class="fas fa-house" aria-hidden="true"></i>
                 Beranda
             </a>
 
@@ -554,8 +697,8 @@
                     }
                 @endphp
                 @if ($isActive)
-                    <a href="{{ route($item['route']) }}" class="nav-item {{ request()->routeIs($item['route']) ? 'active' : '' }}">
-                        <i class="fas {{ $item['icon'] }}"></i>
+                    <a href="{{ route($item['route']) }}" class="nav-item {{ request()->routeIs($item['route']) ? 'active' : '' }}" aria-current="{{ request()->routeIs($item['route']) ? 'page' : 'false' }}">
+                        <i class="fas {{ $item['icon'] }}" aria-hidden="true"></i>
                         {{ $item['label'] }}
                     </a>
                 @endif
@@ -565,20 +708,20 @@
 
             <div class="nav-section-title">Lainnya</div>
 
-            <a href="{{ route('faq') }}" class="nav-item {{ request()->routeIs('faq') ? 'active' : '' }}">
-                <i class="fas fa-circle-question"></i>
+            <a href="{{ route('faq') }}" class="nav-item {{ request()->routeIs('faq') ? 'active' : '' }}" aria-current="{{ request()->routeIs('faq') ? 'page' : 'false' }}">
+                <i class="fas fa-circle-question" aria-hidden="true"></i>
                 FAQ
                 <span class="nav-badge">Tanya</span>
             </a>
 
-            <a href="{{ route('karier') }}" class="nav-item {{ request()->routeIs('karier') ? 'active' : '' }}">
-                <i class="fas fa-briefcase"></i>
+            <a href="{{ route('karier') }}" class="nav-item {{ request()->routeIs('karier') ? 'active' : '' }}" aria-current="{{ request()->routeIs('karier') ? 'page' : 'false' }}">
+                <i class="fas fa-briefcase" aria-hidden="true"></i>
                 Karier
                 <span class="nav-badge">Karir</span>
             </a>
 
-            <a href="{{ route('kontak') }}" class="nav-item {{ request()->routeIs('kontak') ? 'active' : '' }}">
-                <i class="fas fa-envelope"></i>
+            <a href="{{ route('kontak') }}" class="nav-item {{ request()->routeIs('kontak') ? 'active' : '' }}" aria-current="{{ request()->routeIs('kontak') ? 'page' : 'false' }}">
+                <i class="fas fa-envelope" aria-hidden="true"></i>
                 Kontak
                 <span class="nav-badge">Hubungi</span>
             </a>
@@ -587,7 +730,7 @@
         <!-- Footer Auth -->
         <div class="mobile-nav-footer">
             <a href="{{ route('login') }}" class="btn-nav btn-nav-login">
-                <i class="fas fa-sign-in-alt"></i> Masuk Admin
+                <i class="fas fa-sign-in-alt" aria-hidden="true"></i> Masuk Admin
             </a>
         </div>
     </nav>
@@ -598,13 +741,13 @@
     <div class="text-white text-xs hidden sm:block" style="background-color: {{ $pengaturan->warna_utama ?? '#0B2A4A' }};">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center py-2">
             <div class="flex items-center gap-2">
-                <i class="fas fa-globe text-blue-300"></i>
+                <i class="fas fa-globe text-blue-300" aria-hidden="true"></i>
                 <span class="truncate">Memajukan Pengelolaan Tanah yang Produktif, Transparan, dan Berkelanjutan</span>
             </div>
             <div class="flex items-center gap-4">
                 <a href="{{ route('kontak') }}" class="hover:text-blue-300 transition">Kontak</a>
                 <a href="{{ route('search') }}" class="hover:text-blue-300 transition">Pencarian</a>
-                <i class="fas fa-search cursor-pointer hover:text-blue-300 transition"></i>
+                <i class="fas fa-search cursor-pointer hover:text-blue-300 transition" aria-hidden="true"></i>
             </div>
         </div>
     </div>
@@ -612,21 +755,26 @@
     <!-- ========================================================= -->
     <!-- NAVBAR UTAMA -->
     <!-- ========================================================= -->
-    <header class="bg-white sticky top-0 z-[9999] shadow-sm">
+    <header class="bg-white sticky top-0 z-[9999] shadow-sm" role="banner">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16 md:h-20">
 
-                <!-- Logo -->
-                <a href="{{ route('home') }}" class="flex items-center flex-shrink-0">
+                <!-- ========================================================= -->
+                <!-- LOGO - DIPERBAIKI -->
+                <!-- ========================================================= -->
+                <a href="{{ route('home') }}" class="flex items-center flex-shrink-0" aria-label="Badan Bank Tanah - Home">
                     <div class="logo-container">
-                        <img src="{{ asset('images/Logo-badan-bank-tanah.png') }}" alt="Logo Badan Bank Tanah">
+                        <img src="{{ asset('images/Logo-badan-bank-tanah.png') }}"
+                             alt="Logo Badan Bank Tanah"
+                             class="w-full h-full object-contain"
+                             onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 fill=%22%230B2A4A%22/%3E%3Ctext x=%2250%22 y=%2255%22 text-anchor=%22middle%22 font-size=%2240%22 fill=%22white%22 font-weight=%22bold%22%3EBT%3C/text%3E%3C/svg%3E'">
                     </div>
                 </a>
 
                 <!-- ========================================================= -->
                 <!-- DESKTOP NAVIGATION -->
                 <!-- ========================================================= -->
-                <nav class="hidden lg:flex items-center space-x-8 xl:space-x-10 text-gray-700">
+                <nav class="hidden lg:flex items-center space-x-8 xl:space-x-10 text-gray-700" aria-label="Main Navigation">
 
                     @php
                         $navItems = [
@@ -653,7 +801,8 @@
                         @endphp
                         @if ($isActive)
                             <a href="{{ route($item['route']) }}"
-                                class="hover:text-[var(--color-secondary)] transition font-medium {{ $isRouteActive ? 'text-[var(--color-secondary)] font-semibold active-nav' : '' }}">
+                                class="hover:text-[var(--color-secondary)] transition font-medium {{ $isRouteActive ? 'text-[var(--color-secondary)] font-semibold active-nav' : '' }}"
+                                aria-current="{{ $isRouteActive ? 'page' : 'false' }}">
                                 {{ $item['label'] }}
                             </a>
                         @endif
@@ -662,11 +811,12 @@
                     <!-- Dropdown Lainnya (Desktop) -->
                     @if ($otherMenus->count() > 0)
                     <div class="dropdown-desktop">
-                        <button class="flex items-center gap-1 hover:text-[var(--color-secondary)] transition font-medium {{ request()->routeIs('faq') || request()->routeIs('karier') || request()->routeIs('kontak') ? 'text-[var(--color-secondary)] font-semibold' : '' }}">
+                        <button class="flex items-center gap-1 hover:text-[var(--color-secondary)] transition font-medium {{ request()->routeIs('faq') || request()->routeIs('karier') || request()->routeIs('kontak') ? 'text-[var(--color-secondary)] font-semibold' : '' }}"
+                                aria-expanded="false">
                             Lainnya
-                            <i class="fas fa-chevron-down text-[10px]"></i>
+                            <i class="fas fa-chevron-down text-[10px]" aria-hidden="true"></i>
                         </button>
-                        <div class="dropdown-menu">
+                        <div class="dropdown-menu" role="menu">
                             @foreach ($otherMenus as $menu)
                                 @php
                                     $icon = match(strtolower($menu->nama)) {
@@ -682,8 +832,8 @@
                                         default => ''
                                     };
                                 @endphp
-                                <a href="{{ route($routeName) }}">
-                                    <i class="fas {{ $icon }}"></i>
+                                <a href="{{ route($routeName) }}" role="menuitem">
+                                    <i class="fas {{ $icon }}" aria-hidden="true"></i>
                                     {{ $menu->nama }}
                                 </a>
                             @endforeach
@@ -698,8 +848,13 @@
                 <!-- ========================================================= -->
                 <div class="flex items-center gap-2 md:gap-3">
 
+                    <!-- Dark Mode Toggle -->
+                    <button id="darkModeToggle" aria-label="Toggle dark mode" title="Toggle Dark Mode">
+                        <i id="darkModeIconFrontend" class="fas fa-moon text-sm" aria-hidden="true"></i>
+                    </button>
+
                     <!-- Hamburger Menu (Mobile) -->
-                    <button class="lg:hidden hamburger" id="hamburgerBtn" aria-label="Toggle menu">
+                    <button class="lg:hidden hamburger" id="hamburgerBtn" aria-label="Toggle navigation menu" aria-expanded="false">
                         <span></span>
                         <span></span>
                         <span></span>
@@ -714,22 +869,24 @@
     <!-- ========================================================= -->
     <!-- MAIN CONTENT -->
     <!-- ========================================================= -->
-    <main>
+    <main role="main">
         @yield('content')
     </main>
 
     <!-- ========================================================= -->
     <!-- FOOTER -->
     <!-- ========================================================= -->
-    <footer class="text-white mt-20" style="background-color: {{ $pengaturan->warna_utama ?? '#0B2A4A' }};">
+    <footer class="text-white mt-20" style="background-color: {{ $pengaturan->warna_utama ?? '#0B2A4A' }};" role="contentinfo">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10 border-b border-white/10">
 
             <!-- Kolom 1: Profil -->
             <div>
                 <div class="flex items-center gap-3 mb-4">
                     <div class="flex items-center justify-center w-12 h-12 rounded">
-                        <img src="{{ asset('images/Logo-badan-bank-tanah.png') }}" alt="Logo"
-                            class="w-full h-full object-contain">
+                        <img src="{{ asset('images/Logo-badan-bank-tanah.png') }}"
+                             alt="Logo Badan Bank Tanah"
+                             class="w-full h-full object-contain"
+                             onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 fill=%22%230B2A4A%22/%3E%3Ctext x=%2250%22 y=%2255%22 text-anchor=%22middle%22 font-size=%2240%22 fill=%22white%22 font-weight=%22bold%22%3EBT%3C/text%3E%3C/svg%3E'">
                     </div>
                 </div>
                 <p class="text-sm text-gray-300 leading-relaxed">
@@ -752,15 +909,15 @@
                 <h4 class="font-bold text-white mb-4 uppercase text-xs tracking-wider">Kontak</h4>
                 <ul class="space-y-3 text-sm text-gray-300">
                     <li class="flex items-start gap-3">
-                        <i class="fas fa-map-marker-alt text-blue-400 mt-0.5"></i>
+                        <i class="fas fa-map-marker-alt text-blue-400 mt-0.5" aria-hidden="true"></i>
                         <span>{{ $footer->alamat ?? 'Jl. H. Juanda No. 15, Jakarta Pusat' }}</span>
                     </li>
                     <li class="flex items-center gap-3">
-                        <i class="fas fa-envelope text-blue-400"></i>
+                        <i class="fas fa-envelope text-blue-400" aria-hidden="true"></i>
                         <a href="mailto:{{ $footer->email ?? 'info@bantah.go.id' }}" class="hover:text-white transition">{{ $footer->email ?? 'info@bantah.go.id' }}</a>
                     </li>
                     <li class="flex items-center gap-3">
-                        <i class="fas fa-phone text-blue-400"></i>
+                        <i class="fas fa-phone text-blue-400" aria-hidden="true"></i>
                         <a href="tel:{{ $footer->telepon ?? '02134567890' }}" class="hover:text-white transition">{{ $footer->telepon ?? '(021) 3456-7890' }}</a>
                     </li>
                 </ul>
@@ -768,38 +925,38 @@
                 @if ($footer->show_social_media)
                     <div class="flex flex-wrap gap-3 mt-4">
                         @if ($footer->facebook && $footer->facebook != '#')
-                            <a href="{{ $footer->facebook }}" target="_blank" rel="noopener noreferrer" 
+                            <a href="{{ $footer->facebook }}" target="_blank" rel="noopener noreferrer"
                                class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition group"
-                               title="Facebook">
-                                <i class="fab fa-facebook-f text-sm group-hover:scale-110 transition"></i>
+                               title="Facebook" aria-label="Facebook">
+                                <i class="fab fa-facebook-f text-sm group-hover:scale-110 transition" aria-hidden="true"></i>
                             </a>
                         @endif
                         @if ($footer->twitter && $footer->twitter != '#')
-                            <a href="{{ $footer->twitter }}" target="_blank" rel="noopener noreferrer" 
+                            <a href="{{ $footer->twitter }}" target="_blank" rel="noopener noreferrer"
                                class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition group"
-                               title="Twitter / X">
-                                <i class="fab fa-twitter text-sm group-hover:scale-110 transition"></i>
+                               title="Twitter / X" aria-label="Twitter / X">
+                                <i class="fab fa-twitter text-sm group-hover:scale-110 transition" aria-hidden="true"></i>
                             </a>
                         @endif
                         @if ($footer->instagram && $footer->instagram != '#')
-                            <a href="{{ $footer->instagram }}" target="_blank" rel="noopener noreferrer" 
+                            <a href="{{ $footer->instagram }}" target="_blank" rel="noopener noreferrer"
                                class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition group"
-                               title="Instagram">
-                                <i class="fab fa-instagram text-sm group-hover:scale-110 transition"></i>
+                               title="Instagram" aria-label="Instagram">
+                                <i class="fab fa-instagram text-sm group-hover:scale-110 transition" aria-hidden="true"></i>
                             </a>
                         @endif
                         @if ($footer->linkedin && $footer->linkedin != '#')
-                            <a href="{{ $footer->linkedin }}" target="_blank" rel="noopener noreferrer" 
+                            <a href="{{ $footer->linkedin }}" target="_blank" rel="noopener noreferrer"
                                class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition group"
-                               title="LinkedIn">
-                                <i class="fab fa-linkedin-in text-sm group-hover:scale-110 transition"></i>
+                               title="LinkedIn" aria-label="LinkedIn">
+                                <i class="fab fa-linkedin-in text-sm group-hover:scale-110 transition" aria-hidden="true"></i>
                             </a>
                         @endif
                         @if ($footer->youtube && $footer->youtube != '#')
-                            <a href="{{ $footer->youtube }}" target="_blank" rel="noopener noreferrer" 
+                            <a href="{{ $footer->youtube }}" target="_blank" rel="noopener noreferrer"
                                class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition group"
-                               title="YouTube">
-                                <i class="fab fa-youtube text-sm group-hover:scale-110 transition"></i>
+                               title="YouTube" aria-label="YouTube">
+                                <i class="fab fa-youtube text-sm group-hover:scale-110 transition" aria-hidden="true"></i>
                             </a>
                         @endif
                     </div>
@@ -813,10 +970,12 @@
                     <p class="text-sm text-gray-300 mb-3">Dapatkan informasi terbaru dari Badan Bank Tanah.</p>
                     <div class="flex">
                         <input type="email" placeholder="Email Anda"
-                            class="flex-1 bg-white/10 text-white px-4 py-3 rounded-l-lg border border-white/20 focus:outline-none focus:border-blue-400 text-sm placeholder-gray-400">
+                            class="flex-1 bg-white/10 text-white px-4 py-3 rounded-l-lg border border-white/20 focus:outline-none focus:border-blue-400 text-sm placeholder-gray-400"
+                            aria-label="Email address for newsletter">
                         <button class="px-4 rounded-r-lg transition hover:opacity-90"
-                            style="background-color: {{ $pengaturan->warna_sekunder ?? '#1D4ED8' }};">
-                            <i class="fas fa-paper-plane"></i>
+                            style="background-color: {{ $pengaturan->warna_sekunder ?? '#1D4ED8' }};"
+                            aria-label="Subscribe to newsletter">
+                            <i class="fas fa-paper-plane" aria-hidden="true"></i>
                         </button>
                     </div>
                 </div>
@@ -854,6 +1013,7 @@
                 mobileNav.classList.add('open');
                 overlay.classList.add('active');
                 hamburger.classList.add('active');
+                hamburger.setAttribute('aria-expanded', 'true');
                 body.style.overflow = 'hidden';
             }
 
@@ -861,6 +1021,7 @@
                 mobileNav.classList.remove('open');
                 overlay.classList.remove('active');
                 hamburger.classList.remove('active');
+                hamburger.setAttribute('aria-expanded', 'false');
                 body.style.overflow = '';
             }
 
@@ -897,6 +1058,69 @@
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape' && mobileNav && mobileNav.classList.contains('open')) {
                     closeMobileNav();
+                }
+            });
+        });
+    </script>
+
+    <!-- ========================================================= -->
+    <!-- SCROLL REVEAL -->
+    <!-- ========================================================= -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
+
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+
+            revealElements.forEach(el => {
+                revealObserver.observe(el);
+            });
+        });
+    </script>
+
+    <!-- ========================================================= -->
+    <!-- FRONTEND DARK MODE -->
+    <!-- ========================================================= -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const darkToggle = document.getElementById('darkModeToggle');
+            const darkIcon = document.getElementById('darkModeIconFrontend');
+
+            if (!darkToggle) return;
+
+            // Cek status dari localStorage
+            const savedMode = localStorage.getItem('frontendDarkMode');
+
+            if (savedMode === 'true') {
+                document.body.classList.add('dark-mode');
+                if (darkIcon) {
+                    darkIcon.classList.remove('fa-moon');
+                    darkIcon.classList.add('fa-sun');
+                }
+            }
+
+            darkToggle.addEventListener('click', function() {
+                document.body.classList.toggle('dark-mode');
+                const active = document.body.classList.contains('dark-mode');
+                localStorage.setItem('frontendDarkMode', active);
+
+                if (darkIcon) {
+                    if (active) {
+                        darkIcon.classList.remove('fa-moon');
+                        darkIcon.classList.add('fa-sun');
+                    } else {
+                        darkIcon.classList.remove('fa-sun');
+                        darkIcon.classList.add('fa-moon');
+                    }
                 }
             });
         });

@@ -7,7 +7,8 @@
 <div class="max-w-7xl mx-auto space-y-6">
 
     @php
-        $role = auth()->user()->role;
+        $user = auth()->user();
+        $role = $user->role;
         $roleLabel = [
             'super_admin' => 'Super Admin',
             'admin' => 'Admin',
@@ -21,7 +22,7 @@
         $totalAset = \App\Models\AsetTanah::count();
         $totalLuas = \App\Models\AsetTanah::sum('luas_hektar');
         $totalBerita = \App\Models\Berita::count();
-        $totalPengunjung = 124530; // Placeholder (bisa dari Google Analytics nanti)
+        $totalPengunjung = 124530; // Placeholder
         $draftCount = \App\Models\Berita::where('status_approval', 'Draft')->count();
         $pendingCount = \App\Models\Berita::where('status_approval', 'Menunggu Approval')->count();
         $publishedCount = \App\Models\Berita::where('status', 'Dipublikasikan')->count();
@@ -63,6 +64,54 @@
                 <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
                 {{ $roleLabel }}
             </span>
+        </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- PROFIL ADMIN CARD (DENGAN FOTO) -->
+    <!-- ========================================================= -->
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:shadow-md transition">
+        <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+            <!-- Foto Profil -->
+            @if ($user->foto)
+                <img src="{{ asset('storage/' . $user->foto) }}"
+                    class="w-16 h-16 rounded-full object-cover border-2 border-gray-200 flex-shrink-0"
+                    alt="{{ $user->name }}">
+            @else
+                <div class="w-16 h-16 bg-[#006400] rounded-full flex items-center justify-center text-white font-bold text-2xl flex-shrink-0">
+                    {{ strtoupper(substr($user->name, 0, 1)) }}
+                </div>
+            @endif
+
+            <div class="flex-1">
+                <h2 class="text-lg font-bold text-gray-900">{{ $user->name }}</h2>
+                <div class="flex flex-wrap items-center gap-2 mt-0.5">
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold
+                        {{ $user->role == 'super_admin' ? 'bg-purple-50 text-purple-700' :
+                           ($user->role == 'admin' ? 'bg-blue-50 text-blue-700' :
+                           ($user->role == 'editor' ? 'bg-yellow-50 text-yellow-700' :
+                           ($user->role == 'publisher' ? 'bg-green-50 text-green-700' :
+                           'bg-gray-50 text-gray-500'))) }}">
+                        {{ ucfirst(str_replace('_', ' ', $user->role)) }}
+                    </span>
+                    <span class="text-xs text-gray-400">{{ $user->email }}</span>
+                </div>
+                <p class="text-sm text-gray-500 mt-1.5">
+                    @if ($role == 'super_admin')
+                        Anda memiliki akses penuh ke semua fitur.
+                    @elseif ($role == 'admin')
+                        Anda dapat mengelola konten website.
+                    @elseif ($role == 'editor')
+                        Anda dapat membuat dan mengedit draft konten.
+                    @elseif ($role == 'publisher')
+                        Anda dapat mereview dan mempublikasikan konten.
+                    @endif
+                </p>
+            </div>
+
+            <a href="{{ route('profile.edit') }}" class="text-sm text-[#006400] hover:underline font-semibold">
+                <i class="fas fa-pen mr-1"></i> Edit Profil
+            </a>
         </div>
     </div>
 
@@ -229,7 +278,7 @@
         </div>
     </div>
 
-    <!-- AKTIVITAS TERBARU (Semua Role) -->
+    <!-- AKTIVITAS TERBARU -->
     <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
         <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
             <div>

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AsetTanah;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Spatie\Activitylog\Models\Activity;
 
 class AsetAdminController extends Controller
@@ -324,6 +325,38 @@ class AsetAdminController extends Controller
         return response()->json([
             'success' => true,
             'message' => count($ids) . ' aset berhasil dihapus.'
+        ]);
+    }
+
+    /**
+     * =========================================================
+     * QR CODE GENERATOR
+     * =========================================================
+     */
+
+    /**
+     * Generate QR Code for an asset
+     */
+    public function generateQrCode($id)
+    {
+        $aset = AsetTanah::findOrFail($id);
+        
+        // Generate URL untuk detail aset
+        $url = route('assets.show', $aset->id);
+        
+        // Generate QR Code dalam bentuk SVG
+        $qrCode = QrCode::format('svg')
+            ->size(200)
+            ->errorCorrection('H')
+            ->generate($url);
+        
+        // Simpan ke database
+        $aset->qr_code = $qrCode;
+        $aset->save();
+        
+        return response()->json([
+            'success' => true,
+            'qr_code' => $qrCode,
         ]);
     }
 
