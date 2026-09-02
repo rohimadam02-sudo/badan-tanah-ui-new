@@ -316,7 +316,9 @@
                               request()->routeIs('admin.faq.*') ||
                               request()->routeIs('admin.karier.*') ||
                               request()->routeIs('admin.kontak.*') ||
-                              request()->routeIs('admin.halaman.edit.partnership');
+                              request()->routeIs('admin.halaman.edit.partnership') ||
+                              request()->routeIs('admin.social-media.*') ||
+                              request()->routeIs('admin.lokasi-kantor.*');
             @endphp
 
             <div x-data="{ open: {{ $websiteOpen ? 'true' : 'false' }} }" class="relative">
@@ -333,6 +335,7 @@
                 <div x-show="open" x-transition:enter.duration.200ms x-transition:leave.duration.150ms
                     class="mt-0.5 pl-7 space-y-0.5 overflow-hidden" role="menu">
 
+                    <!-- Homepage -->
                     <div class="tooltip-container">
                         <a href="{{ route('admin.website') }}"
                             class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
@@ -344,6 +347,7 @@
                         <span class="tooltip-text">Homepage</span>
                     </div>
 
+                    <!-- Tentang -->
                     <div class="tooltip-container">
                         <a href="{{ route('admin.halaman.edit.tentang') }}"
                             class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
@@ -355,6 +359,7 @@
                         <span class="tooltip-text">Tentang</span>
                     </div>
 
+                    <!-- Halaman -->
                     <div class="tooltip-container">
                         <a href="{{ route('admin.halaman.index') }}"
                             class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
@@ -366,6 +371,7 @@
                         <span class="tooltip-text">Halaman</span>
                     </div>
 
+                    <!-- Menu Navigasi -->
                     <div class="tooltip-container">
                         <a href="{{ route('admin.menu_navigasi') }}"
                             class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
@@ -377,6 +383,7 @@
                         <span class="tooltip-text">Menu Navigasi</span>
                     </div>
 
+                    <!-- Footer -->
                     <div class="tooltip-container">
                         <a href="{{ route('admin.footer.index') }}"
                             class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
@@ -388,6 +395,31 @@
                         <span class="tooltip-text">Footer</span>
                     </div>
 
+                    <!-- Social Media -->
+                    <div class="tooltip-container">
+                        <a href="{{ route('admin.social-media.index') }}"
+                            class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
+                            {{ request()->routeIs('admin.social-media.*') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            role="menuitem">
+                            <i class="fas fa-share-alt w-4 text-center text-[10px]"></i>
+                            <span>Social Media</span>
+                        </a>
+                        <span class="tooltip-text">Social Media</span>
+                    </div>
+
+                    <!-- Lokasi Kantor -->
+                    <div class="tooltip-container">
+                        <a href="{{ route('admin.lokasi-kantor.index') }}"
+                            class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
+                            {{ request()->routeIs('admin.lokasi-kantor.*') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            role="menuitem">
+                            <i class="fas fa-map-pin w-4 text-center text-[10px]"></i>
+                            <span>Lokasi Kantor</span>
+                        </a>
+                        <span class="tooltip-text">Lokasi Kantor</span>
+                    </div>
+
+                    <!-- FAQ -->
                     <div class="tooltip-container">
                         <a href="{{ route('admin.faq.index') }}"
                             class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
@@ -399,6 +431,7 @@
                         <span class="tooltip-text">FAQ</span>
                     </div>
 
+                    <!-- Karier -->
                     <div class="tooltip-container">
                         <a href="{{ route('admin.karier.index') }}"
                             class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
@@ -410,6 +443,7 @@
                         <span class="tooltip-text">Karier</span>
                     </div>
 
+                    <!-- Kontak -->
                     <div class="tooltip-container">
                         <a href="{{ route('admin.kontak.index') }}"
                             class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
@@ -429,6 +463,7 @@
                         <span class="tooltip-text">Kontak Kami</span>
                     </div>
 
+                    <!-- Pemanfaatan & Kerjasama -->
                     <div class="tooltip-container">
                         <a href="{{ route('admin.halaman.edit.partnership') }}"
                             class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
@@ -623,7 +658,7 @@
             @endif
 
             <!-- ============================================= -->
-            <!-- PUBLIKASI (Semua Role) -->
+            <!-- PUBLIKASI (Semua Role: Super Admin, Admin, Editor, Publisher) -->
             <!-- ============================================= -->
             @if (in_array($role, ['super_admin', 'admin', 'editor', 'publisher']))
             <div class="pt-3 pb-1.5">
@@ -648,6 +683,7 @@
                 <div x-show="open" x-transition:enter.duration.200ms x-transition:leave.duration.150ms
                     class="mt-0.5 pl-7 space-y-0.5 overflow-hidden" role="menu">
 
+                    <!-- Berita -->
                     <div class="tooltip-container">
                         <a href="{{ route('admin.berita.index') }}"
                             class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
@@ -658,7 +694,7 @@
                             @php
                                 $pendingCount = \App\Models\Berita::where('status_approval', 'Menunggu Approval')->count();
                             @endphp
-                            @if($pendingCount > 0 && $role == 'publisher')
+                            @if($pendingCount > 0 && in_array($role, ['publisher', 'super_admin', 'admin']))
                                 <span class="ml-auto bg-orange-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full min-w-[16px] text-center">
                                     {{ $pendingCount }}
                                 </span>
@@ -667,6 +703,7 @@
                         <span class="tooltip-text">Berita</span>
                     </div>
 
+                    <!-- Siaran Pers -->
                     <div class="tooltip-container">
                         <a href="{{ route('admin.berita.siaran_pers') }}"
                             class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
@@ -678,6 +715,7 @@
                         <span class="tooltip-text">Siaran Pers</span>
                     </div>
 
+                    <!-- Pengumuman -->
                     <div class="tooltip-container">
                         <a href="{{ route('admin.berita.pengumuman') }}"
                             class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
@@ -689,6 +727,7 @@
                         <span class="tooltip-text">Pengumuman</span>
                     </div>
 
+                    <!-- Tambah Berita - Hanya untuk Super Admin, Admin, Editor -->
                     @if (in_array($role, ['super_admin', 'admin', 'editor']))
                     <div class="pt-1">
                         <div class="tooltip-container">
@@ -766,11 +805,11 @@
             @endif
 
             <!-- ============================================= -->
-            <!-- LAINNYA (Hanya Super Admin) -->
+            <!-- KONTAK - Hanya Super Admin & Admin (di sidebar) -->
             <!-- ============================================= -->
-            @if ($role == 'super_admin')
+            @if (in_array($role, ['super_admin', 'admin']))
             <div class="pt-3 pb-1.5">
-                <p class="px-3 text-[9px] font-bold text-gray-400 uppercase tracking-wider">Lainnya</p>
+                <p class="px-3 text-[9px] font-bold text-gray-400 uppercase tracking-wider">Kontak</p>
             </div>
 
             <div class="tooltip-container">
@@ -778,7 +817,7 @@
                     class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition sidebar-transition w-full
                     {{ request()->routeIs('admin.kontak.index') ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-700 hover:bg-gray-100 hover:text-[#006400]' }}">
                     <i class="fas fa-envelope w-5 text-center {{ request()->routeIs('admin.kontak.index') ? 'text-white' : 'text-gray-400' }}"></i>
-                    <span>Kontak</span>
+                    <span>Kontak Masuk</span>
                     @php
                         $unreadCount = \App\Models\Kontak::where('is_read', 0)->count();
                     @endphp
@@ -788,7 +827,16 @@
                         </span>
                     @endif
                 </a>
-                <span class="tooltip-text">Kontak</span>
+                <span class="tooltip-text">Kontak Masuk</span>
+            </div>
+            @endif
+
+            <!-- ============================================= -->
+            <!-- LAINNYA (Hanya Super Admin) -->
+            <!-- ============================================= -->
+            @if ($role == 'super_admin')
+            <div class="pt-3 pb-1.5">
+                <p class="px-3 text-[9px] font-bold text-gray-400 uppercase tracking-wider">Sistem</p>
             </div>
 
             <div class="tooltip-container">
@@ -824,8 +872,21 @@
                 </a>
                 <span class="tooltip-text">Pengaturan</span>
             </div>
+
+            <div class="tooltip-container">
+                <a href="{{ route('admin.activity-log') }}"
+                    class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition sidebar-transition w-full
+                    {{ request()->routeIs('admin.activity-log*') ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-700 hover:bg-gray-100 hover:text-[#006400]' }}">
+                    <i class="fas fa-clock-rotate-left w-5 text-center {{ request()->routeIs('admin.activity-log*') ? 'text-white' : 'text-gray-400' }}"></i>
+                    <span>Aktivitas Sistem</span>
+                </a>
+                <span class="tooltip-text">Aktivitas Sistem</span>
+            </div>
             @endif
 
+            <!-- ============================================= -->
+            <!-- LIAT WEBSITE (Semua Role) -->
+            <!-- ============================================= -->
             <div class="h-4"></div>
 
             <div class="tooltip-container">
@@ -842,7 +903,7 @@
         </nav>
 
         <!-- ========================================================= -->
-        <!-- PROFIL ADMIN - SIDEBAR (DIPERBAIKI DENGAN FOTO + CACHE BUSTER) -->
+        <!-- PROFIL ADMIN - SIDEBAR -->
         <!-- ========================================================= -->
         <div class="p-3 border-t border-gray-200 bg-gray-50/80" role="contentinfo">
             <div class="flex items-center gap-3">
@@ -948,6 +1009,13 @@
                         'admin.microsite.index' => 'Microsite',
                         'admin.microsite.create' => 'Buat Microsite',
                         'admin.microsite.edit' => 'Edit Microsite',
+                        'admin.social-media.index' => 'Social Media',
+                        'admin.social-media.create' => 'Tambah Social Media',
+                        'admin.social-media.edit' => 'Edit Social Media',
+                        'admin.lokasi-kantor.index' => 'Lokasi Kantor',
+                        'admin.lokasi-kantor.create' => 'Tambah Lokasi Kantor',
+                        'admin.lokasi-kantor.edit' => 'Edit Lokasi Kantor',
+                        'admin.notifications.index' => 'Notifikasi',
                     ];
 
                     $currentRoute = Route::currentRouteName();
@@ -995,15 +1063,34 @@
                 <!-- ========================================================= -->
                 <!-- NOTIFICATION DROPDOWN -->
                 <!-- ========================================================= -->
-                <div x-data="{ open: false, notifications: [], total: 0, loading: true }"
-                     x-init="
-                        fetch('{{ route('admin.notifications.index') }}?limit=10')
-                            .then(res => res.json())
-                            .then(data => { notifications = data.notifications; total = data.total; loading = false; })
-                            .catch(() => { loading = false; })
-                     "
-                     @click.outside="open = false"
-                     class="relative">
+                <div x-data="{ 
+                    open: false, 
+                    notifications: [], 
+                    total: 0, 
+                    loading: true 
+                }" 
+                x-init="
+                    fetch('{{ route('admin.notifications.index') }}?limit=5&ajax=1')
+                        .then(res => res.json())
+                        .then(data => { 
+                            notifications = data.notifications || []; 
+                            total = data.total || 0; 
+                            loading = false; 
+                            // Update badge juga
+                            const badge = document.getElementById('notificationBadge');
+                            if (badge && total > 0) {
+                                badge.textContent = total > 99 ? '99+' : total;
+                                badge.style.display = 'block';
+                                badge.classList.add('show');
+                            } else if (badge) {
+                                badge.style.display = 'none';
+                                badge.classList.remove('show');
+                            }
+                        })
+                        .catch(() => { loading = false; })
+                "
+                @click.outside="open = false"
+                class="relative">
 
                     <button @click="open = !open"
                         class="text-gray-400 hover:text-gray-700 transition w-8 h-8 rounded-lg hover:bg-gray-100 flex items-center justify-center relative"
@@ -1011,9 +1098,10 @@
                         aria-expanded="false"
                         title="Notifikasi">
                         <i class="fas fa-bell" aria-hidden="true"></i>
-                        <span x-show="total > 0" x-text="total > 9 ? '9+' : total"
-                            class="absolute -top-0.5 -right-0.5 bg-red-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full min-w-[14px] text-center notification-pulse"
-                            role="status">
+                        <span id="notificationBadge"
+                              class="absolute -top-0.5 -right-0.5 bg-red-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full min-w-[14px] text-center notification-pulse"
+                              style="display: none;">
+                            0
                         </span>
                     </button>
 
@@ -1043,6 +1131,11 @@
                                     .then(() => {
                                         total = 0;
                                         notifications = [];
+                                        const badge = document.getElementById('notificationBadge');
+                                        if (badge) {
+                                            badge.style.display = 'none';
+                                            badge.classList.remove('show');
+                                        }
                                     })
                                     .catch(() => {})
                                 " class="text-[10px] text-blue-600 hover:underline">
@@ -1084,13 +1177,13 @@
 
                         <!-- Footer -->
                         <div class="px-4 py-2 border-t border-gray-100 text-center">
-                            <a href="#" class="text-[10px] text-blue-600 hover:underline">Lihat semua notifikasi</a>
+                            <a href="{{ route('admin.notifications.index') }}" class="text-[10px] text-blue-600 hover:underline">Lihat semua notifikasi</a>
                         </div>
                     </div>
                 </div>
 
                 <!-- ========================================================= -->
-                <!-- USER AVATAR - HEADER (DIPERBAIKI DENGAN FOTO + CACHE BUSTER) -->
+                <!-- USER AVATAR - HEADER -->
                 <!-- ========================================================= -->
                 @if ($user->foto)
                     <img src="{{ asset('storage/' . $user->foto) }}?v={{ time() }}"
@@ -1347,6 +1440,49 @@
                 location.reload();
             });
         }
+
+        // =========================================================
+        // NOTIFICATION BADGE - UPDATE
+        // =========================================================
+        function updateNotificationBadge() {
+            const badge = document.getElementById('notificationBadge');
+            if (!badge) {
+                console.log('Badge not found');
+                return;
+            }
+
+            fetch('{{ route("admin.notifications.unread-count") }}')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Notification count:', data);
+                    
+                    if (data.count > 0) {
+                        badge.textContent = data.count > 99 ? '99+' : data.count;
+                        badge.style.display = 'block';
+                        badge.classList.add('show');
+                    } else {
+                        badge.style.display = 'none';
+                        badge.classList.remove('show');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching notifications:', error);
+                });
+        }
+
+        // Update setiap 15 detik
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update badge pertama kali
+            updateNotificationBadge();
+            
+            // Update setiap 15 detik
+            setInterval(updateNotificationBadge, 15000);
+        });
     </script>
 
     @stack('scripts')

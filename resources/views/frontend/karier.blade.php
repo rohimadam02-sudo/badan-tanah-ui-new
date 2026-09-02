@@ -127,7 +127,11 @@
                                 <p class="text-gray-600 mt-1">{{ $karier->lokasi ?? 'Tidak ditentukan' }}</p>
                             </div>
                             <div class="mt-2">
-                                <a href="{{ route('kontak') }}" class="inline-flex items-center gap-2 bg-[#006400] hover:bg-[#005500] text-white px-5 py-2.5 rounded-lg text-xs font-bold transition">
+                                {{-- ========================================================= --}}
+                                {{-- TOMBOL LAMAR SEKARANG (DIUBAH) --}}
+                                {{-- ========================================================= --}}
+                                <a href="{{ route('karier.lamar', $karier->id) }}" 
+                                   class="inline-flex items-center gap-2 bg-[#006400] hover:bg-[#005500] text-white px-5 py-2.5 rounded-lg text-xs font-bold transition shadow-sm hover:shadow-md">
                                     <i class="fas fa-paper-plane"></i>
                                     Lamar Sekarang
                                 </a>
@@ -165,52 +169,52 @@
 
 @push('scripts')
 <script>
-    function toggleDetail(btn) {
-        const detail = btn.nextElementSibling;
-        const icon = btn.querySelector('.fa-chevron-down');
-        detail.classList.toggle('hidden');
-        icon.classList.toggle('rotate-180');
-        btn.textContent = detail.classList.contains('hidden') ? 'Lihat Detail ' : 'Sembunyikan ';
-        btn.appendChild(icon);
+function toggleDetail(btn) {
+    const detail = btn.nextElementSibling;
+    const icon = btn.querySelector('.fa-chevron-down');
+    detail.classList.toggle('hidden');
+    icon.classList.toggle('rotate-180');
+    btn.textContent = detail.classList.contains('hidden') ? 'Lihat Detail ' : 'Sembunyikan ';
+    btn.appendChild(icon);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Search
+    const searchInput = document.getElementById('searchKarier');
+    const karierItems = document.querySelectorAll('.karier-item');
+
+    if (searchInput) {
+        searchInput.addEventListener('input', function() {
+            const keyword = this.value.toLowerCase().trim();
+            karierItems.forEach(item => {
+                const title = item.querySelector('h3')?.textContent?.toLowerCase() || '';
+                const location = item.querySelector('.fa-location-dot')?.parentElement?.textContent?.toLowerCase() || '';
+                const desc = item.querySelector('p.text-gray-600')?.textContent?.toLowerCase() || '';
+
+                if (title.includes(keyword) || location.includes(keyword) || desc.includes(keyword)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
     }
 
-    document.addEventListener('DOMContentLoaded', function() {
-        // Search
-        const searchInput = document.getElementById('searchKarier');
-        const karierItems = document.querySelectorAll('.karier-item');
-
-        if (searchInput) {
-            searchInput.addEventListener('input', function() {
-                const keyword = this.value.toLowerCase().trim();
-                karierItems.forEach(item => {
-                    const title = item.querySelector('h3')?.textContent?.toLowerCase() || '';
-                    const location = item.querySelector('.fa-location-dot')?.parentElement?.textContent?.toLowerCase() || '';
-                    const desc = item.querySelector('p.text-gray-600')?.textContent?.toLowerCase() || '';
-
-                    if (title.includes(keyword) || location.includes(keyword) || desc.includes(keyword)) {
-                        item.style.display = 'block';
-                    } else {
-                        item.style.display = 'none';
-                    }
-                });
+    // Filter Status
+    const filterStatus = document.getElementById('filterStatus');
+    if (filterStatus) {
+        filterStatus.addEventListener('change', function() {
+            const status = this.value;
+            karierItems.forEach(item => {
+                const itemStatus = item.dataset.status;
+                if (status === 'all' || itemStatus === status) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
             });
-        }
-
-        // Filter Status
-        const filterStatus = document.getElementById('filterStatus');
-        if (filterStatus) {
-            filterStatus.addEventListener('change', function() {
-                const status = this.value;
-                karierItems.forEach(item => {
-                    const itemStatus = item.dataset.status;
-                    if (status === 'all' || itemStatus === status) {
-                        item.style.display = 'block';
-                    } else {
-                        item.style.display = 'none';
-                    }
-                });
-            });
-        }
-    });
+        });
+    }
+});
 </script>
 @endpush

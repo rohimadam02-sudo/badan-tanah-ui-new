@@ -123,7 +123,7 @@
                 </h2>
 
                 <p class="text-xs text-gray-500 mt-1">
-                    Lengkapi pertanyaan dan jawaban pada formulir berikut.
+                    Lengkapi pertanyaan, kategori, dan jawaban pada formulir berikut.
                 </p>
 
             </div>
@@ -138,6 +138,71 @@
             @csrf
 
             <div class="p-6 space-y-6">
+
+
+                {{-- =================================================
+                    KATEGORI (TAMBAHAN)
+                ================================================== --}}
+                <div>
+
+                    <label for="kategori"
+                           class="block text-sm font-bold
+                                  text-gray-800 mb-2">
+
+                        Kategori
+
+                        <span class="text-red-500">
+                            *
+                        </span>
+
+                    </label>
+
+                    <select name="kategori" id="kategori"
+                            class="w-full border border-gray-300
+                                   rounded-xl px-4 py-3 text-sm
+                                   focus:outline-none focus:ring-2
+                                   focus:ring-[#0B2A4A]/20
+                                   focus:border-[#0B2A4A]
+                                   transition"
+                            required>
+
+                        <option value="Umum" {{ old('kategori') == 'Umum' ? 'selected' : '' }}>
+                            Umum
+                        </option>
+                        <option value="Aset Tanah" {{ old('kategori') == 'Aset Tanah' ? 'selected' : '' }}>
+                            Aset Tanah
+                        </option>
+                        <option value="Pemanfaatan" {{ old('kategori') == 'Pemanfaatan' ? 'selected' : '' }}>
+                            Pemanfaatan
+                        </option>
+                        <option value="Kerjasama" {{ old('kategori') == 'Kerjasama' ? 'selected' : '' }}>
+                            Kerjasama
+                        </option>
+                        <option value="Investasi" {{ old('kategori') == 'Investasi' ? 'selected' : '' }}>
+                            Investasi
+                        </option>
+                        <option value="Reforma Agraria" {{ old('kategori') == 'Reforma Agraria' ? 'selected' : '' }}>
+                            Reforma Agraria
+                        </option>
+                        <option value="Lainnya" {{ old('kategori') == 'Lainnya' ? 'selected' : '' }}>
+                            Lainnya
+                        </option>
+
+                    </select>
+
+                    @error('kategori')
+
+                        <p class="text-xs text-red-600 mt-2">
+                            {{ $message }}
+                        </p>
+
+                    @enderror
+
+                    <p class="text-xs text-gray-400 mt-2">
+                        Pilih kategori yang sesuai untuk memudahkan pengelompokan FAQ.
+                    </p>
+
+                </div>
 
 
                 {{-- =================================================

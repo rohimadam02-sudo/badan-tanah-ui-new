@@ -22,13 +22,19 @@ class FaqAdminController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'pertanyaan' => 'required',
-            'jawaban' => 'required',
+            'pertanyaan' => 'required|string|max:255',
+            'kategori' => 'required|string|max:100',
+            'jawaban' => 'required|string',
         ]);
 
-        Faq::create($request->all());
+        Faq::create([
+            'pertanyaan' => $request->pertanyaan,
+            'kategori' => $request->kategori,
+            'jawaban' => $request->jawaban,
+        ]);
 
-        return redirect()->route('admin.faq.index')->with('success', 'FAQ berhasil ditambahkan!');
+        return redirect()->route('admin.faq.index')
+            ->with('success', 'FAQ berhasil ditambahkan!');
     }
 
     public function edit($id)
@@ -40,19 +46,29 @@ class FaqAdminController extends Controller
     public function update(Request $request, $id)
     {
         $faq = Faq::findOrFail($id);
+
         $request->validate([
-            'pertanyaan' => 'required',
-            'jawaban' => 'required',
+            'pertanyaan' => 'required|string|max:255',
+            'kategori' => 'required|string|max:100',
+            'jawaban' => 'required|string',
         ]);
 
-        $faq->update($request->all());
+        $faq->update([
+            'pertanyaan' => $request->pertanyaan,
+            'kategori' => $request->kategori,
+            'jawaban' => $request->jawaban,
+        ]);
 
-        return redirect()->route('admin.faq.index')->with('success', 'FAQ berhasil diubah!');
+        return redirect()->route('admin.faq.index')
+            ->with('success', 'FAQ berhasil diperbarui!');
     }
 
     public function destroy($id)
     {
-        Faq::findOrFail($id)->delete();
-        return redirect()->route('admin.faq.index')->with('success', 'FAQ berhasil dihapus!');
+        $faq = Faq::findOrFail($id);
+        $faq->delete();
+
+        return redirect()->route('admin.faq.index')
+            ->with('success', 'FAQ berhasil dihapus!');
     }
 }

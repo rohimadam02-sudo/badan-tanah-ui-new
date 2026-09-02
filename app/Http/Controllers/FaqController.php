@@ -9,12 +9,15 @@ use Illuminate\Http\Request;
 
 class FaqController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $faqs = Faq::all();
+        $kategori = $request->input('kategori', 'Semua');
+        
+        $faqs = Faq::kategori($kategori)->get();
+        $categories = Faq::getCategories();
         $menuNavigasi = MenuNavigasi::where('status', 'Aktif')->get();
         $pengaturan = PengaturanWebsite::first();
 
-        return view('frontend.faq', compact('faqs', 'menuNavigasi', 'pengaturan'));
+        return view('frontend.faq', compact('faqs', 'categories', 'kategori', 'menuNavigasi', 'pengaturan'));
     }
 }

@@ -34,7 +34,7 @@
                     </h1>
 
                     <p class="text-sm text-gray-500 mt-1">
-                        Perbarui pertanyaan dan jawaban FAQ Badan Bank Tanah.
+                        Perbarui pertanyaan, kategori, dan jawaban FAQ Badan Bank Tanah.
                     </p>
 
                 </div>
@@ -160,6 +160,71 @@
 
 
             <div class="p-6 space-y-6">
+
+
+                {{-- =================================================
+                    KATEGORI (TAMBAHAN)
+                ================================================== --}}
+                <div>
+
+                    <label for="kategori"
+                           class="block text-sm font-bold
+                                  text-gray-800 mb-2">
+
+                        Kategori
+
+                        <span class="text-red-500">
+                            *
+                        </span>
+
+                    </label>
+
+                    <select name="kategori" id="kategori"
+                            class="w-full border border-gray-300
+                                   rounded-xl px-4 py-3 text-sm
+                                   focus:outline-none focus:ring-2
+                                   focus:ring-[#0B2A4A]/20
+                                   focus:border-[#0B2A4A]
+                                   transition"
+                            required>
+
+                        <option value="Umum" {{ old('kategori', $faq->kategori) == 'Umum' ? 'selected' : '' }}>
+                            Umum
+                        </option>
+                        <option value="Aset Tanah" {{ old('kategori', $faq->kategori) == 'Aset Tanah' ? 'selected' : '' }}>
+                            Aset Tanah
+                        </option>
+                        <option value="Pemanfaatan" {{ old('kategori', $faq->kategori) == 'Pemanfaatan' ? 'selected' : '' }}>
+                            Pemanfaatan
+                        </option>
+                        <option value="Kerjasama" {{ old('kategori', $faq->kategori) == 'Kerjasama' ? 'selected' : '' }}>
+                            Kerjasama
+                        </option>
+                        <option value="Investasi" {{ old('kategori', $faq->kategori) == 'Investasi' ? 'selected' : '' }}>
+                            Investasi
+                        </option>
+                        <option value="Reforma Agraria" {{ old('kategori', $faq->kategori) == 'Reforma Agraria' ? 'selected' : '' }}>
+                            Reforma Agraria
+                        </option>
+                        <option value="Lainnya" {{ old('kategori', $faq->kategori) == 'Lainnya' ? 'selected' : '' }}>
+                            Lainnya
+                        </option>
+
+                    </select>
+
+                    @error('kategori')
+
+                        <p class="text-xs text-red-600 mt-2">
+                            {{ $message }}
+                        </p>
+
+                    @enderror
+
+                    <p class="text-xs text-gray-400 mt-2">
+                        Pilih kategori yang sesuai untuk memudahkan pengelompokan FAQ.
+                    </p>
+
+                </div>
 
 
                 {{-- =================================================

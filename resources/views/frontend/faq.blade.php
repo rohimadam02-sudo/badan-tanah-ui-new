@@ -37,34 +37,42 @@
 <section class="bg-gray-50 py-12 md:py-16">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        {{-- Search / Filter --}}
+        {{-- Search & Filter --}}
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-6 mb-8">
             <div class="relative">
                 <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
                 <input type="text" id="searchFaq" placeholder="Cari pertanyaan..."
                     class="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#006400]/30 focus:border-[#006400] transition">
             </div>
-            <div class="flex flex-wrap gap-2 mt-3">
-                <button type="button" class="filter-btn active px-4 py-1.5 rounded-full text-xs font-medium bg-[#006400] text-white hover:bg-[#005500] transition" data-filter="all">Semua</button>
-                <button type="button" class="filter-btn px-4 py-1.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600 hover:bg-gray-200 transition" data-filter="umum">Umum</button>
-                <button type="button" class="filter-btn px-4 py-1.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600 hover:bg-gray-200 transition" data-filter="aset">Aset Tanah</button>
-                <button type="button" class="filter-btn px-4 py-1.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600 hover:bg-gray-200 transition" data-filter="pemanfaatan">Pemanfaatan</button>
-                <button type="button" class="filter-btn px-4 py-1.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600 hover:bg-gray-200 transition" data-filter="kerjasama">Kerjasama</button>
+
+            {{-- Dynamic Categories --}}
+            <div class="flex flex-wrap gap-2 mt-3" id="categoryFilter">
+                <button type="button" class="filter-btn active px-4 py-1.5 rounded-full text-xs font-medium bg-[#006400] text-white hover:bg-[#005500] transition" data-kategori="Semua">
+                    Semua
+                </button>
+                @foreach($categories as $cat)
+                    <button type="button" class="filter-btn px-4 py-1.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600 hover:bg-gray-200 transition" data-kategori="{{ $cat }}">
+                        {{ $cat }}
+                    </button>
+                @endforeach
             </div>
         </div>
 
         {{-- FAQ List --}}
         <div class="space-y-4" id="faqList">
             @forelse ($faqs as $index => $faq)
-            <div class="faq-item bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden transition hover:shadow-md" data-category="umum">
+            <div class="faq-item bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden transition hover:shadow-md" data-kategori="{{ $faq->kategori }}">
                 <button type="button" class="faq-toggle w-full text-left px-6 py-5 flex items-center justify-between gap-4 hover:bg-gray-50 transition group">
                     <div class="flex items-start gap-4">
                         <span class="w-7 h-7 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center flex-shrink-0 text-xs font-bold mt-0.5">
                             {{ $index + 1 }}
                         </span>
-                        <span class="text-sm md:text-base font-semibold text-gray-800 group-hover:text-[#006400] transition">
-                            {{ $faq->pertanyaan }}
-                        </span>
+                        <div>
+                            <span class="text-[10px] font-semibold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">{{ $faq->kategori }}</span>
+                            <span class="text-sm md:text-base font-semibold text-gray-800 group-hover:text-[#006400] transition block mt-1">
+                                {{ $faq->pertanyaan }}
+                            </span>
+                        </div>
                     </div>
                     <i class="fas fa-chevron-down text-gray-400 transition-transform duration-300 flex-shrink-0"></i>
                 </button>
@@ -103,76 +111,71 @@
 
 @push('scripts')
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Toggle FAQ
-        const toggles = document.querySelectorAll('.faq-toggle');
-        toggles.forEach(btn => {
-            btn.addEventListener('click', function() {
-                const answer = this.nextElementSibling;
-                const icon = this.querySelector('.fa-chevron-down');
-
-                // Tutup semua FAQ lain (opsional)
-                // toggles.forEach(other => {
-                //     if (other !== this) {
-                //         const otherAnswer = other.nextElementSibling;
-                //         const otherIcon = other.querySelector('.fa-chevron-down');
-                //         otherAnswer.classList.add('hidden');
-                //         otherIcon.classList.remove('rotate-180');
-                //     }
-                // });
-
-                answer.classList.toggle('hidden');
-                icon.classList.toggle('rotate-180');
-            });
+document.addEventListener('DOMContentLoaded', function() {
+    // =========================================================
+    // TOGGLE FAQ
+    // =========================================================
+    const toggles = document.querySelectorAll('.faq-toggle');
+    toggles.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const answer = this.nextElementSibling;
+            const icon = this.querySelector('.fa-chevron-down');
+            answer.classList.toggle('hidden');
+            icon.classList.toggle('rotate-180');
         });
+    });
 
-        // Filter FAQ
-        const filterBtns = document.querySelectorAll('.filter-btn');
-        const faqItems = document.querySelectorAll('.faq-item');
+    // =========================================================
+    // FILTER FAQ BY CATEGORY
+    // =========================================================
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const faqItems = document.querySelectorAll('.faq-item');
 
-        filterBtns.forEach(btn => {
-            btn.addEventListener('click', function() {
-                // Update active button
-                filterBtns.forEach(b => {
-                    b.classList.remove('active', 'bg-[#006400]', 'text-white');
-                    b.classList.add('bg-gray-100', 'text-gray-600');
-                });
-                this.classList.remove('bg-gray-100', 'text-gray-600');
-                this.classList.add('active', 'bg-[#006400]', 'text-white');
-
-                const filter = this.dataset.filter;
-
-                faqItems.forEach(item => {
-                    if (filter === 'all') {
-                        item.style.display = 'block';
-                    } else {
-                        // Sembunyikan semua, lalu tampilkan yang sesuai
-                        if (item.dataset.category === filter) {
-                            item.style.display = 'block';
-                        } else {
-                            item.style.display = 'none';
-                        }
-                    }
-                });
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            // Update active button
+            filterBtns.forEach(b => {
+                b.classList.remove('active', 'bg-[#006400]', 'text-white');
+                b.classList.add('bg-gray-100', 'text-gray-600');
             });
-        });
+            this.classList.remove('bg-gray-100', 'text-gray-600');
+            this.classList.add('active', 'bg-[#006400]', 'text-white');
 
-        // Search FAQ
-        const searchInput = document.getElementById('searchFaq');
-        if (searchInput) {
-            searchInput.addEventListener('input', function() {
-                const keyword = this.value.toLowerCase().trim();
-                faqItems.forEach(item => {
-                    const question = item.querySelector('.faq-toggle .text-gray-800')?.textContent?.toLowerCase() || '';
-                    const answer = item.querySelector('.faq-answer p')?.textContent?.toLowerCase() || '';
-                    if (question.includes(keyword) || answer.includes(keyword)) {
+            const kategori = this.dataset.kategori;
+
+            faqItems.forEach(item => {
+                if (kategori === 'Semua') {
+                    item.style.display = 'block';
+                } else {
+                    const itemKategori = item.dataset.kategori;
+                    if (itemKategori === kategori) {
                         item.style.display = 'block';
                     } else {
                         item.style.display = 'none';
                     }
-                });
+                }
             });
-        }
+        });
     });
+
+    // =========================================================
+    // SEARCH FAQ
+    // =========================================================
+    const searchInput = document.getElementById('searchFaq');
+    if (searchInput) {
+        searchInput.addEventListener('input', function() {
+            const keyword = this.value.toLowerCase().trim();
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-toggle .text-gray-800')?.textContent?.toLowerCase() || '';
+                const answer = item.querySelector('.faq-answer p')?.textContent?.toLowerCase() || '';
+                if (question.includes(keyword) || answer.includes(keyword)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    }
+});
 </script>
 @endpush

@@ -27,6 +27,8 @@ class DatabaseSeeder extends Seeder
                 'warna_sekunder' => '#1D4ED8',
                 'nama_website' => 'Badan Bank Tanah',
                 'deskripsi_website' => 'Badan Bank Tanah mengelola aset tanah negara secara profesional, transparan, dan berkelanjutan untuk kepentingan rakyat.',
+                'lat_kantor' => -6.1754,
+                'lng_kantor' => 106.8272,
             ]
         );
 
@@ -40,7 +42,7 @@ class DatabaseSeeder extends Seeder
                 'isi' => 'Badan Bank Tanah adalah lembaga pemerintah yang mengelola aset tanah negara secara profesional, transparan, dan berkelanjutan untuk kepentingan rakyat.',
                 'visi' => 'Menjadi lembaga pengelola tanah yang profesional, transparan, dan berkelanjutan untuk mewujudkan kedaulatan dan kemakmuran rakyat.',
                 'misi' => "1. Mengelola aset tanah negara secara profesional dan akuntabel.\n2. Mewujudkan tata kelola tanah yang transparan dan berkeadilan.\n3. Mendukung program Reforma Agraria dan pembangunan nasional.\n4. Meningkatkan kesejahteraan masyarakat melalui pemanfaatan tanah yang produktif.",
-                'struktur_organisasi' => "Struktur organisasi Badan Bank Tanah terdiri dari:\n1. Kepala Badan\n2. Sekretariat\n3. Deputi Bidang Perencanaan dan Pengembangan\n4. Deputi Bidang Pengelolaan Aset\n5. Deputi Bidang Pemanfaatan dan Kerjasama\n6. Deputi Bidang Hukum dan Hubungan Masyarakat",
+                'struktur_organisasi' => "Kepala Badan Bank Tanah\nSekretariat\nDeputi Bidang Perencanaan dan Pengembangan\nDeputi Bidang Pengelolaan Aset\nDeputi Bidang Pemanfaatan dan Kerjasama\nDeputi Bidang Hukum dan Hubungan Masyarakat",
                 'dasar_hukum' => "1. Undang-Undang Nomor 11 Tahun 2020 tentang Cipta Kerja\n2. Peraturan Pemerintah Nomor 64 Tahun 2021 tentang Badan Bank Tanah\n3. Peraturan Presiden Nomor 62 Tahun 2021 tentang Tata Kelola Badan Bank Tanah",
                 'gambar' => null,
                 'foto' => null,
@@ -217,5 +219,15 @@ class DatabaseSeeder extends Seeder
                 $item
             );
         }
+
+        // =========================================================
+        // SOCIAL MEDIA (DEFAULT)
+        // =========================================================
+        $this->call(SocialMediaSeeder::class);
+
+        // =========================================================
+        // LOKASI KANTOR (DEFAULT)
+        // =========================================================
+        $this->call(LokasiKantorSeeder::class);
     }
 }

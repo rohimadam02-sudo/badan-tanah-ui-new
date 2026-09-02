@@ -17,11 +17,27 @@
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
 
+    {{-- Vite Assets --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
+    {{-- External CSS --}}
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+    {{-- ========================================================= --}}
+    {{-- GOOGLE ANALYTICS --}}
+    {{-- ========================================================= --}}
+    @if(isset($pengaturan) && $pengaturan->google_analytics)
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{ $pengaturan->google_analytics }}"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '{{ $pengaturan->google_analytics }}');
+        </script>
+    @endif
 
     <style>
         /* =========================================================
@@ -760,7 +776,7 @@
             <div class="flex items-center justify-between h-16 md:h-20">
 
                 <!-- ========================================================= -->
-                <!-- LOGO - DIPERBAIKI -->
+                <!-- LOGO -->
                 <!-- ========================================================= -->
                 <a href="{{ route('home') }}" class="flex items-center flex-shrink-0" aria-label="Badan Bank Tanah - Home">
                     <div class="logo-container">
@@ -922,43 +938,20 @@
                     </li>
                 </ul>
 
-                @if ($footer->show_social_media)
+                @php
+                    $socialMedias = \App\Models\SocialMedia::active()->ordered()->get();
+                @endphp
+
+                @if($socialMedias->count() > 0)
                     <div class="flex flex-wrap gap-3 mt-4">
-                        @if ($footer->facebook && $footer->facebook != '#')
-                            <a href="{{ $footer->facebook }}" target="_blank" rel="noopener noreferrer"
-                               class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition group"
-                               title="Facebook" aria-label="Facebook">
-                                <i class="fab fa-facebook-f text-sm group-hover:scale-110 transition" aria-hidden="true"></i>
+                        @foreach($socialMedias as $social)
+                            <a href="{{ $social->url }}" target="_blank" rel="noopener noreferrer"
+                               class="w-9 h-9 rounded-full flex items-center justify-center hover:scale-110 transition group"
+                               style="background-color: {{ $social->warna ?? '#ffffff' }}; color: white;"
+                               title="{{ $social->nama }}" aria-label="{{ $social->nama }}">
+                                <i class="{{ $social->icon }} text-sm group-hover:scale-110 transition" aria-hidden="true"></i>
                             </a>
-                        @endif
-                        @if ($footer->twitter && $footer->twitter != '#')
-                            <a href="{{ $footer->twitter }}" target="_blank" rel="noopener noreferrer"
-                               class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition group"
-                               title="Twitter / X" aria-label="Twitter / X">
-                                <i class="fab fa-twitter text-sm group-hover:scale-110 transition" aria-hidden="true"></i>
-                            </a>
-                        @endif
-                        @if ($footer->instagram && $footer->instagram != '#')
-                            <a href="{{ $footer->instagram }}" target="_blank" rel="noopener noreferrer"
-                               class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition group"
-                               title="Instagram" aria-label="Instagram">
-                                <i class="fab fa-instagram text-sm group-hover:scale-110 transition" aria-hidden="true"></i>
-                            </a>
-                        @endif
-                        @if ($footer->linkedin && $footer->linkedin != '#')
-                            <a href="{{ $footer->linkedin }}" target="_blank" rel="noopener noreferrer"
-                               class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition group"
-                               title="LinkedIn" aria-label="LinkedIn">
-                                <i class="fab fa-linkedin-in text-sm group-hover:scale-110 transition" aria-hidden="true"></i>
-                            </a>
-                        @endif
-                        @if ($footer->youtube && $footer->youtube != '#')
-                            <a href="{{ $footer->youtube }}" target="_blank" rel="noopener noreferrer"
-                               class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition group"
-                               title="YouTube" aria-label="YouTube">
-                                <i class="fab fa-youtube text-sm group-hover:scale-110 transition" aria-hidden="true"></i>
-                            </a>
-                        @endif
+                        @endforeach
                     </div>
                 @endif
             </div>

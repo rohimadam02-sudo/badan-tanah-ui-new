@@ -75,6 +75,7 @@
                                             alt="{{ $halaman->judul }} - Foto {{ $index + 1 }}"
                                             class="w-full h-full object-contain"
                                             style="max-height: 420px;"
+                                            loading="lazy"
                                         >
                                     </div>
                                 @endforeach
@@ -107,104 +108,104 @@
 
                         @push('scripts')
                         <script>
-                            document.addEventListener('DOMContentLoaded', function() {
-                                const track = document.getElementById('aboutSliderTrack');
-                                const slides = track ? track.querySelectorAll('.min-w-full') : [];
-                                const totalSlides = slides.length;
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const track = document.getElementById('aboutSliderTrack');
+                            const slides = track ? track.querySelectorAll('.min-w-full') : [];
+                            const totalSlides = slides.length;
 
-                                if (totalSlides <= 1) return;
+                            if (totalSlides <= 1) return;
 
-                                let currentIndex = 0;
-                                let autoSlideInterval = null;
-                                const slideIntervalTime = 4000;
+                            let currentIndex = 0;
+                            let autoSlideInterval = null;
+                            const slideIntervalTime = 4000;
 
-                                const prevBtn = document.getElementById('aboutSliderPrev');
-                                const nextBtn = document.getElementById('aboutSliderNext');
-                                const dots = document.querySelectorAll('.slider-dot');
-                                const currentText = document.getElementById('aboutSliderCurrent');
-                                const totalText = document.getElementById('aboutSliderTotal');
+                            const prevBtn = document.getElementById('aboutSliderPrev');
+                            const nextBtn = document.getElementById('aboutSliderNext');
+                            const dots = document.querySelectorAll('.slider-dot');
+                            const currentText = document.getElementById('aboutSliderCurrent');
+                            const totalText = document.getElementById('aboutSliderTotal');
 
-                                if (totalText) {
-                                    totalText.textContent = totalSlides;
-                                }
+                            if (totalText) {
+                                totalText.textContent = totalSlides;
+                            }
 
-                                function goToSlide(index) {
-                                    if (index < 0) index = totalSlides - 1;
-                                    if (index >= totalSlides) index = 0;
+                            function goToSlide(index) {
+                                if (index < 0) index = totalSlides - 1;
+                                if (index >= totalSlides) index = 0;
 
-                                    currentIndex = index;
-                                    const offset = -index * 100;
-                                    track.style.transform = 'translateX(' + offset + '%)';
+                                currentIndex = index;
+                                const offset = -index * 100;
+                                track.style.transform = 'translateX(' + offset + '%)';
 
-                                    dots.forEach((dot, i) => {
-                                        dot.classList.toggle('active', i === index);
-                                    });
-
-                                    if (currentText) {
-                                        currentText.textContent = index + 1;
-                                    }
-                                }
-
-                                function nextSlide() { goToSlide(currentIndex + 1); }
-                                function prevSlide() { goToSlide(currentIndex - 1); }
-
-                                function startAutoSlide() {
-                                    stopAutoSlide();
-                                    autoSlideInterval = setInterval(nextSlide, slideIntervalTime);
-                                }
-
-                                function stopAutoSlide() {
-                                    if (autoSlideInterval) {
-                                        clearInterval(autoSlideInterval);
-                                        autoSlideInterval = null;
-                                    }
-                                }
-
-                                if (prevBtn) {
-                                    prevBtn.addEventListener('click', function() { prevSlide(); startAutoSlide(); });
-                                }
-                                if (nextBtn) {
-                                    nextBtn.addEventListener('click', function() { nextSlide(); startAutoSlide(); });
-                                }
-
-                                dots.forEach((dot) => {
-                                    dot.addEventListener('click', function() {
-                                        const index = parseInt(this.dataset.slide);
-                                        goToSlide(index);
-                                        startAutoSlide();
-                                    });
+                                dots.forEach((dot, i) => {
+                                    dot.classList.toggle('active', i === index);
                                 });
 
-                                const sliderContainer = document.getElementById('aboutSlider');
-                                if (sliderContainer) {
-                                    sliderContainer.addEventListener('mouseenter', stopAutoSlide);
-                                    sliderContainer.addEventListener('mouseleave', startAutoSlide);
+                                if (currentText) {
+                                    currentText.textContent = index + 1;
                                 }
+                            }
 
-                                document.addEventListener('keydown', function(e) {
-                                    if (e.key === 'ArrowLeft') { prevSlide(); startAutoSlide(); }
-                                    if (e.key === 'ArrowRight') { nextSlide(); startAutoSlide(); }
+                            function nextSlide() { goToSlide(currentIndex + 1); }
+                            function prevSlide() { goToSlide(currentIndex - 1); }
+
+                            function startAutoSlide() {
+                                stopAutoSlide();
+                                autoSlideInterval = setInterval(nextSlide, slideIntervalTime);
+                            }
+
+                            function stopAutoSlide() {
+                                if (autoSlideInterval) {
+                                    clearInterval(autoSlideInterval);
+                                    autoSlideInterval = null;
+                                }
+                            }
+
+                            if (prevBtn) {
+                                prevBtn.addEventListener('click', function() { prevSlide(); startAutoSlide(); });
+                            }
+                            if (nextBtn) {
+                                nextBtn.addEventListener('click', function() { nextSlide(); startAutoSlide(); });
+                            }
+
+                            dots.forEach((dot) => {
+                                dot.addEventListener('click', function() {
+                                    const index = parseInt(this.dataset.slide);
+                                    goToSlide(index);
+                                    startAutoSlide();
                                 });
-
-                                let touchStartX = 0;
-                                let touchEndX = 0;
-                                if (sliderContainer) {
-                                    sliderContainer.addEventListener('touchstart', function(e) {
-                                        touchStartX = e.changedTouches[0].screenX;
-                                    }, { passive: true });
-
-                                    sliderContainer.addEventListener('touchend', function(e) {
-                                        touchEndX = e.changedTouches[0].screenX;
-                                        const diff = touchStartX - touchEndX;
-                                        if (Math.abs(diff) > 50) {
-                                            if (diff > 0) { nextSlide(); } else { prevSlide(); }
-                                            startAutoSlide();
-                                        }
-                                    }, { passive: true });
-                                }
-
-                                startAutoSlide();
                             });
+
+                            const sliderContainer = document.getElementById('aboutSlider');
+                            if (sliderContainer) {
+                                sliderContainer.addEventListener('mouseenter', stopAutoSlide);
+                                sliderContainer.addEventListener('mouseleave', startAutoSlide);
+                            }
+
+                            document.addEventListener('keydown', function(e) {
+                                if (e.key === 'ArrowLeft') { prevSlide(); startAutoSlide(); }
+                                if (e.key === 'ArrowRight') { nextSlide(); startAutoSlide(); }
+                            });
+
+                            let touchStartX = 0;
+                            let touchEndX = 0;
+                            if (sliderContainer) {
+                                sliderContainer.addEventListener('touchstart', function(e) {
+                                    touchStartX = e.changedTouches[0].screenX;
+                                }, { passive: true });
+
+                                sliderContainer.addEventListener('touchend', function(e) {
+                                    touchEndX = e.changedTouches[0].screenX;
+                                    const diff = touchStartX - touchEndX;
+                                    if (Math.abs(diff) > 50) {
+                                        if (diff > 0) { nextSlide(); } else { prevSlide(); }
+                                        startAutoSlide();
+                                    }
+                                }, { passive: true });
+                            }
+
+                            startAutoSlide();
+                        });
                         </script>
                         @endpush
 
@@ -290,7 +291,7 @@
 
 
         {{-- =================================================
-            STRUKTUR ORGANISASI
+            STRUKTUR ORGANISASI - TREE VIEW
         ================================================== --}}
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-7 md:p-10 mb-8">
 
@@ -305,21 +306,71 @@
                 </div>
             </div>
 
-            <div class="rounded-xl border border-gray-200 bg-gray-50 p-8">
-                <div class="flex items-start gap-4">
-                    <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
-                        <i class="fas fa-users text-blue-700 text-lg"></i>
-                    </div>
-                    <div class="flex-1">
-                        <h3 class="font-bold text-gray-900 text-lg mb-3">Struktur Organisasi Badan Bank Tanah</h3>
-                        <div class="text-gray-600 leading-7 text-sm whitespace-pre-line">
-                            {!! nl2br(e($halaman->struktur_organisasi ?? 'Struktur organisasi ditampilkan berdasarkan data resmi yang dikelola melalui CMS Badan Bank Tanah.')) !!}
+            <div class="overflow-x-auto">
+                @php
+                    $struktur = $halaman->struktur_organisasi ?? '';
+                    $lines = array_filter(explode("\n", $struktur));
+                    $isList = count($lines) > 1;
+                @endphp
+
+                @if($isList)
+                    <div class="tree-view min-w-[600px]">
+                        <div class="flex flex-col items-center">
+                            <!-- Root -->
+                            <div class="bg-[#0B2A4A] text-white px-6 py-3 rounded-xl font-bold text-sm shadow-md">
+                                {{ $lines[0] ?? 'Struktur Organisasi' }}
+                            </div>
+                            
+                            @if(count($lines) > 1)
+                                <div class="w-px h-8 bg-gray-300"></div>
+                                <div class="flex flex-wrap justify-center gap-4 gap-y-6 mt-2">
+                                    @foreach(array_slice($lines, 1) as $line)
+                                        @php
+                                            $clean = trim(preg_replace('/^\d+\.\s*/', '', $line));
+                                            $colors = ['blue', 'green', 'purple', 'orange', 'red', 'teal', 'indigo', 'pink'];
+                                            $color = $colors[$loop->index % count($colors)];
+                                            $bgColor = $color . '-50';
+                                            $borderColor = $color . '-200';
+                                            $textColor = $color . '-800';
+                                        @endphp
+                                        <div class="flex flex-col items-center min-w-[140px]">
+                                            <div class="bg-{{ $bgColor }} border border-{{ $borderColor }} px-4 py-2.5 rounded-lg text-xs font-semibold text-{{ $textColor }} shadow-sm text-center">
+                                                {{ $clean }}
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @endif
                         </div>
                     </div>
-                </div>
+                    <p class="text-xs text-gray-400 mt-4 text-center">Struktur organisasi dapat diperbarui melalui CMS</p>
+                @else
+                    <div class="rounded-xl border border-gray-200 bg-gray-50 p-8">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-users text-blue-700 text-lg"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="font-bold text-gray-900 text-lg mb-3">Struktur Organisasi Badan Bank Tanah</h3>
+                                <div class="text-gray-600 leading-7 text-sm whitespace-pre-line">
+                                    {!! nl2br(e($struktur)) !!}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
             </div>
 
         </div>
+
+        <style>
+        .tree-view {
+            padding: 1rem 0;
+        }
+        .tree-view .w-px {
+            min-height: 2rem;
+        }
+        </style>
 
 
         {{-- =================================================

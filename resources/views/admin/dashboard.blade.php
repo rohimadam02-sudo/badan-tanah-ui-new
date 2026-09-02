@@ -68,11 +68,143 @@
     </div>
 
     <!-- ========================================================= -->
-    <!-- PROFIL ADMIN CARD (DENGAN FOTO) -->
+    <!-- QUICK ACTION BUTTONS - SESUAI ROLE -->
     <!-- ========================================================= -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+
+        {{-- SUPER ADMIN & ADMIN: Tambah Aset --}}
+        @if (in_array($role, ['super_admin', 'admin']))
+        <a href="{{ route('admin.aset.create') }}" 
+           class="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-[#006400] transition group">
+            <div class="w-10 h-10 rounded-xl bg-green-50 text-[#006400] flex items-center justify-center group-hover:bg-[#006400] group-hover:text-white transition">
+                <i class="fas fa-plus"></i>
+            </div>
+            <div>
+                <p class="text-sm font-bold text-gray-900">Tambah Aset</p>
+                <p class="text-[10px] text-gray-400">Aset Persediaan Tanah</p>
+            </div>
+        </a>
+        @endif
+
+        {{-- SUPER ADMIN, ADMIN, EDITOR: Tambah Berita --}}
+        @if (in_array($role, ['super_admin', 'admin', 'editor']))
+        <a href="{{ route('admin.berita.create') }}" 
+           class="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-[#006400] transition group">
+            <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center group-hover:bg-[#006400] group-hover:text-white transition">
+                <i class="fas fa-plus"></i>
+            </div>
+            <div>
+                <p class="text-sm font-bold text-gray-900">Tambah Berita</p>
+                <p class="text-[10px] text-gray-400">Publikasi</p>
+            </div>
+        </a>
+        @endif
+
+        {{-- SUPER ADMIN & ADMIN: Tambah User --}}
+        @if (in_array($role, ['super_admin']))
+        <a href="{{ route('admin.user.create') }}" 
+           class="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-[#006400] transition group">
+            <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center group-hover:bg-[#006400] group-hover:text-white transition">
+                <i class="fas fa-user-plus"></i>
+            </div>
+            <div>
+                <p class="text-sm font-bold text-gray-900">Tambah User</p>
+                <p class="text-[10px] text-gray-400">Manajemen Pengguna</p>
+            </div>
+        </a>
+        @endif
+
+        {{-- SUPER ADMIN & ADMIN: Buat Microsite --}}
+        @if (in_array($role, ['super_admin', 'admin']))
+        <a href="{{ route('admin.microsite.create') }}" 
+           class="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-[#006400] transition group">
+            <div class="w-10 h-10 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center group-hover:bg-[#006400] group-hover:text-white transition">
+                <i class="fas fa-file-lines"></i>
+            </div>
+            <div>
+                <p class="text-sm font-bold text-gray-900">Buat Microsite</p>
+                <p class="text-[10px] text-gray-400">Event / Campaign</p>
+            </div>
+        </a>
+        @endif
+
+        {{-- PUBLISHER: Tombol Review Berita --}}
+        @if ($role == 'publisher')
+        <a href="{{ route('admin.berita.index') }}" 
+           class="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-[#006400] transition group">
+            <div class="w-10 h-10 rounded-xl bg-green-50 text-[#006400] flex items-center justify-center group-hover:bg-[#006400] group-hover:text-white transition">
+                <i class="fas fa-check-double"></i>
+            </div>
+            <div>
+                <p class="text-sm font-bold text-gray-900">Review Berita</p>
+                <p class="text-[10px] text-gray-400">
+                    @if($pendingCount > 0)
+                        <span class="text-orange-600 font-bold">{{ $pendingCount }} menunggu</span>
+                    @else
+                        Tidak ada pending
+                    @endif
+                </p>
+            </div>
+        </a>
+
+        <a href="{{ route('admin.kontak.index') }}" 
+           class="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-[#006400] transition group">
+            <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center group-hover:bg-[#006400] group-hover:text-white transition">
+                <i class="fas fa-envelope"></i>
+            </div>
+            <div>
+                <p class="text-sm font-bold text-gray-900">Kontak Masuk</p>
+                <p class="text-[10px] text-gray-400">
+                    @if($unreadCount > 0)
+                        <span class="text-red-600 font-bold">{{ $unreadCount }} belum dibaca</span>
+                    @else
+                        Semua sudah dibaca
+                    @endif
+                </p>
+            </div>
+        </a>
+        @endif
+
+        {{-- EDITOR: Tombol Buat Berita & Draft --}}
+        @if ($role == 'editor')
+        <a href="{{ route('admin.berita.create') }}" 
+           class="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-[#006400] transition group">
+            <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center group-hover:bg-[#006400] group-hover:text-white transition">
+                <i class="fas fa-pen"></i>
+            </div>
+            <div>
+                <p class="text-sm font-bold text-gray-900">Buat Berita</p>
+                <p class="text-[10px] text-gray-400">Publikasi baru</p>
+            </div>
+        </a>
+
+        <a href="{{ route('admin.berita.index') }}" 
+           class="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-[#006400] transition group">
+            <div class="w-10 h-10 rounded-xl bg-yellow-50 text-yellow-600 flex items-center justify-center group-hover:bg-[#006400] group-hover:text-white transition">
+                <i class="fas fa-file-pen"></i>
+            </div>
+            <div>
+                <p class="text-sm font-bold text-gray-900">Draft Saya</p>
+                <p class="text-[10px] text-gray-400">
+                    @php
+                        $myDrafts = \App\Models\Berita::where('penulis', auth()->user()->name)
+                                    ->where('status_approval', 'Draft')
+                                    ->count();
+                    @endphp
+                    @if($myDrafts > 0)
+                        <span class="text-yellow-600 font-bold">{{ $myDrafts }} draft</span>
+                    @else
+                        Tidak ada draft
+                    @endif
+                </p>
+            </div>
+        </a>
+        @endif
+    </div>
+
+    <!-- PROFIL ADMIN CARD -->
     <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:shadow-md transition">
         <div class="flex flex-col sm:flex-row sm:items-center gap-4">
-            <!-- Foto Profil -->
             @if ($user->foto)
                 <img src="{{ asset('storage/' . $user->foto) }}"
                     class="w-16 h-16 rounded-full object-cover border-2 border-gray-200 flex-shrink-0"
@@ -140,6 +272,9 @@
                     <strong class="text-base">Selamat datang, Publisher! ✅</strong><br>
                     Anda dapat <strong>mereview</strong>, <strong>menyetujui</strong>, dan
                     <strong>mempublikasikan</strong> konten Publikasi yang sudah disubmit oleh Editor.
+                    @if($pendingCount > 0)
+                        <br><span class="text-orange-600 font-bold">🔔 {{ $pendingCount }} berita menunggu approval!</span>
+                    @endif
                 @else
                     <strong class="text-base">Selamat datang!</strong><br>
                     Anda hanya dapat mengakses beberapa fitur terbatas.

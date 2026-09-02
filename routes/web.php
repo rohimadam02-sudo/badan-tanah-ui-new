@@ -31,6 +31,8 @@ use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\MicrositeController;
 use App\Http\Controllers\Admin\MicrositeAdminController;
+use App\Http\Controllers\Admin\SocialMediaController;
+use App\Http\Controllers\Admin\LokasiKantorController;
 
 // ================= FRONTEND (PUBLIK) =================
 
@@ -175,6 +177,34 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
 });
 
 // =========================================================
+// ADMIN SOCIAL MEDIA
+// =========================================================
+Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
+    Route::get('/social-media', [SocialMediaController::class, 'index'])->name('social-media.index');
+    Route::get('/social-media/create', [SocialMediaController::class, 'create'])->name('social-media.create');
+    Route::post('/social-media', [SocialMediaController::class, 'store'])->name('social-media.store');
+    Route::get('/social-media/{id}/edit', [SocialMediaController::class, 'edit'])->name('social-media.edit');
+    Route::put('/social-media/{id}', [SocialMediaController::class, 'update'])->name('social-media.update');
+    Route::delete('/social-media/{id}', [SocialMediaController::class, 'destroy'])->name('social-media.destroy');
+    Route::post('/social-media/{id}/toggle', [SocialMediaController::class, 'toggle'])->name('social-media.toggle');
+    Route::post('/social-media/update-order', [SocialMediaController::class, 'updateOrder'])->name('social-media.update-order');
+});
+
+// =========================================================
+// ADMIN LOKASI KANTOR
+// =========================================================
+Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
+    Route::get('/lokasi-kantor', [LokasiKantorController::class, 'index'])->name('lokasi-kantor.index');
+    Route::get('/lokasi-kantor/create', [LokasiKantorController::class, 'create'])->name('lokasi-kantor.create');
+    Route::post('/lokasi-kantor', [LokasiKantorController::class, 'store'])->name('lokasi-kantor.store');
+    Route::get('/lokasi-kantor/{id}/edit', [LokasiKantorController::class, 'edit'])->name('lokasi-kantor.edit');
+    Route::put('/lokasi-kantor/{id}', [LokasiKantorController::class, 'update'])->name('lokasi-kantor.update');
+    Route::delete('/lokasi-kantor/{id}', [LokasiKantorController::class, 'destroy'])->name('lokasi-kantor.destroy');
+    Route::post('/lokasi-kantor/{id}/toggle', [LokasiKantorController::class, 'toggle'])->name('lokasi-kantor.toggle');
+    Route::post('/lokasi-kantor/update-order', [LokasiKantorController::class, 'updateOrder'])->name('lokasi-kantor.update-order');
+});
+
+// =========================================================
 // ADMIN NOTIFICATIONS
 // =========================================================
 Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
@@ -209,6 +239,13 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::delete('/dokumen-kerjasama/{id}', [DokumenKerjasamaController::class, 'destroy'])->name('dokumen-kerjasama.destroy');
     Route::get('/dokumen-kerjasama/{id}/download', [DokumenKerjasamaController::class, 'download'])->name('dokumen-kerjasama.download');
 });
+
+// =========================================================
+// FRONTEND KARIER - DENGAN LAMARAN
+// =========================================================
+Route::get('/karier', [KarierController::class, 'index'])->name('karier');
+Route::get('/karier/{id}/lamar', [KarierController::class, 'lamar'])->name('karier.lamar');
+Route::post('/karier/{id}/lamar', [KarierController::class, 'storeLamaran'])->name('karier.store-lamaran');
 
 // =========================================================
 // ADMIN INTEGRASI (Hanya Super Admin)

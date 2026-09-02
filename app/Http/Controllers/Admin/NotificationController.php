@@ -73,10 +73,13 @@ class NotificationController extends Controller
         $totalUnread = Kontak::where('is_read', 0)->count();
         $totalCount = $totalPending + $totalUnread;
 
+        // Jika request AJAX, return JSON
         if ($request->ajax() || $request->wantsJson()) {
             return response()->json([
                 'notifications' => $notifications,
                 'total' => $totalCount,
+                'pending_news' => $totalPending,
+                'unread_contacts' => $totalUnread,
             ]);
         }
 
@@ -108,7 +111,6 @@ class NotificationController extends Controller
         Kontak::where('is_read', 0)->update(['is_read' => 1]);
         
         // Untuk berita, tidak bisa di-mark karena butuh aksi approve/publish
-        // Tapi kita bisa mengembalikan response sukses
 
         return response()->json([
             'success' => true,
