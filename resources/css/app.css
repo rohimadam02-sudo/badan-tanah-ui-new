@@ -758,3 +758,10 @@ body.dark-mode #darkModeToggle:hover {
 .animate-slide-in {
   animation: slideIn 0.3s ease forwards;
 }
+
+/* kiri dan kanan */
+#heroPrev,
+#heroNext {
+  visibility: hidden !important;
+  pointer-events: none;
+}

@@ -11,8 +11,8 @@
     right: 24px;
     bottom: 24px;
 
-    width: 70px;
-    height: 70px;
+    width: 90px;
+    height: 90px;
 
     z-index: 999999;
 
@@ -33,8 +33,8 @@
     top: 0;
     left: 0;
 
-    width: 70px;
-    height: 70px;
+    width: 90px;
+    height: 90px;
 
     display: flex;
     align-items: center;
@@ -79,7 +79,7 @@
     display: block;
 
     width: 70px;
-    height: auto;
+    height: 70px;
 
     max-width: none;
     max-height: none;
@@ -429,10 +429,18 @@
    MOBILE
    ========================================================= */
 
+/* =========================================================
+   MOBILE (AGAR TIDAK MENIMPA MENU SAMPING KANAN)
+   ========================================================= */
+
 @media (max-width: 640px) {
 
+    /* Pindahkan widget chatbot ke kiri bawah */
     #chatbot-widget {
-        right: 15px;
+        right: auto;
+        /* Matikan posisi kanan */
+        left: 15px;
+        /* Geser ke kiri */
         bottom: 15px;
 
         width: 60px;
@@ -448,11 +456,16 @@
         width: 60px;
     }
 
+    /* Pindahkan window chatbot mengikuti tombol di kiri */
     #chatbot-window {
-        right: 0;
+        right: auto;
+        /* Matikan posisi kanan */
+        left: 0;
+        /* Ikuti posisi kiri */
         bottom: 70px;
 
         width: calc(100vw - 30px);
+        /* Atau sesuaikan jika ingin lebih kecil, misal: 85vw */
         height: 70vh;
 
         border-radius: 16px;
