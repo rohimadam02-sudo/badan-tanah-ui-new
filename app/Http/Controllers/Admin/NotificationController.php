@@ -7,7 +7,6 @@ use App\Models\Berita;
 use App\Models\Kontak;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Cache;
 
 class NotificationController extends Controller
 {
@@ -19,20 +18,14 @@ class NotificationController extends Controller
         $limit = $request->input('limit', 10);
         $isAjax = $request->ajax() || $request->wantsJson() || $request->input('ajax') == 1;
         
-        // Jika AJAX, gunakan cache
+        // Jika AJAX, ambil langsung tanpa cache
         if ($isAjax) {
-            $cacheKey = 'notifications_' . auth()->id();
-            
-            // Ambil dari cache atau simpan baru
-            $data = Cache::remember($cacheKey, 60, function () {
-                return $this->getNotificationsData();
-            });
-            
+            $data = $this->getNotificationsData($limit);
             return response()->json($data);
         }
         
         // Jika bukan AJAX, ambil langsung
-        $data = $this->getNotificationsData();
+        $data = $this->getNotificationsData($limit);
         
         return view('admin.notifications', [
             'notifications' => $data['notifications'],
@@ -43,10 +36,8 @@ class NotificationController extends Controller
     /**
      * Get notifications data (dipisahkan agar reusable)
      */
-    private function getNotificationsData()
+    private function getNotificationsData($limit = 10)
     {
-        $limit = 10;
-        
         // Notifikasi dari Berita (Menunggu Approval)
         $pendingNews = Berita::where('status_approval', 'Menunggu Approval')
             ->select('id', 'judul as title', 'status_approval as type', 'created_at', DB::raw("'berita' as source"))
@@ -65,9 +56,11 @@ class NotificationController extends Controller
                     'message' => 'Menunggu approval',
                     'link' => route('admin.berita.edit', $item->id),
                     'time' => $item->created_at->diffForHumans(),
-                    'created_at' => $item->created_at,
+                    'created_at' => $item->created_at->toDateTimeString(),
                 ];
-            });
+            })
+            ->values()
+            ->toArray();
 
         // Notifikasi dari Kontak (Belum Dibaca)
         $unreadContacts = Kontak::where('is_read', 0)
@@ -88,15 +81,22 @@ class NotificationController extends Controller
                     'message' => 'Pesan baru dari ' . $item->title,
                     'link' => route('admin.kontak.show', $item->id),
                     'time' => $item->created_at->diffForHumans(),
-                    'created_at' => $item->created_at,
+                    'created_at' => $item->created_at->toDateTimeString(),
                 ];
-            });
-
-        // Gabungkan dan urutkan berdasarkan waktu
-        $notifications = $pendingNews->concat($unreadContacts)
-            ->sortByDesc('created_at')
+            })
             ->values()
-            ->take($limit);
+            ->toArray();
+
+        // Gabungkan dan urutkan berdasarkan waktu (array murni)
+        $notifications = array_merge($pendingNews, $unreadContacts);
+
+        // Urutkan berdasarkan created_at descending
+        usort($notifications, function ($a, $b) {
+            return strtotime($b['created_at']) - strtotime($a['created_at']);
+        });
+
+        // Ambil sesuai limit
+        $notifications = array_slice($notifications, 0, $limit);
 
         // Hitung total
         $totalPending = Berita::where('status_approval', 'Menunggu Approval')->count();
@@ -112,33 +112,18 @@ class NotificationController extends Controller
     }
 
     /**
-     * Get unread count only (for badge) - PAKAI CACHE
+     * Get unread count only (for badge)
      */
     public function unreadCount()
     {
-        $cacheKey = 'unread_count_' . auth()->id();
+        $pendingNews = Berita::where('status_approval', 'Menunggu Approval')->count();
+        $unreadContacts = Kontak::where('is_read', 0)->count();
         
-        $data = Cache::remember($cacheKey, 60, function () {
-            $pendingNews = Berita::where('status_approval', 'Menunggu Approval')->count();
-            $unreadContacts = Kontak::where('is_read', 0)->count();
-            
-            return [
-                'count' => $pendingNews + $unreadContacts,
-                'pending_news' => $pendingNews,
-                'unread_contacts' => $unreadContacts,
-            ];
-        });
-
-        return response()->json($data);
-    }
-
-    /**
-     * Clear notification cache
-     */
-    private function clearNotificationCache()
-    {
-        Cache::forget('notifications_' . auth()->id());
-        Cache::forget('unread_count_' . auth()->id());
+        return response()->json([
+            'count' => $pendingNews + $unreadContacts,
+            'pending_news' => $pendingNews,
+            'unread_contacts' => $unreadContacts,
+        ]);
     }
 
     /**
@@ -148,9 +133,6 @@ class NotificationController extends Controller
     {
         // Tandai semua kontak sebagai sudah dibaca
         Kontak::where('is_read', 0)->update(['is_read' => 1]);
-        
-        // Clear cache
-        $this->clearNotificationCache();
         
         return response()->json([
             'success' => true,
@@ -172,9 +154,6 @@ class NotificationController extends Controller
                 $kontak->save();
             }
         }
-        
-        // Clear cache
-        $this->clearNotificationCache();
 
         return response()->json([
             'success' => true,
