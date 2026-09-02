@@ -325,6 +325,9 @@
             pointer-events: all;
         }
 
+        /* =========================================================
+           HAMBURGER MENU BUTTON
+        ========================================================= */
         .hamburger {
             width: 28px;
             height: 20px;
@@ -336,6 +339,7 @@
             padding: 0;
             border: none;
             background: transparent;
+            z-index: 99999;
         }
         .hamburger span {
             display: block;
@@ -356,58 +360,6 @@
         .hamburger.active span:nth-child(3) {
             transform: translateY(-8.5px) rotate(-45deg);
             background: var(--color-secondary) !important;
-        }
-
-        /* =========================================================
-           DROPDOWN (Desktop)
-        ========================================================= */
-        @media (min-width: 1024px) {
-            .dropdown-desktop {
-                position: relative;
-            }
-            .dropdown-desktop .dropdown-menu {
-                position: absolute;
-                top: 100%;
-                left: 0;
-                margin-top: 10px;
-                min-width: 220px;
-                background: white;
-                border-radius: 14px;
-                box-shadow: 0 20px 60px rgba(0,0,0,0.12);
-                border: 1px solid rgba(0,0,0,0.04);
-                padding: 8px 0;
-                opacity: 0;
-                visibility: hidden;
-                transform: translateY(-10px) scale(0.96);
-                transition: all 0.25s ease;
-                z-index: 50;
-            }
-            .dropdown-desktop:hover .dropdown-menu {
-                opacity: 1;
-                visibility: visible;
-                transform: translateY(0) scale(1);
-            }
-            .dropdown-desktop .dropdown-menu a {
-                display: flex;
-                align-items: center;
-                gap: 12px;
-                padding: 12px 22px;
-                color: #374151;
-                font-size: 0.9rem;
-                font-weight: 500;
-                transition: all 0.15s ease;
-                border-radius: 0;
-                letter-spacing: 0.3px;
-            }
-            .dropdown-desktop .dropdown-menu a:hover {
-                background: #f0fdf4;
-                color: var(--color-secondary) !important;
-            }
-            .dropdown-desktop .dropdown-menu a i {
-                width: 20px;
-                color: #9ca3af;
-                font-size: 0.9rem;
-            }
         }
 
         @media (min-width: 1024px) {
