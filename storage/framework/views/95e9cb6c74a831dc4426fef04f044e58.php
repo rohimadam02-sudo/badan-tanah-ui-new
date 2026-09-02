@@ -1,128 +1,131 @@
-@extends('layouts.frontend')
+<?php $__env->startSection('title', $isEnglish ? 'Land Asset Inventory' : 'Aset Persediaan Tanah'); ?>
 
-@section('title', $isEnglish ? 'Land Asset Inventory' : 'Aset Persediaan Tanah')
+<?php $__env->startSection('content'); ?>
 
-@section('content')
-
-    {{-- =========================================================
-    HEADER
-========================================================= --}}
+    
     <section class="bg-[#0B2A4A]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
             <div class="max-w-3xl">
                 <span
                     class="inline-flex items-center gap-2 text-xs font-semibold text-blue-200 uppercase tracking-wider mb-4">
                     <i class="fas fa-layer-group"></i>
-                    {{ $isEnglish ? 'Land Asset Inventory' : 'Aset Persediaan Tanah' }}
+                    <?php echo e($isEnglish ? 'Land Asset Inventory' : 'Aset Persediaan Tanah'); ?>
+
                 </span>
                 <h1 class="text-3xl md:text-4xl font-bold text-white">
-                    {{ $isEnglish ? 'Land Asset Inventory' : 'Aset Persediaan Tanah' }}
+                    <?php echo e($isEnglish ? 'Land Asset Inventory' : 'Aset Persediaan Tanah'); ?>
+
                 </h1>
                 <p class="text-blue-100 mt-4 leading-relaxed">
-                    {{ $isEnglish ? 'Find information on Badan Bank Tanah land assets based on location, land area, designation, and utilization schemes.' : 'Temukan informasi aset persediaan tanah Badan Bank Tanah berdasarkan lokasi, luas tanah, peruntukan, dan skema pemanfaatannya.' }}
+                    <?php echo e($isEnglish ? 'Find information on Badan Bank Tanah land assets based on location, land area, designation, and utilization schemes.' : 'Temukan informasi aset persediaan tanah Badan Bank Tanah berdasarkan lokasi, luas tanah, peruntukan, dan skema pemanfaatannya.'); ?>
+
                 </p>
                 <div class="h-1 w-16 bg-blue-500 mt-6"></div>
             </div>
         </div>
     </section>
 
-    {{-- =========================================================
-    MAIN CONTENT
-========================================================= --}}
+    
     <section class="bg-gray-50 py-12">
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" x-data="asetPage()" x-init="init()">
 
-            {{-- =====================================================
-            FILTER
-        ====================================================== --}}
+            
             <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 mb-8">
 
                 <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
                     <div>
                         <h2 class="text-lg font-bold text-gray-900">
-                            {{ $isEnglish ? 'Search Land Assets' : 'Cari Aset Tanah' }}
+                            <?php echo e($isEnglish ? 'Search Land Assets' : 'Cari Aset Tanah'); ?>
+
                         </h2>
                         <p class="text-sm text-gray-500 mt-1">
-                            {{ $isEnglish ? 'Use filters to find assets that match your needs.' : 'Gunakan filter untuk menemukan aset yang sesuai dengan kebutuhan Anda.' }}
+                            <?php echo e($isEnglish ? 'Use filters to find assets that match your needs.' : 'Gunakan filter untuk menemukan aset yang sesuai dengan kebutuhan Anda.'); ?>
+
                         </p>
                     </div>
                     <div class="text-sm text-gray-500">
                         <span x-text="totalItems"></span>
-                        {{ $isEnglish ? 'assets found' : 'aset ditemukan' }}
+                        <?php echo e($isEnglish ? 'assets found' : 'aset ditemukan'); ?>
+
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 
-                    {{-- LOKASI --}}
+                    
                     <div>
                         <label class="block text-xs font-semibold text-gray-600 mb-2">
-                            {{ $isEnglish ? 'Location' : 'Lokasi' }}
+                            <?php echo e($isEnglish ? 'Location' : 'Lokasi'); ?>
+
                         </label>
                         <select x-model="filters.provinsi"
                             class="w-full h-11 border border-gray-300 rounded-lg text-sm px-3 text-black focus:ring-2 focus:ring-black focus:border-black">
-                            <option value="">{{ $isEnglish ? 'All Provinces' : 'Semua Provinsi' }}</option>
+                            <option value=""><?php echo e($isEnglish ? 'All Provinces' : 'Semua Provinsi'); ?></option>
                             <option value="Jawa Tengah">Jawa Tengah</option>
                             <option value="Sumatera Selatan">Sumatera Selatan</option>
                             <option value="Papua Selatan">Papua Selatan</option>
                         </select>
                     </div>
 
-                    {{-- LUAS MINIMUM --}}
+                    
                     <div>
                         <label class="block text-xs font-semibold text-gray-600 mb-2">
-                            {{ $isEnglish ? 'Minimum Area' : 'Luas Minimum' }}
+                            <?php echo e($isEnglish ? 'Minimum Area' : 'Luas Minimum'); ?>
+
                         </label>
                         <div class="relative">
                             <input type="number" min="0" step="0.01" x-model="filters.luas_min"
-                                placeholder="{{ $isEnglish ? 'Example: 1' : 'Contoh: 1' }}"
+                                placeholder="<?php echo e($isEnglish ? 'Example: 1' : 'Contoh: 1'); ?>"
                                 class="w-full h-11 border border-gray-300 rounded-lg text-sm px-3 pr-12 text-black placeholder:text-black focus:ring-2 focus:ring-black focus:border-black">
                             <span class="absolute right-3 top-3 text-xs text-gray-400">Ha</span>
                         </div>
                     </div>
 
-                    {{-- LUAS MAKSIMUM --}}
+                    
                     <div>
                         <label class="block text-xs font-semibold text-gray-600 mb-2">
-                            {{ $isEnglish ? 'Maximum Area' : 'Luas Maksimum' }}
+                            <?php echo e($isEnglish ? 'Maximum Area' : 'Luas Maksimum'); ?>
+
                         </label>
                         <div class="relative">
                             <input type="number" min="0" step="0.01" x-model="filters.luas_mak"
-                                placeholder="{{ $isEnglish ? 'Example: 1' : 'Contoh: 1' }}"
+                                placeholder="<?php echo e($isEnglish ? 'Example: 1' : 'Contoh: 1'); ?>"
                                 class="w-full h-11 border border-gray-300 rounded-lg text-sm px-3 pr-12 text-black placeholder:text-black focus:ring-2 focus:ring-black focus:border-black">
                             <span class="absolute right-3 top-3 text-xs text-gray-400">Ha</span>
                         </div>
                     </div>
 
-                    {{-- PERUNTUKAN --}}
+                    
                     <div>
                         <label class="block text-xs font-semibold text-gray-600 mb-2">
-                            {{ $isEnglish ? 'Designation' : 'Peruntukan' }}
+                            <?php echo e($isEnglish ? 'Designation' : 'Peruntukan'); ?>
+
                         </label>
                         <select x-model="filters.peruntukan"
                             class="w-full h-11 border border-gray-300 rounded-lg text-sm px-3 text-black focus:ring-2 focus:ring-black focus:border-black">
-                            <option value="">{{ $isEnglish ? 'All Designations' : 'Semua Peruntukan' }}</option>
-                            <option value="Industri">{{ $isEnglish ? 'Industrial' : 'Industri' }}</option>
-                            <option value="Pertanian">{{ $isEnglish ? 'Agriculture' : 'Pertanian' }}</option>
-                            <option value="Perumahan">{{ $isEnglish ? 'Residential' : 'Perumahan' }}</option>
+                            <option value=""><?php echo e($isEnglish ? 'All Designations' : 'Semua Peruntukan'); ?></option>
+                            <option value="Industri"><?php echo e($isEnglish ? 'Industrial' : 'Industri'); ?></option>
+                            <option value="Pertanian"><?php echo e($isEnglish ? 'Agriculture' : 'Pertanian'); ?></option>
+                            <option value="Perumahan"><?php echo e($isEnglish ? 'Residential' : 'Perumahan'); ?></option>
                         </select>
                     </div>
                 </div>
 
-                {{-- BARIS KEDUA --}}
+                
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
 
-                    {{-- SKEMA --}}
+                    
                     <div>
                         <label class="block text-xs font-semibold text-gray-600 mb-2">
-                            {{ $isEnglish ? 'Scheme' : 'Skema' }}
+                            <?php echo e($isEnglish ? 'Scheme' : 'Skema'); ?>
+
                         </label>
                         <select x-model="filters.skema"
                             class="w-full h-11 border border-gray-300 rounded-lg text-sm px-3 text-black focus:ring-2 focus:ring-black focus:border-black">
-                            <option value="">{{ $isEnglish ? 'All Schemes' : 'Semua Skema' }}</option>
-                            <option value="Sewa">{{ $isEnglish ? 'Lease' : 'Sewa' }}</option>
-                            <option value="Kerjasama">{{ $isEnglish ? 'Partnership' : 'Kerjasama' }}</option>
+                            <option value=""><?php echo e($isEnglish ? 'All Schemes' : 'Semua Skema'); ?></option>
+                            <option value="Sewa"><?php echo e($isEnglish ? 'Lease' : 'Sewa'); ?></option>
+                            <option value="Kerjasama"><?php echo e($isEnglish ? 'Partnership' : 'Kerjasama'); ?></option>
                         </select>
                     </div>
 
@@ -131,55 +134,58 @@
                         <button type="button" @click="resetFilter()"
                             class="h-11 px-6 rounded-lg border border-gray-300 text-sm font-semibold text-gray-600 hover:bg-gray-50 transition">
                             <i class="fas fa-rotate-left mr-2"></i>
-                            {{ $isEnglish ? 'Reset Filter' : 'Reset Filter' }}
+                            <?php echo e($isEnglish ? 'Reset Filter' : 'Reset Filter'); ?>
+
                         </button>
                         <button type="button" @click="applyFilter()"
                             class="h-11 px-7 rounded-lg bg-[#0B2A4A] text-white text-sm font-semibold hover:bg-[#12395f] transition">
                             <i class="fas fa-filter mr-2"></i>
-                            {{ $isEnglish ? 'Apply Filter' : 'Terapkan Filter' }}
+                            <?php echo e($isEnglish ? 'Apply Filter' : 'Terapkan Filter'); ?>
+
                         </button>
                     </div>
                 </div>
             </div>
 
-            {{-- =====================================================
-            PETA
-        ====================================================== --}}
+            
             <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden mb-8">
                 <div class="p-6 border-b border-gray-100">
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                         <div>
                             <h2 class="text-lg font-bold text-gray-900">
-                                {{ $isEnglish ? 'Asset Distribution Map' : 'Peta Sebaran Aset' }}
+                                <?php echo e($isEnglish ? 'Asset Distribution Map' : 'Peta Sebaran Aset'); ?>
+
                             </h2>
                             <p class="text-sm text-gray-500 mt-1">
-                                {{ $isEnglish ? 'Location of Badan Bank Tanah land assets.' : 'Lokasi aset persediaan tanah Badan Bank Tanah.' }}
+                                <?php echo e($isEnglish ? 'Location of Badan Bank Tanah land assets.' : 'Lokasi aset persediaan tanah Badan Bank Tanah.'); ?>
+
                             </p>
                         </div>
                         <span class="text-xs text-gray-500">
                             <i class="fas fa-location-dot text-[#006400] mr-1"></i>
-                            {{ $isEnglish ? 'Asset marker' : 'Marker aset' }}
+                            <?php echo e($isEnglish ? 'Asset marker' : 'Marker aset'); ?>
+
                         </span>
                     </div>
                 </div>
                 <div id="assetMap" class="w-full h-[420px] bg-blue-50"></div>
             </div>
 
-            {{-- =====================================================
-            HASIL ASET - DENGAN PAGINATION
-        ====================================================== --}}
+            
             <div class="flex items-center justify-between mb-5">
                 <div>
                     <h2 class="text-xl font-bold text-gray-900">
-                        {{ $isEnglish ? 'Asset List' : 'Daftar Aset' }}
+                        <?php echo e($isEnglish ? 'Asset List' : 'Daftar Aset'); ?>
+
                     </h2>
                     <p class="text-sm text-gray-500 mt-1">
-                        {{ $isEnglish ? 'Information on available land assets.' : 'Informasi aset persediaan tanah yang tersedia.' }}
+                        <?php echo e($isEnglish ? 'Information on available land assets.' : 'Informasi aset persediaan tanah yang tersedia.'); ?>
+
                     </p>
                 </div>
             </div>
 
-            {{-- LOADING SKELETON --}}
+            
             <div x-show="loading" x-cloak>
                 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                     <template x-for="i in 6" :key="i">
@@ -202,33 +208,36 @@
                 </div>
             </div>
 
-            {{-- EMPTY --}}
+            
             <div x-show="!loading && paginatedAssets.length === 0" x-cloak
                 class="bg-white rounded-2xl border border-gray-200 p-12 text-center">
                 <div class="w-14 h-14 mx-auto rounded-full bg-gray-100 flex items-center justify-center">
                     <i class="fas fa-map-location-dot text-gray-400 text-xl"></i>
                 </div>
                 <h3 class="font-bold text-gray-800 mt-4">
-                    {{ $isEnglish ? 'No assets found' : 'Aset tidak ditemukan' }}
+                    <?php echo e($isEnglish ? 'No assets found' : 'Aset tidak ditemukan'); ?>
+
                 </h3>
                 <p class="text-sm text-gray-500 mt-1">
-                    {{ $isEnglish ? 'No assets match the selected filters.' : 'Tidak ada aset yang sesuai dengan filter yang dipilih.' }}
+                    <?php echo e($isEnglish ? 'No assets match the selected filters.' : 'Tidak ada aset yang sesuai dengan filter yang dipilih.'); ?>
+
                 </p>
                 <button type="button" @click="resetFilter()"
                     class="mt-5 text-sm font-semibold text-[#0B2A4A] hover:underline">
-                    {{ $isEnglish ? 'Reset Filter' : 'Reset Filter' }}
+                    <?php echo e($isEnglish ? 'Reset Filter' : 'Reset Filter'); ?>
+
                 </button>
             </div>
 
-            {{-- LIST ASET DENGAN PAGINATION --}}
+            
             <div x-show="!loading && paginatedAssets.length > 0" x-cloak>
                 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                     <template x-for="item in paginatedAssets" :key="item.id">
                         <article
                             class="bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-lg transition">
-                            {{-- GAMBAR --}}
+                            
                             <div class="relative h-52 bg-gray-100">
-                                <img :src="item.gambar ? '{{ asset('storage') }}/' + item.gambar :
+                                <img :src="item.gambar ? '<?php echo e(asset('storage')); ?>/' + item.gambar :
                                     'https://picsum.photos/600/400?random=' + item.id"
                                 :alt="item.nama_lokasi" class="w-full h-full object-cover" loading="lazy">
                             <span class="absolute top-4 left-4 text-white text-[10px] px-3 py-1.5 rounded-md font-bold uppercase tracking-wide"
@@ -237,7 +246,7 @@
                                     x-text="item.status"></span>
                             </div>
 
-                            {{-- CONTENT --}}
+                            
                             <div class="p-5">
                                 <h3 class="font-bold text-base text-gray-900 leading-snug" x-text="item.nama_lokasi"></h3>
                                 <div class="flex items-start gap-2 mt-2">
@@ -248,7 +257,8 @@
 
                                 <div class="mt-4 pt-4 border-t border-gray-100">
                                     <p class="text-[10px] text-gray-400 uppercase tracking-wide">
-                                        {{ $isEnglish ? 'Land Area' : 'Luas Tanah' }}
+                                        <?php echo e($isEnglish ? 'Land Area' : 'Luas Tanah'); ?>
+
                                     </p>
                                     <p class="text-lg font-extrabold text-[#006400] mt-1"
                                         x-text="formatNumber(item.luas_hektar) + ' Ha'"></p>
@@ -257,14 +267,16 @@
                                 <div class="grid grid-cols-2 gap-3 mt-4">
                                     <div class="bg-gray-50 rounded-lg p-3">
                                         <p class="text-[9px] text-gray-400 uppercase">
-                                            {{ $isEnglish ? 'Designation' : 'Peruntukan' }}
+                                            <?php echo e($isEnglish ? 'Designation' : 'Peruntukan'); ?>
+
                                         </p>
                                         <p class="text-xs font-semibold text-gray-700 mt-1"
                                             x-text="item.peruntukan || '-'"></p>
                                     </div>
                                     <div class="bg-gray-50 rounded-lg p-3">
                                         <p class="text-[9px] text-gray-400 uppercase">
-                                            {{ $isEnglish ? 'Scheme' : 'Skema' }}
+                                            <?php echo e($isEnglish ? 'Scheme' : 'Skema'); ?>
+
                                         </p>
                                         <p class="text-xs font-semibold text-gray-700 mt-1" x-text="item.skema || '-'">
                                         </p>
@@ -273,7 +285,8 @@
 
                                 <a :href="'/aset/' + item.id"
                                     class="mt-5 w-full h-10 inline-flex items-center justify-center gap-2 rounded-lg bg-[#0B2A4A] text-white text-xs font-semibold hover:bg-[#12395f] transition">
-                                    {{ $isEnglish ? 'View Asset Detail' : 'Lihat Detail Aset' }}
+                                    <?php echo e($isEnglish ? 'View Asset Detail' : 'Lihat Detail Aset'); ?>
+
                                     <i class="fas fa-arrow-right"></i>
                                 </a>
                             </div>
@@ -281,24 +294,27 @@
                     </template>
                 </div>
 
-                {{-- PAGINATION --}}
+                
                 <div class="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
                     <p class="text-xs text-gray-500">
-                        {{ $isEnglish ? 'Showing' : 'Menampilkan' }}
+                        <?php echo e($isEnglish ? 'Showing' : 'Menampilkan'); ?>
+
                         <span x-text="((currentPage - 1) * perPage) + 1"></span> -
                         <span x-text="Math.min(currentPage * perPage, filteredAssets.length)"></span>
-                        {{ $isEnglish ? 'of' : 'dari' }}
+                        <?php echo e($isEnglish ? 'of' : 'dari'); ?>
+
                         <span x-text="filteredAssets.length"></span>
-                        {{ $isEnglish ? 'assets' : 'aset' }}
+                        <?php echo e($isEnglish ? 'assets' : 'aset'); ?>
+
                     </p>
                     <div class="flex items-center gap-1.5 flex-wrap justify-center">
-                        {{-- Previous --}}
+                        
                         <button type="button" @click="changePage(currentPage - 1)" :disabled="currentPage <= 1"
                             class="w-9 h-9 rounded-lg border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 hover:border-[#006400] transition flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed">
                             <i class="fas fa-chevron-left text-xs"></i>
                         </button>
 
-                        {{-- Pages --}}
+                        
                         <template x-for="page in getVisiblePages()" :key="page">
                             <template x-if="page === '...'">
                                 <span class="px-1 text-gray-400">...</span>
@@ -312,7 +328,7 @@
                             </template>
                         </template>
 
-                        {{-- Next --}}
+                        
                         <button type="button" @click="changePage(currentPage + 1)" :disabled="currentPage >= totalPages"
                             class="w-9 h-9 rounded-lg border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 hover:border-[#006400] transition flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed">
                             <i class="fas fa-chevron-right text-xs"></i>
@@ -324,9 +340,9 @@
         </div>
     </section>
 
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
     <script>
         function asetPage() {
             return {
@@ -605,15 +621,15 @@
                             <i class="fas fa-location-dot"></i> ${item.kabupaten ?? ''}, ${item.provinsi ?? ''}
                         </div>
                         <div style="background:#F0FDF4;padding:10px;border-radius:7px;margin-bottom:10px;">
-                            <div style="font-size:9px;color:#6B7280;text-transform:uppercase;">{{ $isEnglish ? 'Total Area' : 'Total Luas' }}</div>
+                            <div style="font-size:9px;color:#6B7280;text-transform:uppercase;"><?php echo e($isEnglish ? 'Total Area' : 'Total Luas'); ?></div>
                             <div style="font-size:14px;font-weight:700;color:#006400;">${this.formatNumber(item.luas_hektar)} Ha</div>
                         </div>
                         <div style="font-size:11px;line-height:1.8;color:#4B5563;">
-                            <strong>{{ $isEnglish ? 'Designation' : 'Peruntukan' }}:</strong> ${item.peruntukan ?? '-'}<br>
-                            <strong>{{ $isEnglish ? 'Scheme' : 'Skema' }}:</strong> ${item.skema ?? '-'}<br>
-                            <strong>{{ $isEnglish ? 'Status' : 'Status' }}:</strong> ${item.status ?? '-'}
+                            <strong><?php echo e($isEnglish ? 'Designation' : 'Peruntukan'); ?>:</strong> ${item.peruntukan ?? '-'}<br>
+                            <strong><?php echo e($isEnglish ? 'Scheme' : 'Skema'); ?>:</strong> ${item.skema ?? '-'}<br>
+                            <strong><?php echo e($isEnglish ? 'Status' : 'Status'); ?>:</strong> ${item.status ?? '-'}
                         </div>
-                        <div style="margin-top:12px;padding:6px;text-align:center;background:#FFF7ED;color:#C2410C;border-radius:5px;font-size:9px;">{{ $isEnglish ? 'Demo data' : 'Data demonstrasi' }}</div>
+                        <div style="margin-top:12px;padding:6px;text-align:center;background:#FFF7ED;color:#C2410C;border-radius:5px;font-size:9px;"><?php echo e($isEnglish ? 'Demo data' : 'Data demonstrasi'); ?></div>
                     </div>
                 `);
 
@@ -732,4 +748,5 @@
 
         window.asetPage = asetPage;
     </script>
-@endpush
+<?php $__env->stopPush(); ?>
+<?php echo $__env->make('layouts.frontend', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Users\Lenovo\badan-tanah-ui-new\resources\views/frontend/assets.blade.php ENDPATH**/ ?>

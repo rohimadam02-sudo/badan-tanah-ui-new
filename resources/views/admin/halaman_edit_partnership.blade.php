@@ -377,13 +377,13 @@
                 </div>
 
                 {{-- BENTUK KERJASAMA --}}
-                <div class="partnership-card">
+                <div class="partnership-card dark:bg-gray-800 dark:border-gray-700">
                     <div class="flex items-center justify-between mb-4">
                         <div>
-                            <h2 class="partnership-card-title">Bentuk Kerjasama</h2>
-                            <p class="partnership-card-subtitle">Kelola bentuk kerjasama yang ditampilkan.</p>
+                            <h2 class="partnership-card-title dark:text-white">Bentuk Kerjasama</h2>
+                            <p class="partnership-card-subtitle dark:text-gray-400">Kelola bentuk kerjasama yang ditampilkan.</p>
                         </div>
-                        <button type="button" onclick="addItem('kerjasama')" class="btn-add-item" style="width:auto;padding:0.5rem 1rem;">
+                        <button type="button" onclick="addItem('kerjasama')" class="btn-add-item dark:bg-blue-600 dark:hover:bg-blue-700 dark:text-white" style="width:auto;padding:0.5rem 1rem;">
                             <i class="fas fa-plus mr-1"></i> Tambah Bentuk
                         </button>
                     </div>
@@ -401,36 +401,36 @@
                         @endphp
 
                         @foreach ($kerjasama as $index => $item)
-                            <div class="item-card kerjasama-item">
-                                <button type="button" onclick="removeItem(this, 'kerjasama')" class="btn-remove-item">
+                            <div class="item-card kerjasama-item dark:bg-gray-700 dark:border-gray-600">
+                                <button type="button" onclick="removeItem(this, 'kerjasama')" class="btn-remove-item dark:text-red-400 dark:hover:text-red-300">
                                     <i class="fas fa-times"></i>
                                 </button>
                                 <div class="grid-3">
                                     <div>
-                                        <label class="block text-xs font-semibold text-gray-500 mb-1">Nomor</label>
+                                        <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Nomor</label>
                                         <input type="text" name="bentuk_kerjasama[{{ $index }}][number]"
                                             value="{{ $item['number'] ?? '' }}"
                                             placeholder="01"
-                                            class="partnership-input text-sm">
+                                            class="partnership-input text-sm dark:bg-gray-600 dark:border-gray-500 dark:text-white">
                                     </div>
                                     <div class="col-span-2">
-                                        <label class="block text-xs font-semibold text-gray-500 mb-1">Judul</label>
+                                        <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Judul</label>
                                         <input type="text" name="bentuk_kerjasama[{{ $index }}][title]"
                                             value="{{ $item['title'] ?? '' }}"
                                             placeholder="Judul bentuk kerjasama"
-                                            class="partnership-input text-sm">
+                                            class="partnership-input text-sm dark:bg-gray-600 dark:border-gray-500 dark:text-white">
                                     </div>
                                 </div>
                                 <div class="mt-2">
-                                    <label class="block text-xs font-semibold text-gray-500 mb-1">Deskripsi</label>
+                                    <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Deskripsi</label>
                                     <textarea name="bentuk_kerjasama[{{ $index }}][description]" rows="2"
-                                        class="partnership-textarea text-sm">{{ $item['description'] ?? '' }}</textarea>
+                                        class="partnership-textarea text-sm dark:bg-gray-600 dark:border-gray-500 dark:text-white">{{ $item['description'] ?? '' }}</textarea>
                                 </div>
                             </div>
                         @endforeach
                     </div>
                 </div>
-
+                
                 {{-- PROSEDUR & TAHAPAN --}}
                 <div class="partnership-card">
                     <div class="flex items-center justify-between mb-4">
