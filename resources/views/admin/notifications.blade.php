@@ -129,11 +129,11 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                location.reload();
+                window.location.reload();
             }
         })
         .catch(() => {
-            location.reload();
+            window.location.reload();
         });
     }
 </script>

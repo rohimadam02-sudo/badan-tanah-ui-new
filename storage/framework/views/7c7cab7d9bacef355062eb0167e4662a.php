@@ -4,10 +4,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'CMS Admin Panel - Badan Bank Tanah')</title>
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
+    <title><?php echo $__env->yieldContent('title', 'CMS Admin Panel - Badan Bank Tanah'); ?></title>
 
-    @vite(['resources/css/app.css', 'resources/css/admin-dark-mode.css', 'resources/js/app.js'])
+    <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/css/admin-dark-mode.css', 'resources/js/app.js']); ?>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
@@ -234,7 +234,7 @@
 
 <body class="bg-gray-100 flex h-screen overflow-hidden text-gray-800 transition-colors duration-300">
 
-    @php
+    <?php
         $user = auth()->user();
         $role = $user->role;
         $roleLabel = [
@@ -243,7 +243,7 @@
             'editor' => 'Editor',
             'publisher' => 'Publisher',
         ][$role] ?? ucfirst($role);
-    @endphp
+    ?>
 
     <!-- ========================================================= -->
     <!-- LOADING STATE -->
@@ -268,7 +268,7 @@
         <div class="p-4 sm:p-5 border-b border-gray-100">
             <div class="flex items-center gap-3">
                 <div class="flex items-center justify-center w-14 h-14 flex-shrink-0">
-                    <img src="{{ asset('images/Logo-badan-bank-tanah.png') }}" alt="Badan Bank Tanah Logo" class="w-12 h-12 object-contain">
+                    <img src="<?php echo e(asset('images/Logo-badan-bank-tanah.png')); ?>" alt="Badan Bank Tanah Logo" class="w-12 h-12 object-contain">
                 </div>
                 <div class="leading-tight min-w-0">
                     <h1 class="font-bold text-sm text-gray-900 truncate">Badan Bank Tanah</h1>
@@ -279,7 +279,8 @@
                 <p class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider">CMS Admin Panel</p>
                 <p class="text-[9px] text-gray-400 mt-0.5">
                     <span class="inline-block w-1.5 h-1.5 rounded-full bg-green-500 mr-1"></span>
-                    {{ $roleLabel }}
+                    <?php echo e($roleLabel); ?>
+
                 </p>
             </div>
         </div>
@@ -291,10 +292,10 @@
             <!-- DASHBOARD (Semua Role) -->
             <!-- ============================================= -->
             <div class="tooltip-container">
-                <a href="{{ route('admin.dashboard') }}"
+                <a href="<?php echo e(route('admin.dashboard')); ?>"
                     class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition sidebar-transition w-full
-                    {{ request()->routeIs('admin.dashboard') ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-700 hover:bg-gray-100 hover:text-[#006400]' }}">
-                    <i class="fas fa-home w-5 text-center {{ request()->routeIs('admin.dashboard') ? 'text-white' : 'text-gray-400' }}"></i>
+                    <?php echo e(request()->routeIs('admin.dashboard') ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-700 hover:bg-gray-100 hover:text-[#006400]'); ?>">
+                    <i class="fas fa-home w-5 text-center <?php echo e(request()->routeIs('admin.dashboard') ? 'text-white' : 'text-gray-400'); ?>"></i>
                     <span>Dashboard</span>
                 </a>
                 <span class="tooltip-text">Dashboard</span>
@@ -303,12 +304,12 @@
             <!-- ============================================= -->
             <!-- WEBSITE (Hanya Super Admin & Admin) -->
             <!-- ============================================= -->
-            @if (in_array($role, ['super_admin', 'admin']))
+            <?php if(in_array($role, ['super_admin', 'admin'])): ?>
             <div class="pt-3 pb-1.5">
                 <p class="px-3 text-[9px] font-bold text-gray-400 uppercase tracking-wider">Website</p>
             </div>
 
-            @php
+            <?php
                 $websiteOpen = request()->routeIs('admin.website') ||
                               request()->routeIs('admin.halaman.*') ||
                               request()->routeIs('admin.menu_navigasi') ||
@@ -319,14 +320,14 @@
                               request()->routeIs('admin.halaman.edit.partnership') ||
                               request()->routeIs('admin.social-media.*') ||
                               request()->routeIs('admin.lokasi-kantor.*');
-            @endphp
+            ?>
 
-            <div x-data="{ open: {{ $websiteOpen ? 'true' : 'false' }} }" class="relative">
+            <div x-data="{ open: <?php echo e($websiteOpen ? 'true' : 'false'); ?> }" class="relative">
                 <button @click="open = !open"
                     class="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium transition sidebar-transition
-                    {{ $websiteOpen ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-700 hover:bg-gray-100 hover:text-[#006400]' }}"
-                    aria-expanded="{{ $websiteOpen ? 'true' : 'false' }}">
-                    <i class="fas fa-globe w-5 text-center {{ $websiteOpen ? 'text-white' : 'text-gray-400' }}"></i>
+                    <?php echo e($websiteOpen ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-700 hover:bg-gray-100 hover:text-[#006400]'); ?>"
+                    aria-expanded="<?php echo e($websiteOpen ? 'true' : 'false'); ?>">
+                    <i class="fas fa-globe w-5 text-center <?php echo e($websiteOpen ? 'text-white' : 'text-gray-400'); ?>"></i>
                     <span>Website</span>
                     <i class="fas fa-chevron-down ml-auto text-[10px] transition-transform duration-200"
                         :class="open ? 'rotate-180' : ''"></i>
@@ -337,9 +338,9 @@
 
                     <!-- Homepage -->
                     <div class="tooltip-container">
-                        <a href="{{ route('admin.website') }}"
+                        <a href="<?php echo e(route('admin.website')); ?>"
                             class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
-                            {{ request()->routeIs('admin.website') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            <?php echo e(request()->routeIs('admin.website') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]'); ?>"
                             role="menuitem">
                             <i class="fas fa-house-chimney w-4 text-center text-[10px]"></i>
                             <span>Homepage</span>
@@ -349,9 +350,9 @@
 
                     <!-- Tentang -->
                     <div class="tooltip-container">
-                        <a href="{{ route('admin.halaman.edit.tentang') }}"
+                        <a href="<?php echo e(route('admin.halaman.edit.tentang')); ?>"
                             class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
-                            {{ request()->routeIs('admin.halaman.edit.tentang') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            <?php echo e(request()->routeIs('admin.halaman.edit.tentang') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]'); ?>"
                             role="menuitem">
                             <i class="fas fa-circle-info w-4 text-center text-[10px]"></i>
                             <span>Tentang</span>
@@ -361,9 +362,9 @@
 
                     <!-- Halaman -->
                     <div class="tooltip-container">
-                        <a href="{{ route('admin.halaman.index') }}"
+                        <a href="<?php echo e(route('admin.halaman.index')); ?>"
                             class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
-                            {{ request()->routeIs('admin.halaman.index') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            <?php echo e(request()->routeIs('admin.halaman.index') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]'); ?>"
                             role="menuitem">
                             <i class="fas fa-file-lines w-4 text-center text-[10px]"></i>
                             <span>Halaman</span>
@@ -373,9 +374,9 @@
 
                     <!-- Menu Navigasi -->
                     <div class="tooltip-container">
-                        <a href="{{ route('admin.menu_navigasi') }}"
+                        <a href="<?php echo e(route('admin.menu_navigasi')); ?>"
                             class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
-                            {{ request()->routeIs('admin.menu_navigasi') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            <?php echo e(request()->routeIs('admin.menu_navigasi') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]'); ?>"
                             role="menuitem">
                             <i class="fas fa-bars w-4 text-center text-[10px]"></i>
                             <span>Menu Navigasi</span>
@@ -385,9 +386,9 @@
 
                     <!-- Footer -->
                     <div class="tooltip-container">
-                        <a href="{{ route('admin.footer.index') }}"
+                        <a href="<?php echo e(route('admin.footer.index')); ?>"
                             class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
-                            {{ request()->routeIs('admin.footer.index') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            <?php echo e(request()->routeIs('admin.footer.index') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]'); ?>"
                             role="menuitem">
                             <i class="fas fa-shoe-prints w-4 text-center text-[10px]"></i>
                             <span>Footer</span>
@@ -397,9 +398,9 @@
 
                     <!-- Social Media -->
                     <div class="tooltip-container">
-                        <a href="{{ route('admin.social-media.index') }}"
+                        <a href="<?php echo e(route('admin.social-media.index')); ?>"
                             class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
-                            {{ request()->routeIs('admin.social-media.*') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            <?php echo e(request()->routeIs('admin.social-media.*') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]'); ?>"
                             role="menuitem">
                             <i class="fas fa-share-alt w-4 text-center text-[10px]"></i>
                             <span>Social Media</span>
@@ -409,9 +410,9 @@
 
                     <!-- Lokasi Kantor -->
                     <div class="tooltip-container">
-                        <a href="{{ route('admin.lokasi-kantor.index') }}"
+                        <a href="<?php echo e(route('admin.lokasi-kantor.index')); ?>"
                             class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
-                            {{ request()->routeIs('admin.lokasi-kantor.*') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            <?php echo e(request()->routeIs('admin.lokasi-kantor.*') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]'); ?>"
                             role="menuitem">
                             <i class="fas fa-map-pin w-4 text-center text-[10px]"></i>
                             <span>Lokasi Kantor</span>
@@ -421,9 +422,9 @@
 
                     <!-- FAQ -->
                     <div class="tooltip-container">
-                        <a href="{{ route('admin.faq.index') }}"
+                        <a href="<?php echo e(route('admin.faq.index')); ?>"
                             class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
-                            {{ request()->routeIs('admin.faq.index') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            <?php echo e(request()->routeIs('admin.faq.index') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]'); ?>"
                             role="menuitem">
                             <i class="fas fa-circle-question w-4 text-center text-[10px]"></i>
                             <span>FAQ</span>
@@ -433,9 +434,9 @@
 
                     <!-- Karier -->
                     <div class="tooltip-container">
-                        <a href="{{ route('admin.karier.index') }}"
+                        <a href="<?php echo e(route('admin.karier.index')); ?>"
                             class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
-                            {{ request()->routeIs('admin.karier.index') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            <?php echo e(request()->routeIs('admin.karier.index') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]'); ?>"
                             role="menuitem">
                             <i class="fas fa-briefcase w-4 text-center text-[10px]"></i>
                             <span>Karier</span>
@@ -445,29 +446,30 @@
 
                     <!-- Kontak -->
                     <div class="tooltip-container">
-                        <a href="{{ route('admin.kontak.index') }}"
+                        <a href="<?php echo e(route('admin.kontak.index')); ?>"
                             class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
-                            {{ request()->routeIs('admin.kontak.index') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            <?php echo e(request()->routeIs('admin.kontak.index') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]'); ?>"
                             role="menuitem">
                             <i class="fas fa-envelope w-4 text-center text-[10px]"></i>
                             <span>Kontak Kami</span>
-                            @php
+                            <?php
                                 $unreadCount = \App\Models\Kontak::where('is_read', 0)->count();
-                            @endphp
-                            @if($unreadCount > 0)
+                            ?>
+                            <?php if($unreadCount > 0): ?>
                                 <span class="ml-auto bg-red-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full min-w-[16px] text-center">
-                                    {{ $unreadCount }}
+                                    <?php echo e($unreadCount); ?>
+
                                 </span>
-                            @endif
+                            <?php endif; ?>
                         </a>
                         <span class="tooltip-text">Kontak Kami</span>
                     </div>
 
                     <!-- Pemanfaatan & Kerjasama -->
                     <div class="tooltip-container">
-                        <a href="{{ route('admin.halaman.edit.partnership') }}"
+                        <a href="<?php echo e(route('admin.halaman.edit.partnership')); ?>"
                             class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
-                            {{ request()->routeIs('admin.halaman.edit.partnership') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            <?php echo e(request()->routeIs('admin.halaman.edit.partnership') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]'); ?>"
                             role="menuitem">
                             <i class="fas fa-handshake w-4 text-center text-[10px]"></i>
                             <span>Pemanfaatan & Kerjasama</span>
@@ -476,26 +478,26 @@
                     </div>
                 </div>
             </div>
-            @endif
+            <?php endif; ?>
 
             <!-- ============================================= -->
             <!-- ASET PERSEDIAAN TANAH (Hanya Super Admin & Admin) -->
             <!-- ============================================= -->
-            @if (in_array($role, ['super_admin', 'admin']))
+            <?php if(in_array($role, ['super_admin', 'admin'])): ?>
             <div class="pt-3 pb-1.5">
                 <p class="px-3 text-[9px] font-bold text-gray-400 uppercase tracking-wider">Aset Persediaan Tanah</p>
             </div>
 
-            @php
+            <?php
                 $asetOpen = request()->routeIs('admin.aset.*');
-            @endphp
+            ?>
 
-            <div x-data="{ open: {{ $asetOpen ? 'true' : 'false' }} }" class="relative">
+            <div x-data="{ open: <?php echo e($asetOpen ? 'true' : 'false'); ?> }" class="relative">
                 <button @click="open = !open"
                     class="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium transition sidebar-transition
-                    {{ $asetOpen ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-700 hover:bg-gray-100 hover:text-[#006400]' }}"
-                    aria-expanded="{{ $asetOpen ? 'true' : 'false' }}">
-                    <i class="fas fa-map-marked-alt w-5 text-center {{ $asetOpen ? 'text-white' : 'text-gray-400' }}"></i>
+                    <?php echo e($asetOpen ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-700 hover:bg-gray-100 hover:text-[#006400]'); ?>"
+                    aria-expanded="<?php echo e($asetOpen ? 'true' : 'false'); ?>">
+                    <i class="fas fa-map-marked-alt w-5 text-center <?php echo e($asetOpen ? 'text-white' : 'text-gray-400'); ?>"></i>
                     <span>Aset Persediaan Tanah</span>
                     <i class="fas fa-chevron-down ml-auto text-[10px] transition-transform duration-200"
                         :class="open ? 'rotate-180' : ''"></i>
@@ -505,9 +507,9 @@
                     class="mt-0.5 pl-7 space-y-0.5 overflow-hidden" role="menu">
 
                     <div class="tooltip-container">
-                        <a href="{{ route('admin.aset.index') }}"
+                        <a href="<?php echo e(route('admin.aset.index')); ?>"
                             class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
-                            {{ request()->routeIs('admin.aset.index') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            <?php echo e(request()->routeIs('admin.aset.index') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]'); ?>"
                             role="menuitem">
                             <i class="fas fa-database w-4 text-center text-[10px]"></i>
                             <span>Data Aset</span>
@@ -516,9 +518,9 @@
                     </div>
 
                     <div class="tooltip-container">
-                        <a href="{{ route('admin.aset.peta') }}"
+                        <a href="<?php echo e(route('admin.aset.peta')); ?>"
                             class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
-                            {{ request()->routeIs('admin.aset.peta') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            <?php echo e(request()->routeIs('admin.aset.peta') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]'); ?>"
                             role="menuitem">
                             <i class="fas fa-map-location-dot w-4 text-center text-[10px]"></i>
                             <span>Peta Interaktif</span>
@@ -527,9 +529,9 @@
                     </div>
 
                     <div class="tooltip-container">
-                        <a href="{{ route('admin.aset.profil') }}"
+                        <a href="<?php echo e(route('admin.aset.profil')); ?>"
                             class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
-                            {{ request()->routeIs('admin.aset.profil') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            <?php echo e(request()->routeIs('admin.aset.profil') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]'); ?>"
                             role="menuitem">
                             <i class="fas fa-layer-group w-4 text-center text-[10px]"></i>
                             <span>Profil Persediaan Tanah</span>
@@ -538,9 +540,9 @@
                     </div>
 
                     <div class="tooltip-container">
-                        <a href="{{ route('admin.aset.pengelolaan') }}"
+                        <a href="<?php echo e(route('admin.aset.pengelolaan')); ?>"
                             class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
-                            {{ request()->routeIs('admin.aset.pengelolaan') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            <?php echo e(request()->routeIs('admin.aset.pengelolaan') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]'); ?>"
                             role="menuitem">
                             <i class="fas fa-gear w-4 text-center text-[10px]"></i>
                             <span>Pengelolaan Tanah</span>
@@ -549,9 +551,9 @@
                     </div>
 
                     <div class="tooltip-container">
-                        <a href="{{ route('admin.aset.pengembangan') }}"
+                        <a href="<?php echo e(route('admin.aset.pengembangan')); ?>"
                             class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
-                            {{ request()->routeIs('admin.aset.pengembangan') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            <?php echo e(request()->routeIs('admin.aset.pengembangan') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]'); ?>"
                             role="menuitem">
                             <i class="fas fa-chart-line w-4 text-center text-[10px]"></i>
                             <span>Pengembangan Tanah</span>
@@ -560,9 +562,9 @@
                     </div>
 
                     <div class="tooltip-container">
-                        <a href="{{ route('admin.aset.wilayah') }}"
+                        <a href="<?php echo e(route('admin.aset.wilayah')); ?>"
                             class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
-                            {{ request()->routeIs('admin.aset.wilayah') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            <?php echo e(request()->routeIs('admin.aset.wilayah') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]'); ?>"
                             role="menuitem">
                             <i class="fas fa-map w-4 text-center text-[10px]"></i>
                             <span>Wilayah</span>
@@ -571,9 +573,9 @@
                     </div>
 
                     <div class="tooltip-container">
-                        <a href="{{ route('admin.aset.status') }}"
+                        <a href="<?php echo e(route('admin.aset.status')); ?>"
                             class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
-                            {{ request()->routeIs('admin.aset.status') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            <?php echo e(request()->routeIs('admin.aset.status') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]'); ?>"
                             role="menuitem">
                             <i class="fas fa-circle-check w-4 text-center text-[10px]"></i>
                             <span>Status Tanah</span>
@@ -582,9 +584,9 @@
                     </div>
 
                     <div class="tooltip-container">
-                        <a href="{{ route('admin.aset.dokumen') }}"
+                        <a href="<?php echo e(route('admin.aset.dokumen')); ?>"
                             class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
-                            {{ request()->routeIs('admin.aset.dokumen') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            <?php echo e(request()->routeIs('admin.aset.dokumen') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]'); ?>"
                             role="menuitem">
                             <i class="fas fa-file-lines w-4 text-center text-[10px]"></i>
                             <span>Dokumen</span>
@@ -593,9 +595,9 @@
                     </div>
 
                     <div class="tooltip-container">
-                        <a href="{{ route('admin.aset.statistik') }}"
+                        <a href="<?php echo e(route('admin.aset.statistik')); ?>"
                             class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
-                            {{ request()->routeIs('admin.aset.statistik') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            <?php echo e(request()->routeIs('admin.aset.statistik') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]'); ?>"
                             role="menuitem">
                             <i class="fas fa-chart-pie w-4 text-center text-[10px]"></i>
                             <span>Statistik</span>
@@ -604,26 +606,26 @@
                     </div>
                 </div>
             </div>
-            @endif
+            <?php endif; ?>
 
             <!-- ============================================= -->
             <!-- PEMANFAATAN & KERJASAMA (Hanya Super Admin & Admin) -->
             <!-- ============================================= -->
-            @if (in_array($role, ['super_admin', 'admin']))
+            <?php if(in_array($role, ['super_admin', 'admin'])): ?>
             <div class="pt-3 pb-1.5">
                 <p class="px-3 text-[9px] font-bold text-gray-400 uppercase tracking-wider">Pemanfaatan & Kerjasama</p>
             </div>
 
-            @php
+            <?php
                 $pemanfaatanOpen = request()->routeIs('admin.proyek-investasi.*') || request()->routeIs('admin.dokumen-kerjasama.*');
-            @endphp
+            ?>
 
-            <div x-data="{ open: {{ $pemanfaatanOpen ? 'true' : 'false' }} }" class="relative">
+            <div x-data="{ open: <?php echo e($pemanfaatanOpen ? 'true' : 'false'); ?> }" class="relative">
                 <button @click="open = !open"
                     class="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium transition sidebar-transition
-                    {{ $pemanfaatanOpen ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-700 hover:bg-gray-100 hover:text-[#006400]' }}"
-                    aria-expanded="{{ $pemanfaatanOpen ? 'true' : 'false' }}">
-                    <i class="fas fa-handshake w-5 text-center {{ $pemanfaatanOpen ? 'text-white' : 'text-gray-400' }}"></i>
+                    <?php echo e($pemanfaatanOpen ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-700 hover:bg-gray-100 hover:text-[#006400]'); ?>"
+                    aria-expanded="<?php echo e($pemanfaatanOpen ? 'true' : 'false'); ?>">
+                    <i class="fas fa-handshake w-5 text-center <?php echo e($pemanfaatanOpen ? 'text-white' : 'text-gray-400'); ?>"></i>
                     <span>Pemanfaatan & Kerjasama</span>
                     <i class="fas fa-chevron-down ml-auto text-[10px] transition-transform duration-200"
                         :class="open ? 'rotate-180' : ''"></i>
@@ -633,9 +635,9 @@
                     class="mt-0.5 pl-7 space-y-0.5 overflow-hidden" role="menu">
 
                     <div class="tooltip-container">
-                        <a href="{{ route('admin.proyek-investasi.index') }}"
+                        <a href="<?php echo e(route('admin.proyek-investasi.index')); ?>"
                             class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
-                            {{ request()->routeIs('admin.proyek-investasi.*') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            <?php echo e(request()->routeIs('admin.proyek-investasi.*') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]'); ?>"
                             role="menuitem">
                             <i class="fas fa-chart-line w-4 text-center text-[10px]"></i>
                             <span>Proyek Investasi</span>
@@ -644,9 +646,9 @@
                     </div>
 
                     <div class="tooltip-container">
-                        <a href="{{ route('admin.dokumen-kerjasama.index') }}"
+                        <a href="<?php echo e(route('admin.dokumen-kerjasama.index')); ?>"
                             class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
-                            {{ request()->routeIs('admin.dokumen-kerjasama.*') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            <?php echo e(request()->routeIs('admin.dokumen-kerjasama.*') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]'); ?>"
                             role="menuitem">
                             <i class="fas fa-file-lines w-4 text-center text-[10px]"></i>
                             <span>Dokumen Kerjasama</span>
@@ -655,26 +657,26 @@
                     </div>
                 </div>
             </div>
-            @endif
+            <?php endif; ?>
 
             <!-- ============================================= -->
             <!-- PUBLIKASI (Semua Role: Super Admin, Admin, Editor, Publisher) -->
             <!-- ============================================= -->
-            @if (in_array($role, ['super_admin', 'admin', 'editor', 'publisher']))
+            <?php if(in_array($role, ['super_admin', 'admin', 'editor', 'publisher'])): ?>
             <div class="pt-3 pb-1.5">
                 <p class="px-3 text-[9px] font-bold text-gray-400 uppercase tracking-wider">Publikasi</p>
             </div>
 
-            @php
+            <?php
                 $pubOpen = request()->routeIs('admin.berita.*');
-            @endphp
+            ?>
 
-            <div x-data="{ open: {{ $pubOpen ? 'true' : 'false' }} }" class="relative">
+            <div x-data="{ open: <?php echo e($pubOpen ? 'true' : 'false'); ?> }" class="relative">
                 <button @click="open = !open"
                     class="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium transition sidebar-transition
-                    {{ $pubOpen ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-700 hover:bg-gray-100 hover:text-[#006400]' }}"
-                    aria-expanded="{{ $pubOpen ? 'true' : 'false' }}">
-                    <i class="fas fa-newspaper w-5 text-center {{ $pubOpen ? 'text-white' : 'text-gray-400' }}"></i>
+                    <?php echo e($pubOpen ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-700 hover:bg-gray-100 hover:text-[#006400]'); ?>"
+                    aria-expanded="<?php echo e($pubOpen ? 'true' : 'false'); ?>">
+                    <i class="fas fa-newspaper w-5 text-center <?php echo e($pubOpen ? 'text-white' : 'text-gray-400'); ?>"></i>
                     <span>Publikasi</span>
                     <i class="fas fa-chevron-down ml-auto text-[10px] transition-transform duration-200"
                         :class="open ? 'rotate-180' : ''"></i>
@@ -685,29 +687,30 @@
 
                     <!-- Berita -->
                     <div class="tooltip-container">
-                        <a href="{{ route('admin.berita.index') }}"
+                        <a href="<?php echo e(route('admin.berita.index')); ?>"
                             class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
-                            {{ request()->routeIs('admin.berita.index') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            <?php echo e(request()->routeIs('admin.berita.index') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]'); ?>"
                             role="menuitem">
                             <i class="fas fa-newspaper w-4 text-center text-[10px]"></i>
                             <span>Berita</span>
-                            @php
+                            <?php
                                 $pendingCount = \App\Models\Berita::where('status_approval', 'Menunggu Approval')->count();
-                            @endphp
-                            @if($pendingCount > 0 && in_array($role, ['publisher', 'super_admin', 'admin']))
+                            ?>
+                            <?php if($pendingCount > 0 && in_array($role, ['publisher', 'super_admin', 'admin'])): ?>
                                 <span class="ml-auto bg-orange-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full min-w-[16px] text-center">
-                                    {{ $pendingCount }}
+                                    <?php echo e($pendingCount); ?>
+
                                 </span>
-                            @endif
+                            <?php endif; ?>
                         </a>
                         <span class="tooltip-text">Berita</span>
                     </div>
 
                     <!-- Siaran Pers -->
                     <div class="tooltip-container">
-                        <a href="{{ route('admin.berita.siaran_pers') }}"
+                        <a href="<?php echo e(route('admin.berita.siaran_pers')); ?>"
                             class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
-                            {{ request()->routeIs('admin.berita.siaran_pers') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            <?php echo e(request()->routeIs('admin.berita.siaran_pers') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]'); ?>"
                             role="menuitem">
                             <i class="fas fa-bullhorn w-4 text-center text-[10px]"></i>
                             <span>Siaran Pers</span>
@@ -717,9 +720,9 @@
 
                     <!-- Pengumuman -->
                     <div class="tooltip-container">
-                        <a href="{{ route('admin.berita.pengumuman') }}"
+                        <a href="<?php echo e(route('admin.berita.pengumuman')); ?>"
                             class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
-                            {{ request()->routeIs('admin.berita.pengumuman') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            <?php echo e(request()->routeIs('admin.berita.pengumuman') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]'); ?>"
                             role="menuitem">
                             <i class="fas fa-circle-info w-4 text-center text-[10px]"></i>
                             <span>Pengumuman</span>
@@ -728,10 +731,10 @@
                     </div>
 
                     <!-- Tambah Berita - Hanya untuk Super Admin, Admin, Editor -->
-                    @if (in_array($role, ['super_admin', 'admin', 'editor']))
+                    <?php if(in_array($role, ['super_admin', 'admin', 'editor'])): ?>
                     <div class="pt-1">
                         <div class="tooltip-container">
-                            <a href="{{ route('admin.berita.create') }}"
+                            <a href="<?php echo e(route('admin.berita.create')); ?>"
                                 class="flex items-center gap-2.5 py-1.5 px-3 rounded-md text-xs font-medium text-[#006400] hover:bg-green-50 transition sidebar-transition w-full">
                                 <i class="fas fa-plus-circle w-4 text-center text-[10px]"></i>
                                 <span>Tambah Berita</span>
@@ -739,29 +742,29 @@
                             <span class="tooltip-text">Tambah Berita</span>
                         </div>
                     </div>
-                    @endif
+                    <?php endif; ?>
                 </div>
             </div>
-            @endif
+            <?php endif; ?>
 
             <!-- ============================================= -->
             <!-- MICROSITE (Hanya Super Admin & Admin) -->
             <!-- ============================================= -->
-            @if (in_array($role, ['super_admin', 'admin']))
+            <?php if(in_array($role, ['super_admin', 'admin'])): ?>
             <div class="pt-3 pb-1.5">
                 <p class="px-3 text-[9px] font-bold text-gray-400 uppercase tracking-wider">Microsite</p>
             </div>
 
-            @php
+            <?php
                 $micrositeOpen = request()->routeIs('admin.microsite.*');
-            @endphp
+            ?>
 
-            <div x-data="{ open: {{ $micrositeOpen ? 'true' : 'false' }} }" class="relative">
+            <div x-data="{ open: <?php echo e($micrositeOpen ? 'true' : 'false'); ?> }" class="relative">
                 <button @click="open = !open"
                     class="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium transition sidebar-transition
-                    {{ $micrositeOpen ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-700 hover:bg-gray-100 hover:text-[#006400]' }}"
-                    aria-expanded="{{ $micrositeOpen ? 'true' : 'false' }}">
-                    <i class="fas fa-file-lines w-5 text-center {{ $micrositeOpen ? 'text-white' : 'text-gray-400' }}"></i>
+                    <?php echo e($micrositeOpen ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-700 hover:bg-gray-100 hover:text-[#006400]'); ?>"
+                    aria-expanded="<?php echo e($micrositeOpen ? 'true' : 'false'); ?>">
+                    <i class="fas fa-file-lines w-5 text-center <?php echo e($micrositeOpen ? 'text-white' : 'text-gray-400'); ?>"></i>
                     <span>Microsite / Event</span>
                     <i class="fas fa-chevron-down ml-auto text-[10px] transition-transform duration-200"
                         :class="open ? 'rotate-180' : ''"></i>
@@ -771,9 +774,9 @@
                     class="mt-0.5 pl-7 space-y-0.5 overflow-hidden" role="menu">
 
                     <div class="tooltip-container">
-                        <a href="{{ route('admin.microsite.index') }}"
+                        <a href="<?php echo e(route('admin.microsite.index')); ?>"
                             class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
-                            {{ request()->routeIs('admin.microsite.index') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            <?php echo e(request()->routeIs('admin.microsite.index') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]'); ?>"
                             role="menuitem">
                             <i class="fas fa-list w-4 text-center text-[10px]"></i>
                             <span>Semua Microsite</span>
@@ -782,9 +785,9 @@
                     </div>
 
                     <div class="tooltip-container">
-                        <a href="{{ route('admin.microsite.create') }}"
+                        <a href="<?php echo e(route('admin.microsite.create')); ?>"
                             class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full
-                            {{ request()->routeIs('admin.microsite.create') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]' }}"
+                            <?php echo e(request()->routeIs('admin.microsite.create') ? 'sub-menu-active' : 'text-gray-500 hover:bg-gray-50 hover:text-[#006400]'); ?>"
                             role="menuitem">
                             <i class="fas fa-plus-circle w-4 text-center text-[10px]"></i>
                             <span>Buat Microsite</span>
@@ -793,7 +796,7 @@
                     </div>
 
                     <div class="tooltip-container">
-                        <a href="{{ route('microsite.index') }}" target="_blank"
+                        <a href="<?php echo e(route('microsite.index')); ?>" target="_blank"
                             class="flex items-center gap-2.5 py-2 px-3 rounded-md text-xs font-medium transition sidebar-transition w-full text-gray-500 hover:bg-gray-50 hover:text-[#006400]">
                             <i class="fas fa-external-link-alt w-4 text-center text-[10px]"></i>
                             <span>Lihat di Frontend</span>
@@ -802,87 +805,88 @@
                     </div>
                 </div>
             </div>
-            @endif
+            <?php endif; ?>
 
             <!-- ============================================= -->
             <!-- KONTAK - Hanya Super Admin & Admin (di sidebar) -->
             <!-- ============================================= -->
-            @if (in_array($role, ['super_admin', 'admin']))
+            <?php if(in_array($role, ['super_admin', 'admin'])): ?>
             <div class="pt-3 pb-1.5">
                 <p class="px-3 text-[9px] font-bold text-gray-400 uppercase tracking-wider">Kontak</p>
             </div>
 
             <div class="tooltip-container">
-                <a href="{{ route('admin.kontak.index') }}"
+                <a href="<?php echo e(route('admin.kontak.index')); ?>"
                     class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition sidebar-transition w-full
-                    {{ request()->routeIs('admin.kontak.index') ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-700 hover:bg-gray-100 hover:text-[#006400]' }}">
-                    <i class="fas fa-envelope w-5 text-center {{ request()->routeIs('admin.kontak.index') ? 'text-white' : 'text-gray-400' }}"></i>
+                    <?php echo e(request()->routeIs('admin.kontak.index') ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-700 hover:bg-gray-100 hover:text-[#006400]'); ?>">
+                    <i class="fas fa-envelope w-5 text-center <?php echo e(request()->routeIs('admin.kontak.index') ? 'text-white' : 'text-gray-400'); ?>"></i>
                     <span>Kontak Masuk</span>
-                    @php
+                    <?php
                         $unreadCount = \App\Models\Kontak::where('is_read', 0)->count();
-                    @endphp
-                    @if($unreadCount > 0)
+                    ?>
+                    <?php if($unreadCount > 0): ?>
                         <span class="ml-auto bg-red-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full min-w-[16px] text-center">
-                            {{ $unreadCount }}
+                            <?php echo e($unreadCount); ?>
+
                         </span>
-                    @endif
+                    <?php endif; ?>
                 </a>
                 <span class="tooltip-text">Kontak Masuk</span>
             </div>
-            @endif
+            <?php endif; ?>
 
             <!-- ============================================= -->
             <!-- LAINNYA (Hanya Super Admin) -->
             <!-- ============================================= -->
-            @if ($role == 'super_admin')
+            <?php if($role == 'super_admin'): ?>
             <div class="pt-3 pb-1.5">
                 <p class="px-3 text-[9px] font-bold text-gray-400 uppercase tracking-wider">Sistem</p>
             </div>
 
             <div class="tooltip-container">
-                <a href="{{ route('admin.user.index') }}"
+                <a href="<?php echo e(route('admin.user.index')); ?>"
                     class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition sidebar-transition w-full
-                    {{ request()->routeIs('admin.user.*') ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-700 hover:bg-gray-100 hover:text-[#006400]' }}">
-                    <i class="fas fa-users w-5 text-center {{ request()->routeIs('admin.user.*') ? 'text-white' : 'text-gray-400' }}"></i>
+                    <?php echo e(request()->routeIs('admin.user.*') ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-700 hover:bg-gray-100 hover:text-[#006400]'); ?>">
+                    <i class="fas fa-users w-5 text-center <?php echo e(request()->routeIs('admin.user.*') ? 'text-white' : 'text-gray-400'); ?>"></i>
                     <span>Pengguna</span>
-                    @php
+                    <?php
                         $userCount = \App\Models\User::count();
-                    @endphp
-                    <span class="ml-auto text-[8px] text-gray-400">{{ $userCount }}</span>
+                    ?>
+                    <span class="ml-auto text-[8px] text-gray-400"><?php echo e($userCount); ?></span>
                 </a>
                 <span class="tooltip-text">Pengguna</span>
             </div>
 
             <div class="tooltip-container">
-                <a href="{{ route('admin.integrasi') }}"
+                <a href="<?php echo e(route('admin.integrasi')); ?>"
                     class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition sidebar-transition w-full
-                    {{ request()->routeIs('admin.integrasi') ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-700 hover:bg-gray-100 hover:text-[#006400]' }}">
-                    <i class="fas fa-plug w-5 text-center {{ request()->routeIs('admin.integrasi') ? 'text-white' : 'text-gray-400' }}"></i>
+                    <?php echo e(request()->routeIs('admin.integrasi') ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-700 hover:bg-gray-100 hover:text-[#006400]'); ?>">
+                    <i class="fas fa-plug w-5 text-center <?php echo e(request()->routeIs('admin.integrasi') ? 'text-white' : 'text-gray-400'); ?>"></i>
                     <span>Integrasi</span>
                 </a>
                 <span class="tooltip-text">Integrasi</span>
             </div>
 
             <div class="tooltip-container">
-                <a href="{{ route('admin.pengaturan') }}"
+                <a href="<?php echo e(route('admin.pengaturan')); ?>"
                     class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition sidebar-transition w-full
-                    {{ request()->routeIs('admin.pengaturan') ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-700 hover:bg-gray-100 hover:text-[#006400]' }}">
-                    <i class="fas fa-gear w-5 text-center {{ request()->routeIs('admin.pengaturan') ? 'text-white' : 'text-gray-400' }}"></i>
+                    <?php echo e(request()->routeIs('admin.pengaturan') ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-700 hover:bg-gray-100 hover:text-[#006400]'); ?>">
+                    <i class="fas fa-gear w-5 text-center <?php echo e(request()->routeIs('admin.pengaturan') ? 'text-white' : 'text-gray-400'); ?>"></i>
                     <span>Pengaturan</span>
                 </a>
                 <span class="tooltip-text">Pengaturan</span>
             </div>
 
             <div class="tooltip-container">
-                <a href="{{ route('admin.activity-log') }}"
+                <a href="<?php echo e(route('admin.activity-log')); ?>"
                     class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition sidebar-transition w-full
-                    {{ request()->routeIs('admin.activity-log*') ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-700 hover:bg-gray-100 hover:text-[#006400]' }}">
-                    <i class="fas fa-clock-rotate-left w-5 text-center {{ request()->routeIs('admin.activity-log*') ? 'text-white' : 'text-gray-400' }}"></i>
+                    <?php echo e(request()->routeIs('admin.activity-log*') ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-700 hover:bg-gray-100 hover:text-[#006400]'); ?>">
+                    <i class="fas fa-clock-rotate-left w-5 text-center <?php echo e(request()->routeIs('admin.activity-log*') ? 'text-white' : 'text-gray-400'); ?>"></i>
                     <span>Aktivitas Sistem</span>
                 </a>
                 <span class="tooltip-text">Aktivitas Sistem</span>
             </div>
-            @endif
+            <?php endif; ?>
 
             <!-- ============================================= -->
             <!-- LIAT WEBSITE (Semua Role) -->
@@ -890,7 +894,7 @@
             <div class="h-4"></div>
 
             <div class="tooltip-container">
-                <a href="{{ route('home') }}" target="_blank"
+                <a href="<?php echo e(route('home')); ?>" target="_blank"
                     class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition sidebar-transition text-gray-500 hover:bg-gray-100 hover:text-[#006400] border border-dashed border-gray-200 mt-2 w-full">
                     <i class="fas fa-external-link-alt w-5 text-center text-gray-400"></i>
                     <span>Lihat Website</span>
@@ -907,31 +911,33 @@
         <!-- ========================================================= -->
         <div class="p-3 border-t border-gray-200 bg-gray-50/80" role="contentinfo">
             <div class="flex items-center gap-3">
-                @if ($user->foto)
-                    <img src="{{ asset('storage/' . $user->foto) }}?v={{ time() }}"
+                <?php if($user->foto): ?>
+                    <img src="<?php echo e(asset('storage/' . $user->foto)); ?>?v=<?php echo e(time()); ?>"
                         class="w-9 h-9 rounded-full object-cover border-2 border-gray-200 flex-shrink-0"
-                        alt="Profile photo of {{ $user->name }}">
-                @else
+                        alt="Profile photo of <?php echo e($user->name); ?>">
+                <?php else: ?>
                     <div class="w-9 h-9 bg-[#006400] rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0" aria-hidden="true">
-                        {{ strtoupper(substr($user->name, 0, 1)) }}
+                        <?php echo e(strtoupper(substr($user->name, 0, 1))); ?>
+
                     </div>
-                @endif
+                <?php endif; ?>
 
                 <div class="flex-1 min-w-0">
-                    <p class="text-xs font-bold text-gray-900 truncate">{{ $user->name }}</p>
+                    <p class="text-xs font-bold text-gray-900 truncate"><?php echo e($user->name); ?></p>
                     <p class="text-[9px] text-gray-500 capitalize flex items-center gap-1.5">
                         <span class="inline-block w-1.5 h-1.5 rounded-full
-                            {{ $user->role == 'super_admin' ? 'bg-purple-500' :
+                            <?php echo e($user->role == 'super_admin' ? 'bg-purple-500' :
                                ($user->role == 'admin' ? 'bg-blue-500' :
                                ($user->role == 'editor' ? 'bg-yellow-500' :
-                               ($user->role == 'publisher' ? 'bg-green-500' : 'bg-gray-500'))) }}" aria-hidden="true">
+                               ($user->role == 'publisher' ? 'bg-green-500' : 'bg-gray-500')))); ?>" aria-hidden="true">
                         </span>
-                        {{ ucfirst(str_replace('_', ' ', $user->role)) }}
+                        <?php echo e(ucfirst(str_replace('_', ' ', $user->role))); ?>
+
                     </p>
                 </div>
 
-                <form method="POST" action="{{ route('logout') }}" class="flex-shrink-0">
-                    @csrf
+                <form method="POST" action="<?php echo e(route('logout')); ?>" class="flex-shrink-0">
+                    <?php echo csrf_field(); ?>
                     <button type="submit" class="text-gray-400 hover:text-red-600 transition p-1.5 rounded-lg hover:bg-red-50"
                             aria-label="Logout">
                         <i class="fas fa-sign-out-alt text-sm" aria-hidden="true"></i>
@@ -960,7 +966,7 @@
                 <!-- ========================================================= -->
                 <!-- BREADCRUMB -->
                 <!-- ========================================================= -->
-                @php
+                <?php
                     $breadcrumbs = [
                         'admin.dashboard' => 'Dashboard',
                         'admin.aset.index' => 'Data Aset',
@@ -1030,18 +1036,18 @@
                             $parentTitle = $breadcrumbs[$parentRoute] ?? null;
                         }
                     }
-                @endphp
+                ?>
 
                 <div class="hidden sm:flex items-center gap-2 text-xs text-gray-500" aria-label="Breadcrumb">
-                    <a href="{{ route('admin.dashboard') }}" class="hover:text-[#006400] transition" aria-label="Home">
+                    <a href="<?php echo e(route('admin.dashboard')); ?>" class="hover:text-[#006400] transition" aria-label="Home">
                         <i class="fas fa-home" aria-hidden="true"></i>
                     </a>
                     <i class="fas fa-chevron-right text-gray-300 text-[8px]" aria-hidden="true"></i>
-                    @if ($parentTitle && $parentTitle != $breadcrumbTitle)
-                        <span class="text-gray-400">{{ $parentTitle }}</span>
+                    <?php if($parentTitle && $parentTitle != $breadcrumbTitle): ?>
+                        <span class="text-gray-400"><?php echo e($parentTitle); ?></span>
                         <i class="fas fa-chevron-right text-gray-300 text-[8px]" aria-hidden="true"></i>
-                    @endif
-                    <span class="font-medium text-gray-700">{{ $breadcrumbTitle }}</span>
+                    <?php endif; ?>
+                    <span class="font-medium text-gray-700"><?php echo e($breadcrumbTitle); ?></span>
                 </div>
             </div>
 
@@ -1156,7 +1162,7 @@
 
                         <!-- Footer -->
                         <div class="px-4 py-2 border-t border-gray-100 text-center">
-                            <a href="{{ route('admin.notifications.index') }}" class="text-[10px] text-blue-600 hover:underline">Lihat semua notifikasi</a>
+                            <a href="<?php echo e(route('admin.notifications.index')); ?>" class="text-[10px] text-blue-600 hover:underline">Lihat semua notifikasi</a>
                         </div>
                     </div>
                 </div>
@@ -1164,22 +1170,23 @@
                 <!-- ========================================================= -->
                 <!-- USER AVATAR - HEADER -->
                 <!-- ========================================================= -->
-                @if ($user->foto)
-                    <img src="{{ asset('storage/' . $user->foto) }}?v={{ time() }}"
+                <?php if($user->foto): ?>
+                    <img src="<?php echo e(asset('storage/' . $user->foto)); ?>?v=<?php echo e(time()); ?>"
                         class="w-8 h-8 rounded-full object-cover border-2 border-gray-200 hidden sm:block"
-                        alt="Profile photo of {{ $user->name }}">
-                @else
+                        alt="Profile photo of <?php echo e($user->name); ?>">
+                <?php else: ?>
                     <div class="w-8 h-8 bg-[#006400] rounded-full flex items-center justify-center text-white font-bold text-xs hidden sm:block" aria-hidden="true">
-                        {{ strtoupper(substr($user->name, 0, 1)) }}
+                        <?php echo e(strtoupper(substr($user->name, 0, 1))); ?>
+
                     </div>
-                @endif
+                <?php endif; ?>
 
             </div>
         </header>
 
         <!-- CONTENT -->
         <main class="admin-content flex-1 overflow-y-auto p-4 sm:p-6 bg-gray-50/80" role="main">
-            @yield('content')
+            <?php echo $__env->yieldContent('content'); ?>
         </main>
     </div>
 
@@ -1366,21 +1373,21 @@
             }, duration);
         }
 
-        @if (session('success'))
-            showToast('{{ session('success') }}', 'success');
-        @endif
+        <?php if(session('success')): ?>
+            showToast('<?php echo e(session('success')); ?>', 'success');
+        <?php endif; ?>
 
-        @if (session('error'))
-            showToast('{{ session('error') }}', 'error');
-        @endif
+        <?php if(session('error')): ?>
+            showToast('<?php echo e(session('error')); ?>', 'error');
+        <?php endif; ?>
 
-        @if (session('warning'))
-            showToast('{{ session('warning') }}', 'warning');
-        @endif
+        <?php if(session('warning')): ?>
+            showToast('<?php echo e(session('warning')); ?>', 'warning');
+        <?php endif; ?>
 
-        @if (session('info'))
-            showToast('{{ session('info') }}', 'info');
-        @endif
+        <?php if(session('info')): ?>
+            showToast('<?php echo e(session('info')); ?>', 'info');
+        <?php endif; ?>
 
         // =========================================================
         // COMING SOON MODAL
@@ -1420,7 +1427,7 @@
             // Set loading true
             dataObj.loading = true;
             
-            fetch('{{ route("admin.notifications.index") }}?limit=5&ajax=1')
+            fetch('<?php echo e(route("admin.notifications.index")); ?>?limit=5&ajax=1')
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok: ' + response.status);
@@ -1445,7 +1452,7 @@
                     dataObj.total = 0;
                     
                     // Coba fallback ke endpoint unread-count
-                    fetch('{{ route("admin.notifications.unread-count") }}')
+                    fetch('<?php echo e(route("admin.notifications.unread-count")); ?>')
                         .then(res => res.json())
                         .then(data => {
                             updateBadge(data.count || 0);
@@ -1471,10 +1478,10 @@
         function markAllAsRead() {
             if (!confirm('Tandai semua notifikasi sebagai dibaca?')) return;
             
-            fetch('{{ route("admin.notifications.mark-all-read") }}', {
+            fetch('<?php echo e(route("admin.notifications.mark-all-read")); ?>', {
                 method: 'POST',
                 headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'X-CSRF-TOKEN': '<?php echo e(csrf_token()); ?>',
                     'Content-Type': 'application/json'
                 }
             })
@@ -1493,11 +1500,11 @@
                             updateBadge(0);
                         }
                     }
-                    window.location.href = '{{ route("admin.notifications.index") }}';
+                    window.location.href = '<?php echo e(route("admin.notifications.index")); ?>';
                 }
             })
             .catch(() => {
-                window.location.href = '{{ route("admin.notifications.index") }}';
+                window.location.href = '<?php echo e(route("admin.notifications.index")); ?>';
             });
         }
 
@@ -1513,10 +1520,10 @@
         // MARK ALL NOTIFICATIONS AS READ (Fallback)
         // =========================================================
         function markAllAsReadOld() {
-            fetch('{{ route("admin.notifications.mark-all-read") }}', {
+            fetch('<?php echo e(route("admin.notifications.mark-all-read")); ?>', {
                 method: 'POST',
                 headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    'X-CSRF-TOKEN': '<?php echo e(csrf_token()); ?>'
                 }
             }).then(response => {
                 if (response.ok) {
@@ -1528,7 +1535,7 @@
         }
     </script>
 
-    @stack('scripts')
+    <?php echo $__env->yieldPushContent('scripts'); ?>
 </body>
 
-</html>
+</html><?php /**PATH C:\Users\rohim\badan-tanah-ui-new\resources\views/layouts/admin.blade.php ENDPATH**/ ?>

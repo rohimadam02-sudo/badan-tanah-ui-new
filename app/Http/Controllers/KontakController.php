@@ -7,6 +7,7 @@ use App\Models\MenuNavigasi;
 use App\Models\PengaturanWebsite;
 use App\Helpers\TranslationHelper;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class KontakController extends Controller
 {
@@ -28,7 +29,17 @@ class KontakController extends Controller
             'pesan' => 'required',
         ]);
 
-        Kontak::create($request->all());
+        $kontak = Kontak::create($request->all());
+
+        // =========================================================
+        // CLEAR NOTIFICATION CACHE
+        // =========================================================
+        // Clear cache untuk semua admin (biar notifikasi muncul)
+        $adminUsers = \App\Models\User::whereIn('role', ['super_admin', 'admin'])->get();
+        foreach ($adminUsers as $admin) {
+            Cache::forget('notifications_' . $admin->id);
+            Cache::forget('unread_count_' . $admin->id);
+        }
 
         return redirect()->route('kontak')->with('success', 'Pesan berhasil dikirim!');
     }

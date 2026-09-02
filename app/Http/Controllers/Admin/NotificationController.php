@@ -7,6 +7,7 @@ use App\Models\Berita;
 use App\Models\Kontak;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 
 class NotificationController extends Controller
 {
@@ -16,6 +17,35 @@ class NotificationController extends Controller
     public function index(Request $request)
     {
         $limit = $request->input('limit', 10);
+        $isAjax = $request->ajax() || $request->wantsJson() || $request->input('ajax') == 1;
+        
+        // Jika AJAX, gunakan cache
+        if ($isAjax) {
+            $cacheKey = 'notifications_' . auth()->id();
+            
+            // Ambil dari cache atau simpan baru
+            $data = Cache::remember($cacheKey, 60, function () {
+                return $this->getNotificationsData();
+            });
+            
+            return response()->json($data);
+        }
+        
+        // Jika bukan AJAX, ambil langsung
+        $data = $this->getNotificationsData();
+        
+        return view('admin.notifications', [
+            'notifications' => $data['notifications'],
+            'totalCount' => $data['total'],
+        ]);
+    }
+
+    /**
+     * Get notifications data (dipisahkan agar reusable)
+     */
+    private function getNotificationsData()
+    {
+        $limit = 10;
         
         // Notifikasi dari Berita (Menunggu Approval)
         $pendingNews = Berita::where('status_approval', 'Menunggu Approval')
@@ -73,33 +103,42 @@ class NotificationController extends Controller
         $totalUnread = Kontak::where('is_read', 0)->count();
         $totalCount = $totalPending + $totalUnread;
 
-        // Jika request AJAX, return JSON
-        if ($request->ajax() || $request->wantsJson()) {
-            return response()->json([
-                'notifications' => $notifications,
-                'total' => $totalCount,
-                'pending_news' => $totalPending,
-                'unread_contacts' => $totalUnread,
-            ]);
-        }
-
-        return view('admin.notifications', compact('notifications', 'totalCount'));
+        return [
+            'notifications' => $notifications,
+            'total' => $totalCount,
+            'pending_news' => $totalPending,
+            'unread_contacts' => $totalUnread,
+        ];
     }
 
     /**
-     * Get unread count only (for badge)
+     * Get unread count only (for badge) - PAKAI CACHE
      */
     public function unreadCount()
     {
-        $pendingNews = Berita::where('status_approval', 'Menunggu Approval')->count();
-        $unreadContacts = Kontak::where('is_read', 0)->count();
-        $total = $pendingNews + $unreadContacts;
+        $cacheKey = 'unread_count_' . auth()->id();
+        
+        $data = Cache::remember($cacheKey, 60, function () {
+            $pendingNews = Berita::where('status_approval', 'Menunggu Approval')->count();
+            $unreadContacts = Kontak::where('is_read', 0)->count();
+            
+            return [
+                'count' => $pendingNews + $unreadContacts,
+                'pending_news' => $pendingNews,
+                'unread_contacts' => $unreadContacts,
+            ];
+        });
 
-        return response()->json([
-            'count' => $total,
-            'pending_news' => $pendingNews,
-            'unread_contacts' => $unreadContacts,
-        ]);
+        return response()->json($data);
+    }
+
+    /**
+     * Clear notification cache
+     */
+    private function clearNotificationCache()
+    {
+        Cache::forget('notifications_' . auth()->id());
+        Cache::forget('unread_count_' . auth()->id());
     }
 
     /**
@@ -110,8 +149,9 @@ class NotificationController extends Controller
         // Tandai semua kontak sebagai sudah dibaca
         Kontak::where('is_read', 0)->update(['is_read' => 1]);
         
-        // Untuk berita, tidak bisa di-mark karena butuh aksi approve/publish
-
+        // Clear cache
+        $this->clearNotificationCache();
+        
         return response()->json([
             'success' => true,
             'message' => 'Semua notifikasi telah ditandai sebagai dibaca'
@@ -132,6 +172,9 @@ class NotificationController extends Controller
                 $kontak->save();
             }
         }
+        
+        // Clear cache
+        $this->clearNotificationCache();
 
         return response()->json([
             'success' => true,
