@@ -28,7 +28,6 @@
     {{-- GOOGLE ANALYTICS --}}
     {{-- ========================================================= --}}
     @if(isset($pengaturan) && $pengaturan->google_analytics)
-        <!-- Google tag (gtag.js) -->
         <script async src="https://www.googletagmanager.com/gtag/js?id={{ $pengaturan->google_analytics }}"></script>
         <script>
             window.dataLayer = window.dataLayer || [];
@@ -80,7 +79,6 @@
             --color-secondary-hover: {{ $pengaturan->warna_utama ?? '#0B2A4A' }};
         }
 
-        /* NAVBAR - Active link menggunakan warna sekunder */
         .active-nav {
             color: var(--color-secondary) !important;
         }
@@ -95,12 +93,10 @@
             border-radius: 10px;
         }
 
-        /* Link hover menggunakan warna sekunder */
         nav a:not(.active-nav):hover {
             color: var(--color-secondary) !important;
         }
 
-        /* Tombol utama menggunakan warna sekunder */
         .btn-primary {
             background-color: var(--color-secondary) !important;
             color: white !important;
@@ -109,7 +105,6 @@
             background-color: var(--color-secondary-hover) !important;
         }
 
-        /* Link warna sekunder */
         .link-secondary {
             color: var(--color-secondary) !important;
         }
@@ -118,14 +113,10 @@
             text-decoration: underline;
         }
 
-        /* Border warna sekunder */
         .border-secondary {
             border-color: var(--color-secondary) !important;
         }
 
-        /* =========================================================
-           NAVBAR IMPROVEMENTS
-        ========================================================= */
         nav a {
             position: relative;
             padding: 6px 4px;
@@ -133,7 +124,6 @@
             font-size: 0.95rem;
         }
 
-        /* Dropdown menu items spacing */
         .dropdown-desktop .dropdown-menu a {
             padding: 12px 20px;
             font-size: 0.9rem;
@@ -326,14 +316,14 @@
         }
 
         /* =========================================================
-           HAMBURGER MENU BUTTON
+           HAMBURGER MENU BUTTON - FIXED
         ========================================================= */
         .hamburger {
             width: 28px;
             height: 20px;
             position: relative;
             cursor: pointer;
-            display: flex;
+            display: flex !important;
             flex-direction: column;
             justify-content: space-between;
             padding: 0;
@@ -444,46 +434,38 @@
             transform: translateY(30px);
             transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
-
         .reveal.active {
             opacity: 1;
             transform: translateY(0);
         }
-
         .reveal-left {
             opacity: 0;
             transform: translateX(-40px);
             transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
-
         .reveal-left.active {
             opacity: 1;
             transform: translateX(0);
         }
-
         .reveal-right {
             opacity: 0;
             transform: translateX(40px);
             transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
-
         .reveal-right.active {
             opacity: 1;
             transform: translateX(0);
         }
-
         .reveal-scale {
             opacity: 0;
             transform: scale(0.9);
             transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
-
         .reveal-scale.active {
             opacity: 1;
             transform: scale(1);
         }
 
-        /* Delay classes */
         .delay-1 { transition-delay: 0.1s; }
         .delay-2 { transition-delay: 0.2s; }
         .delay-3 { transition-delay: 0.3s; }
@@ -497,51 +479,40 @@
             background-color: #111827 !important;
             color: #e5e7eb !important;
         }
-
         body.dark-mode .bg-white {
             background-color: #1f2937 !important;
             color: #e5e7eb !important;
         }
-
         body.dark-mode .bg-gray-50 {
             background-color: #111827 !important;
         }
-
         body.dark-mode .bg-gray-100 {
             background-color: #1f2937 !important;
         }
-
         body.dark-mode .text-gray-900 {
             color: #f9fafb !important;
         }
-
         body.dark-mode .text-gray-700 {
             color: #e5e7eb !important;
         }
-
         body.dark-mode .text-gray-600 {
             color: #d1d5db !important;
         }
-
         body.dark-mode .text-gray-500 {
             color: #9ca3af !important;
         }
-
         body.dark-mode .border-gray-200 {
             border-color: #374151 !important;
         }
-
         body.dark-mode .border-gray-100 {
             border-color: #374151 !important;
         }
-
         body.dark-mode .shadow-sm,
         body.dark-mode .shadow-md,
         body.dark-mode .shadow-lg {
             box-shadow: 0 1px 3px rgba(0,0,0,0.3) !important;
         }
 
-        /* Dark Mode Toggle Button */
         #darkModeToggle {
             width: 36px;
             height: 36px;
@@ -555,15 +526,12 @@
             border: none;
             color: #4b5563;
         }
-
         #darkModeToggle:hover {
             background: #f3f4f6;
         }
-
         body.dark-mode #darkModeToggle {
             color: #facc15;
         }
-
         body.dark-mode #darkModeToggle:hover {
             background: #374151;
         }
@@ -573,49 +541,37 @@
 <body class="bg-white text-gray-800 antialiased">
 
     @php
-        // Ambil halaman yang aktif dari database
         $activePages = \App\Models\Halaman::where('is_active', true)->get();
         $activePageTitles = $activePages->pluck('judul')->map(function($title) {
             return strtolower($title);
         })->toArray();
 
-        // Filter menu navigasi - hanya tampilkan menu yang terkait dengan halaman aktif
         $mainMenus = $menuNavigasi->filter(function($menu) use ($activePageTitles) {
             if ($menu->status != 'Aktif') return false;
-
             $menuName = strtolower($menu->nama);
-
-            // Mapping menu ke halaman
             $pageMapping = [
                 'tentang' => 'tentang',
                 'pemanfaatan & kerjasama' => 'pemanfaatan',
                 'publikasi' => 'publikasi',
             ];
-
             foreach ($pageMapping as $key => $value) {
                 if (str_contains($menuName, $key)) {
-                    // Cek apakah ada halaman dengan judul yang sesuai dan aktif
                     $exists = \App\Models\Halaman::where('judul', 'like', '%' . $value . '%')
                         ->where('is_active', true)
                         ->exists();
                     return $exists;
                 }
             }
-
-            // Menu non-halaman (FAQ, Karier, Kontak) tetap ditampilkan
             return in_array($menuName, ['faq', 'karier', 'kontak', 'beranda', 'aset persediaan tanah']);
         });
 
-        // Menu untuk dropdown "Lainnya"
         $otherMenus = $menuNavigasi->filter(function($menu) {
             return $menu->status == 'Aktif' &&
                    in_array(strtolower($menu->nama), ['faq', 'karier', 'kontak']);
         });
 
-        // Ambil footer settings
         $footer = \App\Models\FooterSetting::getSettings();
 
-        // Menu labels bilingual
         $menuLabels = [
             'home' => $isEnglish ? 'Home' : 'Beranda',
             'about' => $isEnglish ? 'About' : 'Tentang',
@@ -672,7 +628,6 @@
 
             @foreach ($menuItems as $item)
                 @php
-                    // Cek apakah menu ini aktif berdasarkan halaman aktif
                     $isActive = false;
                     if ($item['check'] == 'tentang') {
                         $isActive = \App\Models\Halaman::where('judul', 'like', '%Tentang%')->where('is_active', true)->exists();
@@ -715,7 +670,6 @@
             </a>
         </div>
 
-        <!-- Footer Auth -->
         <div class="mobile-nav-footer">
             <a href="{{ route('login') }}" class="btn-nav btn-nav-login">
                 <i class="fas fa-sign-in-alt" aria-hidden="true"></i> {{ $menuLabels['login'] }}
@@ -796,7 +750,6 @@
                         @endif
                     @endforeach
 
-                    <!-- Dropdown Lainnya (Desktop) -->
                     @if ($otherMenus->count() > 0)
                     <div class="dropdown-desktop">
                         <button class="flex items-center gap-1 hover:text-[var(--color-secondary)] transition font-medium {{ request()->routeIs('faq') || request()->routeIs('karier') || request()->routeIs('kontak') ? 'text-[var(--color-secondary)] font-semibold' : '' }}"
@@ -856,7 +809,9 @@
                         <i id="darkModeIconFrontend" class="fas fa-moon text-sm" aria-hidden="true"></i>
                     </button>
 
-                    <!-- Hamburger Menu (Mobile) -->
+                    <!-- ========================================================= -->
+                    <!-- HAMBURGER MENU (MOBILE) - FIXED -->
+                    <!-- ========================================================= -->
                     <button class="lg:hidden hamburger" id="hamburgerBtn" aria-label="Toggle navigation menu" aria-expanded="false">
                         <span></span>
                         <span></span>
@@ -882,7 +837,6 @@
     <footer class="text-white mt-20" style="background-color: {{ $pengaturan->warna_utama ?? '#0B2A4A' }};" role="contentinfo">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10 border-b border-white/10">
 
-            <!-- Kolom 1: Profil -->
             <div>
                 <div class="flex items-center gap-3 mb-4">
                     <div class="flex items-center justify-center w-12 h-12 rounded">
@@ -897,7 +851,6 @@
                 </p>
             </div>
 
-            <!-- Kolom 2: Tautan Cepat -->
             <div>
                 <h4 class="font-bold text-white mb-4 uppercase text-xs tracking-wider">{{ $menuLabels['quick_links'] }}</h4>
                 <ul class="space-y-2 text-sm text-gray-300">
@@ -907,7 +860,6 @@
                 </ul>
             </div>
 
-            <!-- Kolom 3: Kontak & Sosial Media -->
             <div>
                 <h4 class="font-bold text-white mb-4 uppercase text-xs tracking-wider">{{ $menuLabels['contact_info'] }}</h4>
                 <ul class="space-y-3 text-sm text-gray-300">
@@ -943,7 +895,6 @@
                 @endif
             </div>
 
-            <!-- Kolom 4: Newsletter -->
             @if ($footer->show_newsletter)
                 <div>
                     <h4 class="font-bold text-white mb-4 uppercase text-xs tracking-wider">{{ $menuLabels['newsletter'] }}</h4>
@@ -963,7 +914,6 @@
 
         </div>
 
-        <!-- Copyright -->
         <div class="max-w-7xl mx-auto px-4 py-5 flex flex-col md:flex-row justify-between items-center gap-2 text-[10px] md:text-xs text-gray-400">
             <p>{!! str_replace('{year}', date('Y'), $footer->footer_text ?? '&copy; {year} Badan Bank Tanah. Hak Cipta Dilindungi.') !!}</p>
             <div class="flex gap-4">
@@ -980,7 +930,9 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     @stack('scripts')
 
-    <!-- Mobile Nav Script -->
+    <!-- ========================================================= -->
+    <!-- MOBILE NAV TOGGLE - FIXED -->
+    <!-- ========================================================= -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const hamburger = document.getElementById('hamburgerBtn');
@@ -988,6 +940,11 @@
             const overlay = document.getElementById('mobileOverlay');
             const closeBtn = document.getElementById('mobileNavClose');
             const body = document.body;
+
+            if (!hamburger || !mobileNav || !overlay) {
+                console.error('Mobile navigation elements not found!');
+                return;
+            }
 
             function openMobileNav() {
                 mobileNav.classList.add('open');
@@ -1013,9 +970,7 @@
                 }
             }
 
-            if (hamburger) {
-                hamburger.addEventListener('click', toggleMobileNav);
-            }
+            hamburger.addEventListener('click', toggleMobileNav);
 
             if (closeBtn) {
                 closeBtn.addEventListener('click', closeMobileNav);
@@ -1025,18 +980,18 @@
                 overlay.addEventListener('click', closeMobileNav);
             }
 
-            if (mobileNav) {
-                mobileNav.querySelectorAll('.nav-item').forEach(link => {
-                    link.addEventListener('click', function() {
-                        if (mobileNav.classList.contains('open')) {
-                            closeMobileNav();
-                        }
-                    });
+            // Tutup mobile nav saat klik link di dalamnya
+            mobileNav.querySelectorAll('.nav-item').forEach(function(link) {
+                link.addEventListener('click', function() {
+                    if (mobileNav.classList.contains('open')) {
+                        closeMobileNav();
+                    }
                 });
-            }
+            });
 
+            // Tutup dengan tombol ESC
             document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && mobileNav && mobileNav.classList.contains('open')) {
+                if (e.key === 'Escape' && mobileNav.classList.contains('open')) {
                     closeMobileNav();
                 }
             });
@@ -1077,7 +1032,6 @@
 
             if (!darkToggle) return;
 
-            // Cek status dari localStorage
             const savedMode = localStorage.getItem('frontendDarkMode');
 
             if (savedMode === 'true') {
@@ -1120,7 +1074,6 @@
             window.location.href = url.toString();
         }
 
-        // Update tombol bahasa sesuai session
         document.addEventListener('DOMContentLoaded', function() {
             const langText = document.getElementById('langText');
             if (langText) {
