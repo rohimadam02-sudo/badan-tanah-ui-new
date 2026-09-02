@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Berita;
 use App\Models\MenuNavigasi;
 use App\Models\PengaturanWebsite;
+use App\Helpers\TranslationHelper;
 use Illuminate\Http\Request;
 
 class BeritaController extends Controller
@@ -16,8 +17,9 @@ class BeritaController extends Controller
 
         $menuNavigasi = MenuNavigasi::where('status', 'Aktif')->get();
         $pengaturan = PengaturanWebsite::first();
+        $isEnglish = TranslationHelper::isEnglish();
 
-        return view('frontend.publications', compact('berita', 'menuNavigasi', 'pengaturan'));
+        return view('frontend.publications', compact('berita', 'menuNavigasi', 'pengaturan', 'isEnglish'));
     }
 
     public function show($id)
@@ -33,7 +35,8 @@ class BeritaController extends Controller
 
         $menuNavigasi = MenuNavigasi::where('status', 'Aktif')->get();
         $pengaturan = PengaturanWebsite::first();
+        $isEnglish = TranslationHelper::isEnglish();
 
-        return view('frontend.berita_detail', compact('berita', 'menuNavigasi', 'pengaturan'));
+        return view('frontend.berita_detail', compact('berita', 'menuNavigasi', 'pengaturan', 'isEnglish'));
     }
 }

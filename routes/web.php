@@ -28,6 +28,7 @@ use App\Http\Controllers\Admin\DokumenKerjasamaController;
 use App\Http\Controllers\Admin\IntegrasiController;
 use App\Http\Controllers\Admin\PengaturanController;
 use App\Http\Controllers\Admin\ActivityLogController;
+use App\Http\Controllers\Admin\TranslateController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\MicrositeController;
 use App\Http\Controllers\Admin\MicrositeAdminController;
@@ -212,6 +213,14 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::get('/notifications/unread-count', [NotificationController::class, 'unreadCount'])->name('notifications.unread-count');
     Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-read');
     Route::post('/notifications/{id}/mark-read', [NotificationController::class, 'markAsRead'])->name('notifications.mark-read');
+});
+
+// =========================================================
+// ADMIN TRANSLATE (Kimi K2.5)
+// =========================================================
+Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
+    Route::post('/translate', [TranslateController::class, 'translate'])->name('translate');
+    Route::get('/translate/status', [TranslateController::class, 'status'])->name('translate.status');
 });
 
 // =========================================================

@@ -6,6 +6,7 @@ use App\Models\Karier;
 use App\Models\Lamaran;
 use App\Models\MenuNavigasi;
 use App\Models\PengaturanWebsite;
+use App\Helpers\TranslationHelper;
 use Illuminate\Http\Request;
 
 class KarierController extends Controller
@@ -15,8 +16,9 @@ class KarierController extends Controller
         $kariers = Karier::all();
         $menuNavigasi = MenuNavigasi::where('status', 'Aktif')->get();
         $pengaturan = PengaturanWebsite::first();
+        $isEnglish = TranslationHelper::isEnglish();
 
-        return view('frontend.karier', compact('kariers', 'menuNavigasi', 'pengaturan'));
+        return view('frontend.karier', compact('kariers', 'menuNavigasi', 'pengaturan', 'isEnglish'));
     }
 
     public function lamar($id)
@@ -24,8 +26,9 @@ class KarierController extends Controller
         $karier = Karier::findOrFail($id);
         $menuNavigasi = MenuNavigasi::where('status', 'Aktif')->get();
         $pengaturan = PengaturanWebsite::first();
+        $isEnglish = TranslationHelper::isEnglish();
 
-        return view('frontend.lamar', compact('karier', 'menuNavigasi', 'pengaturan'));
+        return view('frontend.lamar', compact('karier', 'menuNavigasi', 'pengaturan', 'isEnglish'));
     }
 
     public function storeLamaran(Request $request, $id)

@@ -8,6 +8,7 @@
     @php
         $metaTitle = $metaTitle ?? 'Badan Bank Tanah - Mengelola Tanah, Memajukan Negeri';
         $metaDescription = $metaDescription ?? 'Badan Bank Tanah mengelola aset tanah negara secara profesional, transparan, dan berkelanjutan untuk kepentingan rakyat.';
+        $isEnglish = session('locale', 'id') === 'en';
     @endphp
     
     <title>{{ $metaTitle }}</title>
@@ -17,10 +18,8 @@
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
 
-    {{-- Vite Assets --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    {{-- External CSS --}}
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
@@ -663,6 +662,27 @@
 
         // Ambil footer settings
         $footer = \App\Models\FooterSetting::getSettings();
+
+        // Menu labels bilingual
+        $menuLabels = [
+            'home' => $isEnglish ? 'Home' : 'Beranda',
+            'about' => $isEnglish ? 'About' : 'Tentang',
+            'assets' => $isEnglish ? 'Land Assets' : 'Aset Persediaan Tanah',
+            'partnership' => $isEnglish ? 'Utilization & Partnership' : 'Pemanfaatan & Kerjasama',
+            'publications' => $isEnglish ? 'Publications' : 'Publikasi',
+            'faq' => 'FAQ',
+            'career' => $isEnglish ? 'Career' : 'Karier',
+            'contact' => $isEnglish ? 'Contact' : 'Kontak',
+            'others' => $isEnglish ? 'Others' : 'Lainnya',
+            'login' => $isEnglish ? 'Admin Login' : 'Masuk Admin',
+            'search' => $isEnglish ? 'Search' : 'Pencarian',
+            'quick_links' => $isEnglish ? 'Quick Links' : 'Tautan Cepat',
+            'contact_info' => $isEnglish ? 'Contact' : 'Kontak',
+            'newsletter' => $isEnglish ? 'Newsletter' : 'Newsletter',
+            'privacy' => $isEnglish ? 'Privacy Policy' : 'Kebijakan Privasi',
+            'terms' => $isEnglish ? 'Terms & Conditions' : 'Syarat & Ketentuan',
+            'accessibility' => $isEnglish ? 'Accessibility' : 'Aksesibilitas',
+        ];
     @endphp
 
     <!-- ========================================================= -->
@@ -682,19 +702,19 @@
         </div>
 
         <div class="nav-list">
-            <div class="nav-section-title">Menu Utama</div>
+            <div class="nav-section-title">{{ $menuLabels['home'] }}</div>
 
             <a href="{{ route('home') }}" class="nav-item {{ request()->routeIs('home') ? 'active' : '' }}" aria-current="{{ request()->routeIs('home') ? 'page' : 'false' }}">
                 <i class="fas fa-house" aria-hidden="true"></i>
-                Beranda
+                {{ $menuLabels['home'] }}
             </a>
 
             @php
                 $menuItems = [
-                    ['route' => 'about', 'icon' => 'fa-circle-info', 'label' => 'Tentang', 'check' => 'tentang'],
-                    ['route' => 'assets', 'icon' => 'fa-map-pin', 'label' => 'Aset Persediaan Tanah', 'check' => 'aset'],
-                    ['route' => 'partnership', 'icon' => 'fa-handshake', 'label' => 'Pemanfaatan & Kerjasama', 'check' => 'pemanfaatan'],
-                    ['route' => 'halaman.publikasi', 'icon' => 'fa-newspaper', 'label' => 'Publikasi', 'check' => 'publikasi'],
+                    ['route' => 'about', 'icon' => 'fa-circle-info', 'label' => $menuLabels['about'], 'check' => 'tentang'],
+                    ['route' => 'assets', 'icon' => 'fa-map-pin', 'label' => $menuLabels['assets'], 'check' => 'aset'],
+                    ['route' => 'partnership', 'icon' => 'fa-handshake', 'label' => $menuLabels['partnership'], 'check' => 'pemanfaatan'],
+                    ['route' => 'halaman.publikasi', 'icon' => 'fa-newspaper', 'label' => $menuLabels['publications'], 'check' => 'publikasi'],
                 ];
             @endphp
 
@@ -722,31 +742,31 @@
 
             <div class="nav-divider"></div>
 
-            <div class="nav-section-title">Lainnya</div>
+            <div class="nav-section-title">{{ $menuLabels['others'] }}</div>
 
             <a href="{{ route('faq') }}" class="nav-item {{ request()->routeIs('faq') ? 'active' : '' }}" aria-current="{{ request()->routeIs('faq') ? 'page' : 'false' }}">
                 <i class="fas fa-circle-question" aria-hidden="true"></i>
-                FAQ
-                <span class="nav-badge">Tanya</span>
+                {{ $menuLabels['faq'] }}
+                <span class="nav-badge">FAQ</span>
             </a>
 
             <a href="{{ route('karier') }}" class="nav-item {{ request()->routeIs('karier') ? 'active' : '' }}" aria-current="{{ request()->routeIs('karier') ? 'page' : 'false' }}">
                 <i class="fas fa-briefcase" aria-hidden="true"></i>
-                Karier
-                <span class="nav-badge">Karir</span>
+                {{ $menuLabels['career'] }}
+                <span class="nav-badge">{{ $isEnglish ? 'Career' : 'Karir' }}</span>
             </a>
 
             <a href="{{ route('kontak') }}" class="nav-item {{ request()->routeIs('kontak') ? 'active' : '' }}" aria-current="{{ request()->routeIs('kontak') ? 'page' : 'false' }}">
                 <i class="fas fa-envelope" aria-hidden="true"></i>
-                Kontak
-                <span class="nav-badge">Hubungi</span>
+                {{ $menuLabels['contact'] }}
+                <span class="nav-badge">{{ $isEnglish ? 'Contact' : 'Hubungi' }}</span>
             </a>
         </div>
 
         <!-- Footer Auth -->
         <div class="mobile-nav-footer">
             <a href="{{ route('login') }}" class="btn-nav btn-nav-login">
-                <i class="fas fa-sign-in-alt" aria-hidden="true"></i> Masuk Admin
+                <i class="fas fa-sign-in-alt" aria-hidden="true"></i> {{ $menuLabels['login'] }}
             </a>
         </div>
     </nav>
@@ -758,11 +778,11 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center py-2">
             <div class="flex items-center gap-2">
                 <i class="fas fa-globe text-blue-300" aria-hidden="true"></i>
-                <span class="truncate">Memajukan Pengelolaan Tanah yang Produktif, Transparan, dan Berkelanjutan</span>
+                <span class="truncate">{{ $isEnglish ? 'Advancing Productive, Transparent, and Sustainable Land Management' : 'Memajukan Pengelolaan Tanah yang Produktif, Transparan, dan Berkelanjutan' }}</span>
             </div>
             <div class="flex items-center gap-4">
-                <a href="{{ route('kontak') }}" class="hover:text-blue-300 transition">Kontak</a>
-                <a href="{{ route('search') }}" class="hover:text-blue-300 transition">Pencarian</a>
+                <a href="{{ route('kontak') }}" class="hover:text-blue-300 transition">{{ $menuLabels['contact'] }}</a>
+                <a href="{{ route('search') }}" class="hover:text-blue-300 transition">{{ $menuLabels['search'] }}</a>
                 <i class="fas fa-search cursor-pointer hover:text-blue-300 transition" aria-hidden="true"></i>
             </div>
         </div>
@@ -794,10 +814,10 @@
 
                     @php
                         $navItems = [
-                            ['route' => 'about', 'label' => 'Tentang', 'check' => 'tentang'],
-                            ['route' => 'assets', 'label' => 'Aset Persediaan Tanah', 'check' => 'aset'],
-                            ['route' => 'partnership', 'label' => 'Pemanfaatan & Kerjasama', 'check' => 'pemanfaatan'],
-                            ['route' => 'halaman.publikasi', 'label' => 'Publikasi', 'check' => 'publikasi'],
+                            ['route' => 'about', 'label' => $menuLabels['about'], 'check' => 'tentang'],
+                            ['route' => 'assets', 'label' => $menuLabels['assets'], 'check' => 'aset'],
+                            ['route' => 'partnership', 'label' => $menuLabels['partnership'], 'check' => 'pemanfaatan'],
+                            ['route' => 'halaman.publikasi', 'label' => $menuLabels['publications'], 'check' => 'publikasi'],
                         ];
                     @endphp
 
@@ -829,7 +849,7 @@
                     <div class="dropdown-desktop">
                         <button class="flex items-center gap-1 hover:text-[var(--color-secondary)] transition font-medium {{ request()->routeIs('faq') || request()->routeIs('karier') || request()->routeIs('kontak') ? 'text-[var(--color-secondary)] font-semibold' : '' }}"
                                 aria-expanded="false">
-                            Lainnya
+                            {{ $menuLabels['others'] }}
                             <i class="fas fa-chevron-down text-[10px]" aria-hidden="true"></i>
                         </button>
                         <div class="dropdown-menu" role="menu">
@@ -847,10 +867,16 @@
                                         'kontak' => 'kontak',
                                         default => ''
                                     };
+                                    $label = match(strtolower($menu->nama)) {
+                                        'faq' => $menuLabels['faq'],
+                                        'karier' => $menuLabels['career'],
+                                        'kontak' => $menuLabels['contact'],
+                                        default => $menu->nama
+                                    };
                                 @endphp
                                 <a href="{{ route($routeName) }}" role="menuitem">
                                     <i class="fas {{ $icon }}" aria-hidden="true"></i>
-                                    {{ $menu->nama }}
+                                    {{ $label }}
                                 </a>
                             @endforeach
                         </div>
@@ -863,6 +889,15 @@
                 <!-- RIGHT SIDE -->
                 <!-- ========================================================= -->
                 <div class="flex items-center gap-2 md:gap-3">
+
+                    <!-- Language Toggle -->
+                    <button onclick="toggleLanguage()" 
+                            class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium border border-gray-200 hover:border-[var(--color-secondary)] hover:text-[var(--color-secondary)] transition"
+                            id="langToggle"
+                            title="Ganti Bahasa">
+                        <i class="fas fa-globe text-xs"></i>
+                        <span id="langText">{{ $isEnglish ? 'EN' : 'ID' }}</span>
+                    </button>
 
                     <!-- Dark Mode Toggle -->
                     <button id="darkModeToggle" aria-label="Toggle dark mode" title="Toggle Dark Mode">
@@ -906,13 +941,13 @@
                     </div>
                 </div>
                 <p class="text-sm text-gray-300 leading-relaxed">
-                    {{ $footer->deskripsi ?? 'Mengelola tanah negara secara profesional, transparan, dan berkelanjutan untuk kepentingan rakyat.' }}
+                    {{ $footer->deskripsi ?? ($isEnglish ? 'Managing state land professionally, transparently, and sustainably for the benefit of the people.' : 'Mengelola tanah negara secara profesional, transparan, dan berkelanjutan untuk kepentingan rakyat.') }}
                 </p>
             </div>
 
             <!-- Kolom 2: Tautan Cepat -->
             <div>
-                <h4 class="font-bold text-white mb-4 uppercase text-xs tracking-wider">Tautan Cepat</h4>
+                <h4 class="font-bold text-white mb-4 uppercase text-xs tracking-wider">{{ $menuLabels['quick_links'] }}</h4>
                 <ul class="space-y-2 text-sm text-gray-300">
                     @foreach ($footer->quick_links ?? [] as $link)
                         <li><a href="{{ $link['url'] ?? '#' }}" class="hover:text-white transition">{{ $link['label'] ?? 'Link' }}</a></li>
@@ -922,7 +957,7 @@
 
             <!-- Kolom 3: Kontak & Sosial Media -->
             <div>
-                <h4 class="font-bold text-white mb-4 uppercase text-xs tracking-wider">Kontak</h4>
+                <h4 class="font-bold text-white mb-4 uppercase text-xs tracking-wider">{{ $menuLabels['contact_info'] }}</h4>
                 <ul class="space-y-3 text-sm text-gray-300">
                     <li class="flex items-start gap-3">
                         <i class="fas fa-map-marker-alt text-blue-400 mt-0.5" aria-hidden="true"></i>
@@ -959,10 +994,10 @@
             <!-- Kolom 4: Newsletter -->
             @if ($footer->show_newsletter)
                 <div>
-                    <h4 class="font-bold text-white mb-4 uppercase text-xs tracking-wider">Newsletter</h4>
-                    <p class="text-sm text-gray-300 mb-3">Dapatkan informasi terbaru dari Badan Bank Tanah.</p>
+                    <h4 class="font-bold text-white mb-4 uppercase text-xs tracking-wider">{{ $menuLabels['newsletter'] }}</h4>
+                    <p class="text-sm text-gray-300 mb-3">{{ $isEnglish ? 'Get the latest information from the Land Bank Agency.' : 'Dapatkan informasi terbaru dari Badan Bank Tanah.' }}</p>
                     <div class="flex">
-                        <input type="email" placeholder="Email Anda"
+                        <input type="email" placeholder="{{ $isEnglish ? 'Your Email' : 'Email Anda' }}"
                             class="flex-1 bg-white/10 text-white px-4 py-3 rounded-l-lg border border-white/20 focus:outline-none focus:border-blue-400 text-sm placeholder-gray-400"
                             aria-label="Email address for newsletter">
                         <button class="px-4 rounded-r-lg transition hover:opacity-90"
@@ -980,9 +1015,9 @@
         <div class="max-w-7xl mx-auto px-4 py-5 flex flex-col md:flex-row justify-between items-center gap-2 text-[10px] md:text-xs text-gray-400">
             <p>{!! str_replace('{year}', date('Y'), $footer->footer_text ?? '&copy; {year} Badan Bank Tanah. Hak Cipta Dilindungi.') !!}</p>
             <div class="flex gap-4">
-                <a href="#" class="hover:text-white transition">Kebijakan Privasi</a>
-                <a href="#" class="hover:text-white transition">Syarat & Ketentuan</a>
-                <a href="#" class="hover:text-white transition">Aksesibilitas</a>
+                <a href="#" class="hover:text-white transition">{{ $menuLabels['privacy'] }}</a>
+                <a href="#" class="hover:text-white transition">{{ $menuLabels['terms'] }}</a>
+                <a href="#" class="hover:text-white transition">{{ $menuLabels['accessibility'] }}</a>
             </div>
         </div>
     </footer>
@@ -1116,6 +1151,30 @@
                     }
                 }
             });
+        });
+    </script>
+
+    <!-- ========================================================= -->
+    <!-- LANGUAGE TOGGLE -->
+    <!-- ========================================================= -->
+    <script>
+        function toggleLanguage() {
+            const langText = document.getElementById('langText');
+            const currentLang = langText.textContent.trim();
+            const newLang = currentLang === 'ID' ? 'en' : 'id';
+            
+            const url = new URL(window.location.href);
+            url.searchParams.set('lang', newLang);
+            window.location.href = url.toString();
+        }
+
+        // Update tombol bahasa sesuai session
+        document.addEventListener('DOMContentLoaded', function() {
+            const langText = document.getElementById('langText');
+            if (langText) {
+                const currentLang = '{{ session('locale', 'id') }}';
+                langText.textContent = currentLang === 'en' ? 'EN' : 'ID';
+            }
         });
     </script>
 

@@ -370,7 +370,7 @@
                         <label class="tentang-label">
                             Profil / Deskripsi Lembaga <span class="tentang-label-required">*</span>
                         </label>
-                        <textarea name="isi" rows="6" class="tentang-textarea" required>{{ old('isi', $halaman->isi) }}</textarea>
+                        <textarea name="isi" id="editorTentang" rows="6" class="tentang-textarea" required>{{ old('isi', $halaman->isi) }}</textarea>
                         <p class="tentang-help-text">Deskripsi singkat tentang Badan Bank Tanah.</p>
                     </div>
                 </div>
@@ -492,6 +492,35 @@
                     @endif
                 </div>
 
+                {{-- AUTO-TRANSLATE BUTTON --}}
+                <div class="tentang-card">
+                    <h2 class="tentang-card-title">Auto-Translate</h2>
+                    <p class="tentang-card-subtitle">Terjemahkan konten ke bahasa Inggris menggunakan Kimi K2.5.</p>
+
+                    <div class="flex flex-wrap items-center gap-3">
+                        <button type="button" id="translateTentangBtn" 
+                                class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-semibold transition disabled:opacity-50 disabled:cursor-not-allowed">
+                            <i class="fas fa-language"></i>
+                            <span id="translateTentangText">Terjemahkan ke Inggris</span>
+                            <span id="translateTentangLoading" class="hidden">
+                                <i class="fas fa-spinner fa-spin"></i>
+                            </span>
+                        </button>
+                        <span id="translateTentangStatus" class="text-xs text-gray-500"></span>
+                    </div>
+
+                    <!-- Hasil terjemahan -->
+                    <div id="translationResultTentang" class="hidden mt-3 p-4 bg-gray-50 border border-gray-200 rounded-xl">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Hasil Terjemahan (Inggris)</span>
+                            <button type="button" onclick="applyTranslationTentang()" class="text-xs font-semibold text-green-600 hover:text-green-800 transition">
+                                <i class="fas fa-check mr-1"></i> Gunakan Terjemahan
+                            </button>
+                        </div>
+                        <div id="translatedContentTentang" class="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed"></div>
+                    </div>
+                </div>
+
                 {{-- TOMBOL SIMPAN --}}
                 <button type="submit" class="tentang-submit">
                     <i class="fas fa-save"></i>
@@ -507,40 +536,140 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Toggle status checkbox
-        const statusCheckbox = document.querySelector('input[name="is_active"]');
-        const statusLabel = document.querySelector('.toggle-switch + span span');
+document.addEventListener('DOMContentLoaded', function() {
+    // Toggle status checkbox
+    const statusCheckbox = document.querySelector('input[name="is_active"]');
+    const statusLabel = document.querySelector('.toggle-switch + span span');
 
-        if (statusCheckbox && statusLabel) {
-            statusCheckbox.addEventListener('change', function() {
-                if (this.checked) {
-                    statusLabel.textContent = 'Aktif';
-                    statusLabel.className = 'text-green-600';
+    if (statusCheckbox && statusLabel) {
+        statusCheckbox.addEventListener('change', function() {
+            if (this.checked) {
+                statusLabel.textContent = 'Aktif';
+                statusLabel.className = 'text-green-600';
+            } else {
+                statusLabel.textContent = 'Tidak Aktif';
+                statusLabel.className = 'text-gray-400';
+            }
+        });
+    }
+
+    // File name display
+    const gambarInput = document.getElementById('gambarInput');
+    const gambarName = document.getElementById('gambarName');
+    if (gambarInput && gambarName) {
+        gambarInput.addEventListener('change', function() {
+            gambarName.textContent = this.files[0]?.name || 'Belum ada file';
+        });
+    }
+
+    const fotoInput = document.getElementById('fotoInput');
+    const fotoName = document.getElementById('fotoName');
+    if (fotoInput && fotoName) {
+        fotoInput.addEventListener('change', function() {
+            fotoName.textContent = this.files[0]?.name || 'Belum ada file';
+        });
+    }
+
+    // =========================================================
+    // AUTO-TRANSLATE
+    // =========================================================
+    const editorTentang = document.getElementById('editorTentang');
+    const translateBtn = document.getElementById('translateTentangBtn');
+    const translateText = document.getElementById('translateTentangText');
+    const translateLoading = document.getElementById('translateTentangLoading');
+    const translateStatus = document.getElementById('translateTentangStatus');
+    const translationResult = document.getElementById('translationResultTentang');
+    const translatedContent = document.getElementById('translatedContentTentang');
+
+    let currentTranslation = '';
+
+    if (translateBtn) {
+        translateBtn.addEventListener('click', function() {
+            const content = editorTentang ? editorTentang.value : '';
+
+            if (!content || content.trim() === '') {
+                translateStatus.textContent = '⚠️ Konten kosong, tidak bisa diterjemahkan';
+                translateStatus.className = 'text-xs text-yellow-600';
+                return;
+            }
+
+            // Show loading
+            translateBtn.disabled = true;
+            translateText.textContent = 'Menerjemahkan...';
+            translateLoading.classList.remove('hidden');
+            translateStatus.textContent = '';
+            translationResult.classList.add('hidden');
+
+            fetch('{{ route("admin.translate") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({
+                    text: content,
+                    type: 'halaman'
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    currentTranslation = data.translated;
+                    translatedContent.textContent = data.translated;
+                    translationResult.classList.remove('hidden');
+                    translateStatus.textContent = '✅ ' + data.message;
+                    translateStatus.className = 'text-xs text-green-600';
                 } else {
-                    statusLabel.textContent = 'Tidak Aktif';
-                    statusLabel.className = 'text-gray-400';
+                    translateStatus.textContent = '❌ ' + data.message;
+                    translateStatus.className = 'text-xs text-red-600';
                 }
+            })
+            .catch(error => {
+                translateStatus.textContent = '❌ Terjadi kesalahan: ' + error.message;
+                translateStatus.className = 'text-xs text-red-600';
+            })
+            .finally(() => {
+                translateBtn.disabled = false;
+                translateText.textContent = 'Terjemahkan ke Inggris';
+                translateLoading.classList.add('hidden');
             });
-        }
+        });
+    }
 
-        // File name display
-        const gambarInput = document.getElementById('gambarInput');
-        const gambarName = document.getElementById('gambarName');
-        if (gambarInput && gambarName) {
-            gambarInput.addEventListener('change', function() {
-                gambarName.textContent = this.files[0]?.name || 'Belum ada file';
-            });
+    // Fungsi untuk apply terjemahan ke editor
+    window.applyTranslationTentang = function() {
+        if (currentTranslation && editorTentang) {
+            editorTentang.value = currentTranslation;
+            translationResult.classList.add('hidden');
+            translateStatus.textContent = '✅ Terjemahan berhasil diterapkan!';
+            translateStatus.className = 'text-xs text-green-600';
+            
+            // Trigger change event
+            editorTentang.dispatchEvent(new Event('input'));
         }
+    };
 
-        const fotoInput = document.getElementById('fotoInput');
-        const fotoName = document.getElementById('fotoName');
-        if (fotoInput && fotoName) {
-            fotoInput.addEventListener('change', function() {
-                fotoName.textContent = this.files[0]?.name || 'Belum ada file';
-            });
-        }
-    });
+    // =========================================================
+    // CEK STATUS API KEY
+    // =========================================================
+    fetch('{{ route("admin.translate.status") }}')
+        .then(response => response.json())
+        .then(data => {
+            if (!data.configured) {
+                const status = document.getElementById('translateTentangStatus');
+                if (status) {
+                    status.textContent = '⚠️ Kimi API Key belum dikonfigurasi. Tambahkan KIMI_API_KEY di .env';
+                    status.className = 'text-xs text-yellow-600';
+                }
+                const btn = document.getElementById('translateTentangBtn');
+                if (btn) {
+                    btn.disabled = true;
+                    btn.classList.add('opacity-50', 'cursor-not-allowed');
+                }
+            }
+        })
+        .catch(() => {});
+});
 </script>
 
 @endsection

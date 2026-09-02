@@ -7,17 +7,11 @@ use App\Models\Berita;
 use App\Models\MenuNavigasi;
 use App\Models\PengaturanWebsite;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 
 class HomeController extends Controller
 {
     public function index()
     {
-        // =========================================================
-        // PAKAI QUERY LANGSUNG - TANPA CACHE DULU
-        // =========================================================
-        
-        // Pengaturan Website
         $pengaturan = PengaturanWebsite::first() ?? (object) [
             'judul_hero' => 'Mengelola Tanah, Memajukan Negeri',
             'subjudul_hero' => 'Badan Bank Tanah mengelola aset tanah negara secara profesional, transparan, dan berkelanjutan untuk kepentingan rakyat.',
@@ -27,16 +21,30 @@ class HomeController extends Controller
             'warna_sekunder' => '#1D4ED8',
         ];
 
-        // Menu Navigasi
         $menuNavigasi = MenuNavigasi::where('status', 'Aktif')->get();
 
-        // Aset Terbaru
         $asets = AsetTanah::latest()->take(3)->get();
-
-        // Berita Terbaru
         $berita = Berita::where('status', 'Dipublikasikan')->latest()->take(3)->get();
 
-        // Filter Menu
+        // Get current locale
+        $locale = session('locale', 'id');
+        $isEnglish = $locale === 'en';
+
+        // Translation helper function
+        $t = function($data, $field) use ($isEnglish) {
+            if (is_object($data) && property_exists($data, $field . '_en')) {
+                $enValue = $data->{$field . '_en'};
+                if ($isEnglish && !empty($enValue)) {
+                    return $enValue;
+                }
+                return $data->$field ?? '';
+            }
+            return $data->$field ?? '';
+        };
+
+        // Pass translation helper to view
+        $translate = $t;
+
         $mainMenus = $menuNavigasi->filter(function($menu) {
             return !in_array($menu->nama, ['FAQ', 'Karier', 'Kontak']);
         });
@@ -45,6 +53,9 @@ class HomeController extends Controller
             return in_array($menu->nama, ['FAQ', 'Karier', 'Kontak']);
         });
 
-        return view('frontend.home', compact('asets', 'berita', 'menuNavigasi', 'pengaturan', 'mainMenus', 'otherMenus'));
+        return view('frontend.home', compact(
+            'asets', 'berita', 'menuNavigasi', 'pengaturan',
+            'mainMenus', 'otherMenus', 'translate', 'isEnglish'
+        ));
     }
 }

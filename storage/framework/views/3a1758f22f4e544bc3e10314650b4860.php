@@ -8,6 +8,7 @@
     <?php
         $metaTitle = $metaTitle ?? 'Badan Bank Tanah - Mengelola Tanah, Memajukan Negeri';
         $metaDescription = $metaDescription ?? 'Badan Bank Tanah mengelola aset tanah negara secara profesional, transparan, dan berkelanjutan untuk kepentingan rakyat.';
+        $isEnglish = session('locale', 'id') === 'en';
     ?>
     
     <title><?php echo e($metaTitle); ?></title>
@@ -17,10 +18,8 @@
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
 
-    
     <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
 
-    
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
@@ -663,6 +662,27 @@
 
         // Ambil footer settings
         $footer = \App\Models\FooterSetting::getSettings();
+
+        // Menu labels bilingual
+        $menuLabels = [
+            'home' => $isEnglish ? 'Home' : 'Beranda',
+            'about' => $isEnglish ? 'About' : 'Tentang',
+            'assets' => $isEnglish ? 'Land Assets' : 'Aset Persediaan Tanah',
+            'partnership' => $isEnglish ? 'Utilization & Partnership' : 'Pemanfaatan & Kerjasama',
+            'publications' => $isEnglish ? 'Publications' : 'Publikasi',
+            'faq' => 'FAQ',
+            'career' => $isEnglish ? 'Career' : 'Karier',
+            'contact' => $isEnglish ? 'Contact' : 'Kontak',
+            'others' => $isEnglish ? 'Others' : 'Lainnya',
+            'login' => $isEnglish ? 'Admin Login' : 'Masuk Admin',
+            'search' => $isEnglish ? 'Search' : 'Pencarian',
+            'quick_links' => $isEnglish ? 'Quick Links' : 'Tautan Cepat',
+            'contact_info' => $isEnglish ? 'Contact' : 'Kontak',
+            'newsletter' => $isEnglish ? 'Newsletter' : 'Newsletter',
+            'privacy' => $isEnglish ? 'Privacy Policy' : 'Kebijakan Privasi',
+            'terms' => $isEnglish ? 'Terms & Conditions' : 'Syarat & Ketentuan',
+            'accessibility' => $isEnglish ? 'Accessibility' : 'Aksesibilitas',
+        ];
     ?>
 
     <!-- ========================================================= -->
@@ -682,19 +702,20 @@
         </div>
 
         <div class="nav-list">
-            <div class="nav-section-title">Menu Utama</div>
+            <div class="nav-section-title"><?php echo e($menuLabels['home']); ?></div>
 
             <a href="<?php echo e(route('home')); ?>" class="nav-item <?php echo e(request()->routeIs('home') ? 'active' : ''); ?>" aria-current="<?php echo e(request()->routeIs('home') ? 'page' : 'false'); ?>">
                 <i class="fas fa-house" aria-hidden="true"></i>
-                Beranda
+                <?php echo e($menuLabels['home']); ?>
+
             </a>
 
             <?php
                 $menuItems = [
-                    ['route' => 'about', 'icon' => 'fa-circle-info', 'label' => 'Tentang', 'check' => 'tentang'],
-                    ['route' => 'assets', 'icon' => 'fa-map-pin', 'label' => 'Aset Persediaan Tanah', 'check' => 'aset'],
-                    ['route' => 'partnership', 'icon' => 'fa-handshake', 'label' => 'Pemanfaatan & Kerjasama', 'check' => 'pemanfaatan'],
-                    ['route' => 'halaman.publikasi', 'icon' => 'fa-newspaper', 'label' => 'Publikasi', 'check' => 'publikasi'],
+                    ['route' => 'about', 'icon' => 'fa-circle-info', 'label' => $menuLabels['about'], 'check' => 'tentang'],
+                    ['route' => 'assets', 'icon' => 'fa-map-pin', 'label' => $menuLabels['assets'], 'check' => 'aset'],
+                    ['route' => 'partnership', 'icon' => 'fa-handshake', 'label' => $menuLabels['partnership'], 'check' => 'pemanfaatan'],
+                    ['route' => 'halaman.publikasi', 'icon' => 'fa-newspaper', 'label' => $menuLabels['publications'], 'check' => 'publikasi'],
                 ];
             ?>
 
@@ -723,31 +744,35 @@
 
             <div class="nav-divider"></div>
 
-            <div class="nav-section-title">Lainnya</div>
+            <div class="nav-section-title"><?php echo e($menuLabels['others']); ?></div>
 
             <a href="<?php echo e(route('faq')); ?>" class="nav-item <?php echo e(request()->routeIs('faq') ? 'active' : ''); ?>" aria-current="<?php echo e(request()->routeIs('faq') ? 'page' : 'false'); ?>">
                 <i class="fas fa-circle-question" aria-hidden="true"></i>
-                FAQ
-                <span class="nav-badge">Tanya</span>
+                <?php echo e($menuLabels['faq']); ?>
+
+                <span class="nav-badge">FAQ</span>
             </a>
 
             <a href="<?php echo e(route('karier')); ?>" class="nav-item <?php echo e(request()->routeIs('karier') ? 'active' : ''); ?>" aria-current="<?php echo e(request()->routeIs('karier') ? 'page' : 'false'); ?>">
                 <i class="fas fa-briefcase" aria-hidden="true"></i>
-                Karier
-                <span class="nav-badge">Karir</span>
+                <?php echo e($menuLabels['career']); ?>
+
+                <span class="nav-badge"><?php echo e($isEnglish ? 'Career' : 'Karir'); ?></span>
             </a>
 
             <a href="<?php echo e(route('kontak')); ?>" class="nav-item <?php echo e(request()->routeIs('kontak') ? 'active' : ''); ?>" aria-current="<?php echo e(request()->routeIs('kontak') ? 'page' : 'false'); ?>">
                 <i class="fas fa-envelope" aria-hidden="true"></i>
-                Kontak
-                <span class="nav-badge">Hubungi</span>
+                <?php echo e($menuLabels['contact']); ?>
+
+                <span class="nav-badge"><?php echo e($isEnglish ? 'Contact' : 'Hubungi'); ?></span>
             </a>
         </div>
 
         <!-- Footer Auth -->
         <div class="mobile-nav-footer">
             <a href="<?php echo e(route('login')); ?>" class="btn-nav btn-nav-login">
-                <i class="fas fa-sign-in-alt" aria-hidden="true"></i> Masuk Admin
+                <i class="fas fa-sign-in-alt" aria-hidden="true"></i> <?php echo e($menuLabels['login']); ?>
+
             </a>
         </div>
     </nav>
@@ -759,11 +784,11 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center py-2">
             <div class="flex items-center gap-2">
                 <i class="fas fa-globe text-blue-300" aria-hidden="true"></i>
-                <span class="truncate">Memajukan Pengelolaan Tanah yang Produktif, Transparan, dan Berkelanjutan</span>
+                <span class="truncate"><?php echo e($isEnglish ? 'Advancing Productive, Transparent, and Sustainable Land Management' : 'Memajukan Pengelolaan Tanah yang Produktif, Transparan, dan Berkelanjutan'); ?></span>
             </div>
             <div class="flex items-center gap-4">
-                <a href="<?php echo e(route('kontak')); ?>" class="hover:text-blue-300 transition">Kontak</a>
-                <a href="<?php echo e(route('search')); ?>" class="hover:text-blue-300 transition">Pencarian</a>
+                <a href="<?php echo e(route('kontak')); ?>" class="hover:text-blue-300 transition"><?php echo e($menuLabels['contact']); ?></a>
+                <a href="<?php echo e(route('search')); ?>" class="hover:text-blue-300 transition"><?php echo e($menuLabels['search']); ?></a>
                 <i class="fas fa-search cursor-pointer hover:text-blue-300 transition" aria-hidden="true"></i>
             </div>
         </div>
@@ -795,10 +820,10 @@
 
                     <?php
                         $navItems = [
-                            ['route' => 'about', 'label' => 'Tentang', 'check' => 'tentang'],
-                            ['route' => 'assets', 'label' => 'Aset Persediaan Tanah', 'check' => 'aset'],
-                            ['route' => 'partnership', 'label' => 'Pemanfaatan & Kerjasama', 'check' => 'pemanfaatan'],
-                            ['route' => 'halaman.publikasi', 'label' => 'Publikasi', 'check' => 'publikasi'],
+                            ['route' => 'about', 'label' => $menuLabels['about'], 'check' => 'tentang'],
+                            ['route' => 'assets', 'label' => $menuLabels['assets'], 'check' => 'aset'],
+                            ['route' => 'partnership', 'label' => $menuLabels['partnership'], 'check' => 'pemanfaatan'],
+                            ['route' => 'halaman.publikasi', 'label' => $menuLabels['publications'], 'check' => 'publikasi'],
                         ];
                     ?>
 
@@ -831,7 +856,8 @@
                     <div class="dropdown-desktop">
                         <button class="flex items-center gap-1 hover:text-[var(--color-secondary)] transition font-medium <?php echo e(request()->routeIs('faq') || request()->routeIs('karier') || request()->routeIs('kontak') ? 'text-[var(--color-secondary)] font-semibold' : ''); ?>"
                                 aria-expanded="false">
-                            Lainnya
+                            <?php echo e($menuLabels['others']); ?>
+
                             <i class="fas fa-chevron-down text-[10px]" aria-hidden="true"></i>
                         </button>
                         <div class="dropdown-menu" role="menu">
@@ -849,10 +875,16 @@
                                         'kontak' => 'kontak',
                                         default => ''
                                     };
+                                    $label = match(strtolower($menu->nama)) {
+                                        'faq' => $menuLabels['faq'],
+                                        'karier' => $menuLabels['career'],
+                                        'kontak' => $menuLabels['contact'],
+                                        default => $menu->nama
+                                    };
                                 ?>
                                 <a href="<?php echo e(route($routeName)); ?>" role="menuitem">
                                     <i class="fas <?php echo e($icon); ?>" aria-hidden="true"></i>
-                                    <?php echo e($menu->nama); ?>
+                                    <?php echo e($label); ?>
 
                                 </a>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -866,6 +898,15 @@
                 <!-- RIGHT SIDE -->
                 <!-- ========================================================= -->
                 <div class="flex items-center gap-2 md:gap-3">
+
+                    <!-- Language Toggle -->
+                    <button onclick="toggleLanguage()" 
+                            class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium border border-gray-200 hover:border-[var(--color-secondary)] hover:text-[var(--color-secondary)] transition"
+                            id="langToggle"
+                            title="Ganti Bahasa">
+                        <i class="fas fa-globe text-xs"></i>
+                        <span id="langText"><?php echo e($isEnglish ? 'EN' : 'ID'); ?></span>
+                    </button>
 
                     <!-- Dark Mode Toggle -->
                     <button id="darkModeToggle" aria-label="Toggle dark mode" title="Toggle Dark Mode">
@@ -909,14 +950,14 @@
                     </div>
                 </div>
                 <p class="text-sm text-gray-300 leading-relaxed">
-                    <?php echo e($footer->deskripsi ?? 'Mengelola tanah negara secara profesional, transparan, dan berkelanjutan untuk kepentingan rakyat.'); ?>
+                    <?php echo e($footer->deskripsi ?? ($isEnglish ? 'Managing state land professionally, transparently, and sustainably for the benefit of the people.' : 'Mengelola tanah negara secara profesional, transparan, dan berkelanjutan untuk kepentingan rakyat.')); ?>
 
                 </p>
             </div>
 
             <!-- Kolom 2: Tautan Cepat -->
             <div>
-                <h4 class="font-bold text-white mb-4 uppercase text-xs tracking-wider">Tautan Cepat</h4>
+                <h4 class="font-bold text-white mb-4 uppercase text-xs tracking-wider"><?php echo e($menuLabels['quick_links']); ?></h4>
                 <ul class="space-y-2 text-sm text-gray-300">
                     <?php $__currentLoopData = $footer->quick_links ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $link): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <li><a href="<?php echo e($link['url'] ?? '#'); ?>" class="hover:text-white transition"><?php echo e($link['label'] ?? 'Link'); ?></a></li>
@@ -926,7 +967,7 @@
 
             <!-- Kolom 3: Kontak & Sosial Media -->
             <div>
-                <h4 class="font-bold text-white mb-4 uppercase text-xs tracking-wider">Kontak</h4>
+                <h4 class="font-bold text-white mb-4 uppercase text-xs tracking-wider"><?php echo e($menuLabels['contact_info']); ?></h4>
                 <ul class="space-y-3 text-sm text-gray-300">
                     <li class="flex items-start gap-3">
                         <i class="fas fa-map-marker-alt text-blue-400 mt-0.5" aria-hidden="true"></i>
@@ -963,10 +1004,10 @@
             <!-- Kolom 4: Newsletter -->
             <?php if($footer->show_newsletter): ?>
                 <div>
-                    <h4 class="font-bold text-white mb-4 uppercase text-xs tracking-wider">Newsletter</h4>
-                    <p class="text-sm text-gray-300 mb-3">Dapatkan informasi terbaru dari Badan Bank Tanah.</p>
+                    <h4 class="font-bold text-white mb-4 uppercase text-xs tracking-wider"><?php echo e($menuLabels['newsletter']); ?></h4>
+                    <p class="text-sm text-gray-300 mb-3"><?php echo e($isEnglish ? 'Get the latest information from the Land Bank Agency.' : 'Dapatkan informasi terbaru dari Badan Bank Tanah.'); ?></p>
                     <div class="flex">
-                        <input type="email" placeholder="Email Anda"
+                        <input type="email" placeholder="<?php echo e($isEnglish ? 'Your Email' : 'Email Anda'); ?>"
                             class="flex-1 bg-white/10 text-white px-4 py-3 rounded-l-lg border border-white/20 focus:outline-none focus:border-blue-400 text-sm placeholder-gray-400"
                             aria-label="Email address for newsletter">
                         <button class="px-4 rounded-r-lg transition hover:opacity-90"
@@ -984,9 +1025,9 @@
         <div class="max-w-7xl mx-auto px-4 py-5 flex flex-col md:flex-row justify-between items-center gap-2 text-[10px] md:text-xs text-gray-400">
             <p><?php echo str_replace('{year}', date('Y'), $footer->footer_text ?? '&copy; {year} Badan Bank Tanah. Hak Cipta Dilindungi.'); ?></p>
             <div class="flex gap-4">
-                <a href="#" class="hover:text-white transition">Kebijakan Privasi</a>
-                <a href="#" class="hover:text-white transition">Syarat & Ketentuan</a>
-                <a href="#" class="hover:text-white transition">Aksesibilitas</a>
+                <a href="#" class="hover:text-white transition"><?php echo e($menuLabels['privacy']); ?></a>
+                <a href="#" class="hover:text-white transition"><?php echo e($menuLabels['terms']); ?></a>
+                <a href="#" class="hover:text-white transition"><?php echo e($menuLabels['accessibility']); ?></a>
             </div>
         </div>
     </footer>
@@ -1120,6 +1161,30 @@
                     }
                 }
             });
+        });
+    </script>
+
+    <!-- ========================================================= -->
+    <!-- LANGUAGE TOGGLE -->
+    <!-- ========================================================= -->
+    <script>
+        function toggleLanguage() {
+            const langText = document.getElementById('langText');
+            const currentLang = langText.textContent.trim();
+            const newLang = currentLang === 'ID' ? 'en' : 'id';
+            
+            const url = new URL(window.location.href);
+            url.searchParams.set('lang', newLang);
+            window.location.href = url.toString();
+        }
+
+        // Update tombol bahasa sesuai session
+        document.addEventListener('DOMContentLoaded', function() {
+            const langText = document.getElementById('langText');
+            if (langText) {
+                const currentLang = '<?php echo e(session('locale', 'id')); ?>';
+                langText.textContent = currentLang === 'en' ? 'EN' : 'ID';
+            }
         });
     </script>
 

@@ -635,6 +635,32 @@
                     </div>
                 </div>
 
+                <!-- ========================================================= -->
+                <!-- AUTO-TRANSLATE BUTTON -->
+                <!-- ========================================================= -->
+                <div class="flex flex-wrap items-center gap-3 mb-3">
+                    <button type="button" id="translateBeritaBtn" 
+                            class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-semibold transition disabled:opacity-50 disabled:cursor-not-allowed">
+                        <i class="fas fa-language"></i>
+                        <span id="translateBeritaText">Terjemahkan ke Inggris</span>
+                        <span id="translateBeritaLoading" class="hidden">
+                            <i class="fas fa-spinner fa-spin"></i>
+                        </span>
+                    </button>
+                    <span id="translateBeritaStatus" class="text-xs text-gray-500"></span>
+                </div>
+
+                <!-- Hasil terjemahan -->
+                <div id="translationResult" class="hidden mt-3 p-4 bg-gray-50 border border-gray-200 rounded-xl">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Hasil Terjemahan (Inggris)</span>
+                        <button type="button" onclick="applyTranslation()" class="text-xs font-semibold text-green-600 hover:text-green-800 transition">
+                            <i class="fas fa-check mr-1"></i> Gunakan Terjemahan
+                        </button>
+                    </div>
+                    <div id="translatedContent" class="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed"></div>
+                </div>
+
                 <!-- TEXTAREA BIASA -->
                 <textarea name="konten" id="editor" rows="12" required
                     placeholder="Tulis konten berita di sini..."
@@ -1292,6 +1318,105 @@ document.addEventListener('DOMContentLoaded', function() {
         return bytes + ' B';
     }
     @endif
+
+    // =========================================================
+    // AUTO-TRANSLATE
+    // =========================================================
+    const translateBtn = document.getElementById('translateBeritaBtn');
+    const translateText = document.getElementById('translateBeritaText');
+    const translateLoading = document.getElementById('translateBeritaLoading');
+    const translateStatus = document.getElementById('translateBeritaStatus');
+    const translationResult = document.getElementById('translationResult');
+    const translatedContent = document.getElementById('translatedContent');
+
+    let currentTranslation = '';
+
+    if (translateBtn) {
+        translateBtn.addEventListener('click', function() {
+            const content = editor ? editor.value : '';
+
+            if (!content || content.trim() === '') {
+                translateStatus.textContent = '⚠️ Konten kosong, tidak bisa diterjemahkan';
+                translateStatus.className = 'text-xs text-yellow-600';
+                return;
+            }
+
+            // Show loading
+            translateBtn.disabled = true;
+            translateText.textContent = 'Menerjemahkan...';
+            translateLoading.classList.remove('hidden');
+            translateStatus.textContent = '';
+            translationResult.classList.add('hidden');
+
+            fetch('{{ route("admin.translate") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({
+                    text: content,
+                    type: 'berita'
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    currentTranslation = data.translated;
+                    translatedContent.textContent = data.translated;
+                    translationResult.classList.remove('hidden');
+                    translateStatus.textContent = '✅ ' + data.message;
+                    translateStatus.className = 'text-xs text-green-600';
+                } else {
+                    translateStatus.textContent = '❌ ' + data.message;
+                    translateStatus.className = 'text-xs text-red-600';
+                }
+            })
+            .catch(error => {
+                translateStatus.textContent = '❌ Terjadi kesalahan: ' + error.message;
+                translateStatus.className = 'text-xs text-red-600';
+            })
+            .finally(() => {
+                translateBtn.disabled = false;
+                translateText.textContent = 'Terjemahkan ke Inggris';
+                translateLoading.classList.add('hidden');
+            });
+        });
+    }
+
+    // Fungsi untuk apply terjemahan ke editor
+    window.applyTranslation = function() {
+        if (currentTranslation && editor) {
+            editor.value = currentTranslation;
+            translationResult.classList.add('hidden');
+            translateStatus.textContent = '✅ Terjemahan berhasil diterapkan!';
+            translateStatus.className = 'text-xs text-green-600';
+            
+            // Trigger change event
+            editor.dispatchEvent(new Event('input'));
+        }
+    };
+
+    // =========================================================
+    // CEK STATUS API KEY
+    // =========================================================
+    fetch('{{ route("admin.translate.status") }}')
+        .then(response => response.json())
+        .then(data => {
+            if (!data.configured) {
+                const status = document.getElementById('translateBeritaStatus');
+                if (status) {
+                    status.textContent = '⚠️ Kimi API Key belum dikonfigurasi. Tambahkan KIMI_API_KEY di .env';
+                    status.className = 'text-xs text-yellow-600';
+                }
+                const btn = document.getElementById('translateBeritaBtn');
+                if (btn) {
+                    btn.disabled = true;
+                    btn.classList.add('opacity-50', 'cursor-not-allowed');
+                }
+            }
+        })
+        .catch(() => {});
 
     // =========================================================
     // Sembunyikan error container setelah 5 detik

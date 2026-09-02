@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Halaman;
 use App\Models\MenuNavigasi;
 use App\Models\PengaturanWebsite;
+use App\Helpers\TranslationHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -22,6 +23,7 @@ class HalamanController extends Controller
 
         $menuNavigasi = MenuNavigasi::where('status', 'Aktif')->get();
         $pengaturan = PengaturanWebsite::first();
+        $isEnglish = TranslationHelper::isEnglish();
 
         // Jika halaman tidak aktif atau tidak ditemukan, tampilkan 404
         if (! $halaman) {
@@ -30,7 +32,7 @@ class HalamanController extends Controller
 
         return view(
             'frontend.about',
-            compact('halaman', 'menuNavigasi', 'pengaturan')
+            compact('halaman', 'menuNavigasi', 'pengaturan', 'isEnglish')
         );
     }
 
@@ -45,6 +47,7 @@ class HalamanController extends Controller
 
         $menuNavigasi = MenuNavigasi::where('status', 'Aktif')->get();
         $pengaturan = PengaturanWebsite::first();
+        $isEnglish = TranslationHelper::isEnglish();
 
         // Jika halaman tidak ditemukan, buat default
         if (! $halaman) {
@@ -94,7 +97,7 @@ class HalamanController extends Controller
 
         return view(
             'frontend.partnership',
-            compact('halaman', 'menuNavigasi', 'pengaturan')
+            compact('halaman', 'menuNavigasi', 'pengaturan', 'isEnglish')
         );
     }
 
@@ -109,6 +112,7 @@ class HalamanController extends Controller
 
         $menuNavigasi = MenuNavigasi::where('status', 'Aktif')->get();
         $pengaturan = PengaturanWebsite::first();
+        $isEnglish = TranslationHelper::isEnglish();
 
         if (! $halaman) {
             abort(404, 'Halaman tidak ditemukan atau tidak aktif.');
@@ -116,7 +120,7 @@ class HalamanController extends Controller
 
         return view(
             'frontend.publikasi',
-            compact('halaman', 'menuNavigasi', 'pengaturan')
+            compact('halaman', 'menuNavigasi', 'pengaturan', 'isEnglish')
         );
     }
 

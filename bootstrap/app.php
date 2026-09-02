@@ -17,6 +17,13 @@ return Application::configure(basePath: dirname(__DIR__))
             'role' => \App\Http\Middleware\CheckRole::class,
             'cache.response' => \App\Http\Middleware\CacheResponse::class,
         ]);
+
+        // =========================================================
+        // TAMBAHKAN MIDDLEWARE SETLOCALE KE GROUP WEB
+        // =========================================================
+        $middleware->appendToGroup('web', [
+            \App\Http\Middleware\SetLocale::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

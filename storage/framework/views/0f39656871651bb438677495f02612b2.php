@@ -33,20 +33,29 @@
         </span>
 
         <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight max-w-2xl">
-            <?php echo e($pengaturan->judul_hero ?? 'Mengelola Tanah, Memajukan Negeri'); ?>
+            <?php if($isEnglish && !empty($pengaturan->judul_hero_en)): ?>
+                <?php echo e($pengaturan->judul_hero_en); ?>
 
+            <?php else: ?>
+                <?php echo e($pengaturan->judul_hero ?? 'Mengelola Tanah, Memajukan Negeri'); ?>
+
+            <?php endif; ?>
         </h1>
 
         <p class="text-white/90 text-sm sm:text-base md:text-lg mt-3 sm:mt-4 mb-6 sm:mb-8 max-w-xl leading-relaxed">
-            <?php echo e($pengaturan->subjudul_hero ??
-                'Badan Bank Tanah mengelola aset tanah negara secara profesional, transparan, dan berkelanjutan untuk kepentingan rakyat.'); ?>
+            <?php if($isEnglish && !empty($pengaturan->subjudul_hero_en)): ?>
+                <?php echo e($pengaturan->subjudul_hero_en); ?>
 
+            <?php else: ?>
+                <?php echo e($pengaturan->subjudul_hero ?? 'Badan Bank Tanah mengelola aset tanah negara secara profesional, transparan, dan berkelanjutan untuk kepentingan rakyat.'); ?>
+
+            <?php endif; ?>
         </p>
 
         <div class="flex flex-wrap items-center gap-3 sm:gap-4">
             <a href="<?php echo e($pengaturan->tombol_link ?? '/aset'); ?>"
                 class="btn-primary px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-bold text-sm sm:text-base transition inline-block">
-                <?php echo e($pengaturan->tombol_text ?? 'Selengkapnya'); ?>
+                <?php echo e($pengaturan->tombol_text ?? ($isEnglish ? 'Learn More' : 'Selengkapnya')); ?>
 
             </a>
         </div>
@@ -59,7 +68,7 @@
         </div>
     </div>
 
-    <!-- Tombol Panah Kiri & Kanan -->
+    <!-- Tombol Panah -->
     <button type="button" id="heroPrev"
         class="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 z-30 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-black/30 hover:bg-black/50 text-white flex items-center justify-center transition-all duration-300 hover:scale-110 backdrop-blur-sm border border-white/10">
         <i class="fas fa-chevron-left text-xs sm:text-base"></i>
@@ -81,6 +90,16 @@
     $totalProvinsi = \App\Models\AsetTanah::distinct('provinsi')->count('provinsi');
     $totalKerjasama = \App\Models\ProyekInvestasi::where('is_active', true)->count();
     $nilaiAset = 68450000000000;
+
+    // Translation labels
+    $statLabels = [
+        'total_luas' => $isEnglish ? 'Total Land Area' : 'Total Luas Aset',
+        'total_asets' => $isEnglish ? 'Total Assets' : 'Lokasi Aset',
+        'wilayah' => $isEnglish ? 'Regions' : 'Wilayah',
+        'kerjasama' => $isEnglish ? 'Active Partnerships' : 'Kerja Sama Aktif',
+        'nilai_aset' => $isEnglish ? 'Asset Value' : 'Nilai Aset',
+        'estimasi' => $isEnglish ? 'Estimated Value' : 'Estimasi Nilai',
+    ];
 ?>
 
 <div class="w-full px-3 sm:px-4 -mt-10 sm:-mt-16 relative z-10">
@@ -93,9 +112,9 @@
                     <i class="fas fa-layer-group text-base sm:text-xl"></i>
                 </div>
                 <div class="min-w-0">
-                    <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium truncate">Total Luas Aset</p>
+                    <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium truncate"><?php echo e($statLabels['total_luas']); ?></p>
                     <p class="text-sm sm:text-base md:text-xl font-extrabold text-gray-900"><?php echo e(number_format($totalLuas, 0, ',', '.')); ?> Ha</p>
-                    <p class="text-[7px] sm:text-[8px] text-green-600">Data real dari database</p>
+                    <p class="text-[7px] sm:text-[8px] text-green-600"><?php echo e($isEnglish ? 'Real data' : 'Data real dari database'); ?></p>
                 </div>
             </div>
 
@@ -105,9 +124,9 @@
                     <i class="fas fa-location-dot text-base sm:text-xl"></i>
                 </div>
                 <div class="min-w-0">
-                    <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium truncate">Lokasi Aset</p>
+                    <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium truncate"><?php echo e($statLabels['total_asets']); ?></p>
                     <p class="text-sm sm:text-base md:text-xl font-extrabold text-gray-900"><?php echo e(number_format($totalAset)); ?></p>
-                    <p class="text-[7px] sm:text-[8px] text-gray-400 truncate">Bidang Tanah</p>
+                    <p class="text-[7px] sm:text-[8px] text-gray-400 truncate"><?php echo e($isEnglish ? 'Land Plots' : 'Bidang Tanah'); ?></p>
                 </div>
             </div>
 
@@ -117,9 +136,9 @@
                     <i class="fas fa-building text-base sm:text-xl"></i>
                 </div>
                 <div class="min-w-0">
-                    <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium truncate">Wilayah</p>
+                    <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium truncate"><?php echo e($statLabels['wilayah']); ?></p>
                     <p class="text-sm sm:text-base md:text-xl font-extrabold text-gray-900"><?php echo e(number_format($totalProvinsi)); ?></p>
-                    <p class="text-[7px] sm:text-[8px] text-gray-400 truncate">Provinsi</p>
+                    <p class="text-[7px] sm:text-[8px] text-gray-400 truncate"><?php echo e($isEnglish ? 'Provinces' : 'Provinsi'); ?></p>
                 </div>
             </div>
 
@@ -129,9 +148,9 @@
                     <i class="fas fa-handshake text-base sm:text-xl"></i>
                 </div>
                 <div class="min-w-0">
-                    <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium truncate">Kerja Sama Aktif</p>
+                    <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium truncate"><?php echo e($statLabels['kerjasama']); ?></p>
                     <p class="text-sm sm:text-base md:text-xl font-extrabold text-gray-900"><?php echo e($totalKerjasama > 0 ? number_format($totalKerjasama) : '0'); ?></p>
-                    <p class="text-[7px] sm:text-[8px] text-gray-400 truncate">Mitra Strategis</p>
+                    <p class="text-[7px] sm:text-[8px] text-gray-400 truncate"><?php echo e($isEnglish ? 'Strategic Partners' : 'Mitra Strategis'); ?></p>
                 </div>
             </div>
 
@@ -141,9 +160,9 @@
                     <i class="fas fa-chart-line text-xl"></i>
                 </div>
                 <div class="min-w-0">
-                    <p class="text-[10px] text-gray-500 font-medium truncate">Nilai Aset</p>
+                    <p class="text-[10px] text-gray-500 font-medium truncate"><?php echo e($statLabels['nilai_aset']); ?></p>
                     <p class="text-base md:text-xl font-extrabold text-blue-700">Rp 68,45 T</p>
-                    <p class="text-[8px] text-gray-400 truncate">Estimasi Nilai</p>
+                    <p class="text-[8px] text-gray-400 truncate"><?php echo e($statLabels['estimasi']); ?></p>
                 </div>
             </div>
 
@@ -153,7 +172,7 @@
                     <i class="fas fa-chart-line text-base"></i>
                 </div>
                 <div>
-                    <p class="text-[8px] text-gray-500 font-medium">Nilai Aset</p>
+                    <p class="text-[8px] text-gray-500 font-medium"><?php echo e($statLabels['nilai_aset']); ?></p>
                     <p class="text-sm font-extrabold text-blue-700">Rp 68,45 T</p>
                 </div>
             </div>
@@ -172,10 +191,11 @@
         <div class="bg-white rounded-xl shadow-md p-4 sm:p-5">
             <div class="flex items-end justify-between mb-4 sm:mb-5">
                 <div>
-                    <h2 class="text-base sm:text-lg font-bold text-gray-900">Aset Persediaan Tanah</h2>
+                    <h2 class="text-base sm:text-lg font-bold text-gray-900"><?php echo e($isEnglish ? 'Land Asset Inventory' : 'Aset Persediaan Tanah'); ?></h2>
                 </div>
                 <a href="<?php echo e(route('assets')); ?>" class="text-[10px] font-semibold link-secondary">
-                    Lihat Semua →
+                    <?php echo e($isEnglish ? 'View All →' : 'Lihat Semua →'); ?>
+
                 </a>
             </div>
 
@@ -198,8 +218,13 @@
                             </div>
                             <div class="p-3 sm:p-4">
                                 <h3 class="text-xs sm:text-sm font-bold text-gray-900 leading-snug line-clamp-2">
-                                    <?php echo e($aset->nama_lokasi); ?>
+                                    <?php if($isEnglish && !empty($aset->nama_lokasi_en)): ?>
+                                        <?php echo e($aset->nama_lokasi_en); ?>
 
+                                    <?php else: ?>
+                                        <?php echo e($aset->nama_lokasi); ?>
+
+                                    <?php endif; ?>
                                 </h3>
                                 <p class="text-[10px] sm:text-xs text-gray-500 mt-0.5 sm:mt-1">
                                     <?php echo e($aset->provinsi); ?>, <?php echo e($aset->kabupaten); ?>
@@ -231,10 +256,11 @@
         <div class="bg-white rounded-xl shadow-md p-4 sm:p-5">
             <div class="flex items-end justify-between mb-3 sm:mb-4">
                 <div>
-                    <h2 class="text-base sm:text-lg font-bold text-gray-900">Peta Interaktif</h2>
+                    <h2 class="text-base sm:text-lg font-bold text-gray-900"><?php echo e($isEnglish ? 'Interactive Map' : 'Peta Interaktif'); ?></h2>
                 </div>
                 <a href="<?php echo e(route('assets')); ?>" class="text-[10px] font-semibold link-secondary">
-                    Lihat Peta →
+                    <?php echo e($isEnglish ? 'View Map →' : 'Lihat Peta →'); ?>
+
                 </a>
             </div>
 
@@ -244,19 +270,23 @@
             <div class="flex flex-wrap items-center gap-2 sm:gap-3 mt-3 sm:mt-4 text-[8px] sm:text-[10px] text-gray-600">
                 <div class="flex items-center gap-1">
                     <span class="w-2 h-2 rounded-full bg-green-700"></span>
-                    Tersedia
+                    <?php echo e($isEnglish ? 'Available' : 'Tersedia'); ?>
+
                 </div>
                 <div class="flex items-center gap-1">
                     <span class="w-2 h-2 rounded-full bg-blue-500"></span>
-                    Dalam Pengembangan
+                    <?php echo e($isEnglish ? 'In Development' : 'Dalam Pengembangan'); ?>
+
                 </div>
                 <div class="flex items-center gap-1">
                     <span class="w-2 h-2 rounded-full bg-orange-500"></span>
-                    Dalam Proses
+                    <?php echo e($isEnglish ? 'In Process' : 'Dalam Proses'); ?>
+
                 </div>
                 <div class="flex items-center gap-1">
                     <span class="w-2 h-2 rounded-full bg-gray-500"></span>
-                    Terikat
+                    <?php echo e($isEnglish ? 'Committed' : 'Terikat'); ?>
+
                 </div>
             </div>
         </div>
@@ -273,9 +303,10 @@
         <!-- PEMANFAATAN & KERJA SAMA -->
         <div class="lg:col-span-3">
             <div class="flex items-end justify-between mb-5 sm:mb-7">
-                <h2 class="text-xl sm:text-2xl font-bold text-gray-900">Pemanfaatan & Kerja Sama</h2>
+                <h2 class="text-xl sm:text-2xl font-bold text-gray-900"><?php echo e($isEnglish ? 'Utilization & Partnerships' : 'Pemanfaatan & Kerja Sama'); ?></h2>
                 <a href="<?php echo e(route('partnership')); ?>" class="text-xs font-semibold link-secondary">
-                    Lihat Semua →
+                    <?php echo e($isEnglish ? 'View All →' : 'Lihat Semua →'); ?>
+
                 </a>
             </div>
 
@@ -286,12 +317,14 @@
                     <div class="w-12 h-12 sm:w-16 sm:h-16 mx-auto rounded-full bg-blue-50 flex items-center justify-center mb-2 sm:mb-3">
                         <i class="fas fa-chart-line text-blue-600 text-lg sm:text-2xl"></i>
                     </div>
-                    <h3 class="text-xs sm:text-sm font-bold text-gray-900">Investasi</h3>
+                    <h3 class="text-xs sm:text-sm font-bold text-gray-900"><?php echo e($isEnglish ? 'Investment' : 'Investasi'); ?></h3>
                     <p class="text-[8px] sm:text-[10px] text-gray-500 leading-relaxed mt-0.5 sm:mt-1 hidden sm:block">
-                        Pemanfaatan tanah untuk investasi produktif.
+                        <?php echo e($isEnglish ? 'Productive land utilization' : 'Pemanfaatan tanah untuk investasi produktif.'); ?>
+
                     </p>
                     <a href="<?php echo e(route('partnership')); ?>" class="text-[9px] sm:text-xs link-secondary font-semibold">
-                        Selengkapnya →
+                        <?php echo e($isEnglish ? 'Learn More →' : 'Selengkapnya →'); ?>
+
                     </a>
                 </div>
 
@@ -300,12 +333,14 @@
                     <div class="w-12 h-12 sm:w-16 sm:h-16 mx-auto rounded-full bg-green-50 flex items-center justify-center mb-2 sm:mb-3">
                         <i class="fas fa-leaf text-green-600 text-lg sm:text-2xl"></i>
                     </div>
-                    <h3 class="text-xs sm:text-sm font-bold text-gray-900">Reforma Agraria</h3>
+                    <h3 class="text-xs sm:text-sm font-bold text-gray-900"><?php echo e($isEnglish ? 'Agrarian Reform' : 'Reforma Agraria'); ?></h3>
                     <p class="text-[8px] sm:text-[10px] text-gray-500 leading-relaxed mt-0.5 sm:mt-1 hidden sm:block">
-                        Mendukung pemerataan akses tanah.
+                        <?php echo e($isEnglish ? 'Supporting equitable land access' : 'Mendukung pemerataan akses tanah.'); ?>
+
                     </p>
                     <a href="<?php echo e(route('partnership')); ?>" class="text-[9px] sm:text-xs link-secondary font-semibold">
-                        Selengkapnya →
+                        <?php echo e($isEnglish ? 'Learn More →' : 'Selengkapnya →'); ?>
+
                     </a>
                 </div>
 
@@ -314,12 +349,14 @@
                     <div class="w-12 h-12 sm:w-16 sm:h-16 mx-auto rounded-full bg-yellow-50 flex items-center justify-center mb-2 sm:mb-3">
                         <i class="fas fa-handshake text-yellow-600 text-lg sm:text-2xl"></i>
                     </div>
-                    <h3 class="text-xs sm:text-sm font-bold text-gray-900">Kerja Sama</h3>
+                    <h3 class="text-xs sm:text-sm font-bold text-gray-900"><?php echo e($isEnglish ? 'Partnership' : 'Kerja Sama'); ?></h3>
                     <p class="text-[8px] sm:text-[10px] text-gray-500 leading-relaxed mt-0.5 sm:mt-1 hidden sm:block">
-                        Kolaborasi strategis pengelolaan tanah.
+                        <?php echo e($isEnglish ? 'Strategic collaboration' : 'Kolaborasi strategis pengelolaan tanah.'); ?>
+
                     </p>
                     <a href="<?php echo e(route('partnership')); ?>" class="text-[9px] sm:text-xs link-secondary font-semibold">
-                        Selengkapnya →
+                        <?php echo e($isEnglish ? 'Learn More →' : 'Selengkapnya →'); ?>
+
                     </a>
                 </div>
 
@@ -328,12 +365,14 @@
                     <div class="w-12 h-12 sm:w-16 sm:h-16 mx-auto rounded-full bg-purple-50 flex items-center justify-center mb-2 sm:mb-3">
                         <i class="fas fa-file-lines text-purple-600 text-lg sm:text-2xl"></i>
                     </div>
-                    <h3 class="text-xs sm:text-sm font-bold text-gray-900">Dokumen</h3>
+                    <h3 class="text-xs sm:text-sm font-bold text-gray-900"><?php echo e($isEnglish ? 'Documents' : 'Dokumen'); ?></h3>
                     <p class="text-[8px] sm:text-[10px] text-gray-500 leading-relaxed mt-0.5 sm:mt-1 hidden sm:block">
-                        Informasi dan dokumen terkait.
+                        <?php echo e($isEnglish ? 'Related information and documents' : 'Informasi dan dokumen terkait.'); ?>
+
                     </p>
                     <a href="<?php echo e(route('publications')); ?>" class="text-[9px] sm:text-xs link-secondary font-semibold">
-                        Selengkapnya →
+                        <?php echo e($isEnglish ? 'Learn More →' : 'Selengkapnya →'); ?>
+
                     </a>
                 </div>
 
@@ -343,9 +382,10 @@
         <!-- PUBLIKASI TERBARU -->
         <div class="lg:col-span-2">
             <div class="flex items-end justify-between mb-5 sm:mb-7">
-                <h2 class="text-xl sm:text-2xl font-bold text-gray-900">Publikasi Terbaru</h2>
+                <h2 class="text-xl sm:text-2xl font-bold text-gray-900"><?php echo e($isEnglish ? 'Latest Publications' : 'Publikasi Terbaru'); ?></h2>
                 <a href="<?php echo e(route('publications')); ?>" class="text-xs font-semibold link-secondary">
-                    Lihat Semua →
+                    <?php echo e($isEnglish ? 'View All →' : 'Lihat Semua →'); ?>
+
                 </a>
             </div>
 
@@ -374,8 +414,13 @@
 
                         </span>
                         <h3 class="text-[10px] sm:text-xs font-bold text-gray-900 leading-tight mt-0.5 line-clamp-2 group-hover:text-[var(--color-secondary)] transition-colors">
-                            <?php echo e($item->judul); ?>
+                            <?php if($isEnglish && !empty($item->judul_en)): ?>
+                                <?php echo e($item->judul_en); ?>
 
+                            <?php else: ?>
+                                <?php echo e($item->judul); ?>
+
+                            <?php endif; ?>
                         </h3>
                         <p class="text-[8px] sm:text-[9px] text-gray-400 mt-0.5">
                             <?php echo e($item->tanggal_publikasi ? \Carbon\Carbon::parse($item->tanggal_publikasi)->format('d M Y') : $item->created_at?->format('d M Y')); ?>
@@ -400,12 +445,19 @@
 
     <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 flex flex-col sm:flex-row items-center justify-between gap-6 sm:gap-8">
         <div class="text-center sm:text-left">
-            <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-2">Bersama Mengelola Tanah</h2>
-            <p class="text-blue-200 text-sm sm:text-base lg:text-lg">untuk Masa Depan Indonesia yang lebih baik.</p>
+            <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-2">
+                <?php echo e($isEnglish ? 'Together Managing Land' : 'Bersama Mengelola Tanah'); ?>
+
+            </h2>
+            <p class="text-blue-200 text-sm sm:text-base lg:text-lg">
+                <?php echo e($isEnglish ? 'for a better future of Indonesia.' : 'untuk Masa Depan Indonesia yang lebih baik.'); ?>
+
+            </p>
         </div>
         <a href="<?php echo e(route('partnership')); ?>"
             class="btn-primary px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-bold text-sm sm:text-base transition shrink-0 inline-block">
-            Pelajari Lebih Lanjut →
+            <?php echo e($isEnglish ? 'Learn More →' : 'Pelajari Lebih Lanjut →'); ?>
+
         </a>
     </div>
 </div>
@@ -416,7 +468,7 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // =========================================================
-    // HERO SLIDER - LENGKAP (Dots + Panah + Drag + Swipe)
+    // HERO SLIDER
     // =========================================================
     const slides = document.querySelectorAll('.hero-slide');
     const dots = document.querySelectorAll('.hero-dot');
@@ -493,9 +545,6 @@ document.addEventListener('DOMContentLoaded', function() {
         startAutoSlide();
     }
 
-    // =========================================================
-    // EVENT: TOMBOL PANAH
-    // =========================================================
     if (prevBtn) {
         prevBtn.addEventListener('click', function(e) {
             e.stopPropagation();
@@ -512,9 +561,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // =========================================================
-    // EVENT: KLIK DOTS
-    // =========================================================
     dots.forEach((dot, index) => {
         dot.addEventListener('click', function() {
             goToSlide(index);
@@ -522,9 +568,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // =========================================================
-    // EVENT: DRAG (Desktop)
-    // =========================================================
     if (sliderContainer) {
         sliderContainer.addEventListener('mousedown', function(e) {
             if (e.target.closest('button, a')) return;
@@ -565,9 +608,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        // =========================================================
-        // EVENT: SWIPE (Mobile) - FIXED
-        // =========================================================
         sliderContainer.addEventListener('touchstart', function(e) {
             touchStartX = e.changedTouches[0].screenX;
             touchStartY = e.changedTouches[0].screenY;
@@ -605,9 +645,6 @@ document.addEventListener('DOMContentLoaded', function() {
             resetAutoSlide();
         }, { passive: true });
 
-        // =========================================================
-        // KEYBOARD (Aksesibilitas)
-        // =========================================================
         document.addEventListener('keydown', function(e) {
             if (e.key === 'ArrowLeft') {
                 prevSlide();
@@ -619,9 +656,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // =========================================================
-    // START
-    // =========================================================
     goToSlide(0);
     startAutoSlide();
 
@@ -631,16 +665,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // =========================================================
-    // RESIZE HANDLER
-    // =========================================================
-    let resizeTimer;
-    window.addEventListener('resize', function() {
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(function() {}, 250);
-    });
-
-    // =========================================================
-    // ASSET SLIDER - AUTO SLIDE + DRAG + HOVER PAUSE
+    // ASSET SLIDER
     // =========================================================
     const slider = document.getElementById('assetSlider');
     const assetDots = document.querySelectorAll('.asset-dot');
@@ -698,7 +723,6 @@ document.addEventListener('DOMContentLoaded', function() {
             assetContainer.addEventListener('mouseleave', startAssetSlider);
         }
 
-        // Drag support
         let assetStartX = 0;
         let assetCurrentX = 0;
         let isAssetDragging = false;
@@ -735,7 +759,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        // Touch support
         let assetTouchStartX = 0;
         slider.addEventListener('touchstart', (e) => {
             assetTouchStartX = e.touches[0].clientX;
@@ -775,9 +798,6 @@ document.addEventListener('DOMContentLoaded', function() {
         attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    // =========================================================
-    // MARKER DARI DATABASE
-    // =========================================================
     <?php
         $markers = \App\Models\AsetTanah::whereNotNull('lat')->whereNotNull('lng')->get();
     ?>

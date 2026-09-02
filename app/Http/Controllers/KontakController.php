@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Kontak;
 use App\Models\MenuNavigasi;
 use App\Models\PengaturanWebsite;
+use App\Helpers\TranslationHelper;
 use Illuminate\Http\Request;
 
 class KontakController extends Controller
@@ -13,8 +14,9 @@ class KontakController extends Controller
     {
         $menuNavigasi = MenuNavigasi::where('status', 'Aktif')->get();
         $pengaturan = PengaturanWebsite::first();
+        $isEnglish = TranslationHelper::isEnglish();
 
-        return view('frontend.kontak', compact('menuNavigasi', 'pengaturan'));
+        return view('frontend.kontak', compact('menuNavigasi', 'pengaturan', 'isEnglish'));
     }
 
     public function store(Request $request)

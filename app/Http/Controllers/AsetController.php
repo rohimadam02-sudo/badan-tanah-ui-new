@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\AsetTanah;
 use App\Models\MenuNavigasi;
 use App\Models\PengaturanWebsite;
+use App\Helpers\TranslationHelper;
 use Illuminate\Http\Request;
 
 class AsetController extends Controller
@@ -14,8 +15,9 @@ class AsetController extends Controller
         $asets = AsetTanah::all();
         $menuNavigasi = MenuNavigasi::where('status', 'Aktif')->get();
         $pengaturan = PengaturanWebsite::first();
+        $isEnglish = TranslationHelper::isEnglish();
 
-        return view('frontend.assets', compact('asets', 'menuNavigasi', 'pengaturan'));
+        return view('frontend.assets', compact('asets', 'menuNavigasi', 'pengaturan', 'isEnglish'));
     }
 
     /**
@@ -33,8 +35,9 @@ class AsetController extends Controller
 
         $menuNavigasi = MenuNavigasi::where('status', 'Aktif')->get();
         $pengaturan = PengaturanWebsite::first();
+        $isEnglish = TranslationHelper::isEnglish();
 
-        return view('frontend.aset_detail', compact('aset', 'menuNavigasi', 'pengaturan'));
+        return view('frontend.aset_detail', compact('aset', 'menuNavigasi', 'pengaturan', 'isEnglish'));
     }
 
     /**
