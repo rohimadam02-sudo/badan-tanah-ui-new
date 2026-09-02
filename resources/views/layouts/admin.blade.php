@@ -362,7 +362,7 @@
                 <div x-data="{ open: {{ $websiteOpen ? 'true' : 'false' }} }" class="relative">
                     <button @click="open = !open"
                         class="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium transition sidebar-transition
-                    {{ $websiteOpen ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-700 hover:bg-gray-100 hover:text-[#006400]' }}"
+                    {{ $websiteOpen ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-700 hover:bg-gray-100 hover:text-[#00640]' }}"
                         aria-expanded="{{ $websiteOpen ? 'true' : 'false' }}">
                         <i class="fas fa-globe w-5 text-center {{ $websiteOpen ? 'text-white' : 'text-gray-400' }}"></i>
                         <span>Website</span>
@@ -1159,18 +1159,22 @@
                         style="display: none;" role="dialog" aria-label="Notifications">
 
                         <!-- Header -->
-                        <div class="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
-                            <span class="font-bold text-sm text-gray-900">Notifikasi</span>
+                        <div class="px-4 py-3 border-b border-gray-100 flex items-center justify-between gap-2">
+                            <span class="font-bold text-sm text-gray-900 dark:text-white shrink-0">Notifikasi</span>
+
                             <div class="flex items-center gap-2">
+                                <!-- Badge Jumlah -->
                                 <span x-show="total > 0" x-text="total"
-                                    class="text-[10px] text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full"></span>
+                                    class="inline-flex items-center justify-center min-w-[22px] h-[22px] px-1.5 text-[11px] font-bold text-white bg-red-500 dark:bg-red-600 rounded-full shadow-sm">
+                                </span>
+
+                                <!-- Tombol Tandai Semua Dibaca (PROFESIONAL) -->
                                 <button x-show="total > 0" @click="markAllAsRead()"
-                                    class="text-[10px] text-blue-600 hover:underline">
-                                    Tandai semua dibaca
+                                    class="inline-flex items-center gap-1.5 text-[11px] font-semibold text-blue-600 dark:text-blue-400 hover:text-white hover:bg-blue-600 dark:hover:bg-blue-500 px-3 py-1.5 rounded-lg border border-blue-200 dark:border-blue-500/30 bg-blue-50 dark:bg-blue-500/10 transition-all duration-200 shadow-sm">
+                                    <i class="fas fa-check-double text-xs"></i>
                                 </button>
                             </div>
                         </div>
-
                         <!-- Body -->
                         <div class="max-h-80 overflow-y-auto divide-y divide-gray-50">
                             <!-- Loading -->
@@ -1214,29 +1218,29 @@
                     </div>
                 </div>
 
-                
 
-    <!-- ========================================================= -->
-    <!-- USER AVATAR - HEADER -->
-    <!-- ========================================================= -->
-    @if ($user->foto)
-        <img src="{{ asset('storage/' . $user->foto) }}?v={{ time() }}"
-            class="w-8 h-8 rounded-full object-cover border-2 border-gray-200 hidden sm:block"
-            alt="Profile photo of {{ $user->name }}">
-    @else
-        <div class="w-8 h-8 bg-[#006400] rounded-full flex items-center justify-center text-white font-bold text-xs hidden sm:block"
-            aria-hidden="true">
-            {{ strtoupper(substr($user->name, 0, 1)) }}
-        </div>
-    @endif
 
-    </div>
-    </header>
+                <!-- ========================================================= -->
+                <!-- USER AVATAR - HEADER -->
+                <!-- ========================================================= -->
+                @if ($user->foto)
+                    <img src="{{ asset('storage/' . $user->foto) }}?v={{ time() }}"
+                        class="w-8 h-8 rounded-full object-cover border-2 border-gray-200 hidden sm:block"
+                        alt="Profile photo of {{ $user->name }}">
+                @else
+                    <div class="w-8 h-8 bg-[#006400] rounded-full flex items-center justify-center text-white font-bold text-xs hidden sm:block"
+                        aria-hidden="true">
+                        {{ strtoupper(substr($user->name, 0, 1)) }}
+                    </div>
+                @endif
 
-    <!-- CONTENT -->
-    <main class="admin-content flex-1 overflow-y-auto p-4 sm:p-6 bg-gray-50/80" role="main">
-        @yield('content')
-    </main>
+            </div>
+        </header>
+
+        <!-- CONTENT -->
+        <main class="admin-content flex-1 overflow-y-auto p-4 sm:p-6 bg-gray-50/80" role="main">
+            @yield('content')
+        </main>
     </div>
 
     <!-- ========================================================= -->

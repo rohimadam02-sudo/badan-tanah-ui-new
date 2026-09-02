@@ -544,53 +544,53 @@
         }
 
         /* =========================================================
-           FRONTEND DARK MODE
-        ========================================================= */
-        body.dark-mode {
+   FRONTEND DARK MODE
+========================================================= */
+        body.dark {
             background-color: #111827 !important;
             color: #e5e7eb !important;
         }
 
-        body.dark-mode .bg-white {
+        body.dark .bg-white {
             background-color: #1f2937 !important;
             color: #e5e7eb !important;
         }
 
-        body.dark-mode .bg-gray-50 {
+        body.dark .bg-gray-50 {
             background-color: #111827 !important;
         }
 
-        body.dark-mode .bg-gray-100 {
+        body.dark .bg-gray-100 {
             background-color: #1f2937 !important;
         }
 
-        body.dark-mode .text-gray-900 {
+        body.dark .text-gray-900 {
             color: #f9fafb !important;
         }
 
-        body.dark-mode .text-gray-700 {
+        body.dark .text-gray-700 {
             color: #e5e7eb !important;
         }
 
-        body.dark-mode .text-gray-600 {
+        body.dark .text-gray-600 {
             color: #d1d5db !important;
         }
 
-        body.dark-mode .text-gray-500 {
+        body.dark .text-gray-500 {
             color: #9ca3af !important;
         }
 
-        body.dark-mode .border-gray-200 {
+        body.dark .border-gray-200 {
             border-color: #374151 !important;
         }
 
-        body.dark-mode .border-gray-100 {
+        body.dark .border-gray-100 {
             border-color: #374151 !important;
         }
 
-        body.dark-mode .shadow-sm,
-        body.dark-mode .shadow-md,
-        body.dark-mode .shadow-lg {
+        body.dark .shadow-sm,
+        body.dark .shadow-md,
+        body.dark .shadow-lg {
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
         }
 
@@ -613,11 +613,11 @@
             background: #f3f4f6;
         }
 
-        body.dark-mode #darkModeToggle {
+        body.dark #darkModeToggle {
             color: #facc15;
         }
 
-        body.dark-mode #darkModeToggle:hover {
+        body.dark #darkModeToggle:hover {
             background: #374151;
         }
     </style>
@@ -804,13 +804,7 @@
             </a>
         </div>
 
-        <!-- Footer Auth -->
-        <div class="mobile-nav-footer">
-            <a href="<?php echo e(route('login')); ?>" class="btn-nav btn-nav-login">
-                <i class="fas fa-sign-in-alt" aria-hidden="true"></i> <?php echo e($menuLabels['login']); ?>
 
-            </a>
-        </div>
     </nav>
 
     <!-- ========================================================= -->
@@ -1210,10 +1204,10 @@
         });
     </script>
 
-    <!-- ========================================================= -->
-    <!-- FRONTEND DARK MODE -->
-    <!-- ========================================================= -->
     <script>
+        // =========================================================
+        // FRONTEND DARK MODE
+        // =========================================================
         document.addEventListener('DOMContentLoaded', function() {
             const darkToggle = document.getElementById('darkModeToggle');
             const darkIcon = document.getElementById('darkModeIconFrontend');
@@ -1224,7 +1218,7 @@
             const savedMode = localStorage.getItem('frontendDarkMode');
 
             if (savedMode === 'true') {
-                document.body.classList.add('dark-mode');
+                document.body.classList.add('dark');
                 if (darkIcon) {
                     darkIcon.classList.remove('fa-moon');
                     darkIcon.classList.add('fa-sun');
@@ -1232,8 +1226,8 @@
             }
 
             darkToggle.addEventListener('click', function() {
-                document.body.classList.toggle('dark-mode');
-                const active = document.body.classList.contains('dark-mode');
+                document.body.classList.toggle('dark');
+                const active = document.body.classList.contains('dark');
                 localStorage.setItem('frontendDarkMode', active);
 
                 if (darkIcon) {

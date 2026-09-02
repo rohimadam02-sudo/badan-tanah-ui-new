@@ -14,7 +14,7 @@
             <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight">
                 Kontak
             </h1>
-            <div class="h-1 w-20 bg-blue-500 mt-5 mb-5 rounded-full"></div>
+            <div class="h-1 w-20 mt-5 mb-5 rounded-full"></div>
             <p class="text-blue-100 text-sm md:text-base leading-relaxed max-w-2xl">
                 Hubungi kami untuk informasi lebih lanjut mengenai
                 Badan Bank Tanah dan pengelolaan aset tanah.
@@ -88,7 +88,7 @@
                                 </label>
                                 <input type="text" name="nama" value="<?php echo e(old('nama')); ?>"
                                     placeholder="Masukkan nama Anda"
-                                    class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#006400]/30 focus:border-[#006400] transition"
+                                    class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm text-black placeholder:text-black focus:ring-2 focus:ring-black focus:border-black transition"
                                     required>
                             </div>
 
@@ -98,7 +98,7 @@
                                 </label>
                                 <input type="email" name="email" value="<?php echo e(old('email')); ?>"
                                     placeholder="Masukkan email Anda"
-                                    class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#006400]/30 focus:border-[#006400] transition"
+                                    class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm text-black placeholder:text-black focus:ring-2 focus:ring-black focus:border-black transition"
                                     required>
                             </div>
                         </div>
@@ -109,7 +109,7 @@
                             </label>
                             <input type="text" name="telepon" value="<?php echo e(old('telepon')); ?>"
                                 placeholder="Masukkan nomor telepon Anda"
-                                class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#006400]/30 focus:border-[#006400] transition"
+                                class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm text-black placeholder:text-black focus:ring-2 focus:ring-black focus:border-black transition"
                                 required>
                         </div>
 
@@ -119,13 +119,13 @@
                             </label>
                             <textarea name="pesan" rows="5"
                                 placeholder="Tulis pesan Anda di sini..."
-                                class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#006400]/30 focus:border-[#006400] transition resize-y"
+                                class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm text-black placeholder:text-black focus:ring-2 focus:ring-black focus:border-black transition"
                                 required><?php echo e(old('pesan')); ?></textarea>
                         </div>
 
                         <div class="mt-6">
                             <button type="submit"
-                                class="w-full sm:w-auto bg-[#006400] hover:bg-[#005500] text-white px-8 py-3 rounded-xl font-bold text-sm transition shadow-md hover:shadow-lg">
+                                class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm text-black placeholder:text-black focus:ring-2 focus:ring-black focus:border-black transition"
                                 <i class="fas fa-paper-plane mr-2"></i>
                                 Kirim Pesan
                             </button>
