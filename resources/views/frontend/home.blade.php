@@ -5,30 +5,23 @@
 @section('content')
 
 <!-- ========================================================= -->
-<!-- HERO SLIDER -->
-<!-- ========================================================= -->
+<!-- HERO VIDEO - SINGLE BACKGROUND -->
 <div id="heroSlider" class="relative h-[400px] sm:h-[500px] md:h-[600px] lg:h-[650px] overflow-hidden select-none">
 
-    <!-- Slide 1 -->
-    <div class="hero-slide absolute inset-0 bg-cover bg-center opacity-100 transition-opacity duration-700"
-        style="background-image: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=2000&auto=format&fit=crop');">
-    </div>
+    <video
+        id="heroVideo"
+        class="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="auto"
+        aria-hidden="true">
+        <source src="{{ asset('background-vid.mp4') }}" type="video/mp4">
+    </video>
 
-    <!-- Slide 2 -->
-    <div class="hero-slide absolute inset-0 bg-cover bg-center opacity-0 transition-opacity duration-700"
-        style="background-image: url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=2000&auto=format&fit=crop');">
-    </div>
+    <div class="absolute inset-0 bg-gradient-to-r from-[#0B2A4A]/90 via-[#0B2A4A]/60 to-transparent z-10"></div>
 
-    <!-- Slide 3 -->
-    <div class="hero-slide absolute inset-0 bg-cover bg-center opacity-0 transition-opacity duration-700"
-        style="background-image: url('https://images.unsplash.com/photo-1500534623283-312aade485b7?q=80&w=2000&auto=format&fit=crop');">
-    </div>
-
-    <!-- Overlay -->
-    <div class="absolute inset-0 bg-gradient-to-r from-[#0B2A4A]/90 via-[#0B2A4A]/60 to-transparent z-10">
-    </div>
-
-    <!-- Konten Hero -->
     <div class="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col justify-center">
         <span class="text-blue-200 text-xs sm:text-sm font-semibold uppercase tracking-widest mb-2 sm:mb-4">
             Badan Bank Tanah
@@ -52,33 +45,13 @@
 
         <div class="flex flex-wrap items-center gap-3 sm:gap-4">
             <a href="{{ $pengaturan->tombol_link ?? '/aset' }}"
-                class="btn-primary px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-bold text-sm sm:text-base transition inline-block">
+               class="btn-primary px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-bold text-sm sm:text-base transition inline-block">
                 {{ $pengaturan->tombol_text ?? ($isEnglish ? 'Learn More' : 'Selengkapnya') }}
             </a>
         </div>
-
-        <!-- Dots -->
-        <div class="flex items-center gap-2 mt-6 sm:mt-8">
-            <button type="button" class="hero-dot w-2.5 h-2.5 rounded-full bg-white transition-all duration-300" data-slide="0"></button>
-            <button type="button" class="hero-dot w-2.5 h-2.5 rounded-full bg-white/50 transition-all duration-300" data-slide="1"></button>
-            <button type="button" class="hero-dot w-2.5 h-2.5 rounded-full bg-white/50 transition-all duration-300" data-slide="2"></button>
-        </div>
     </div>
 
-    <!-- Tombol Panah -->
-    <button type="button" id="heroPrev"
-        class="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 z-30 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-black/30 hover:bg-black/50 text-white flex items-center justify-center transition-all duration-300 hover:scale-110 backdrop-blur-sm border border-white/10">
-        <i class="fas fa-chevron-left text-xs sm:text-base"></i>
-    </button>
-
-    <button type="button" id="heroNext"
-        class="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 z-30 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-black/30 hover:bg-black/50 text-white flex items-center justify-center transition-all duration-300 hover:scale-110 backdrop-blur-sm border border-white/10">
-        <i class="fas fa-chevron-right text-xs sm:text-base"></i>
-    </button>
-
 </div>
-
-<!-- ========================================================= -->
 <!-- STATISTIK - DATA REAL DARI DATABASE -->
 <!-- ========================================================= -->
 @php
@@ -436,371 +409,21 @@
 
 @push('scripts')
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // =========================================================
-    // HERO SLIDER
-    // =========================================================
-    const slides = document.querySelectorAll('.hero-slide');
-    const dots = document.querySelectorAll('.hero-dot');
-    const prevBtn = document.getElementById('heroPrev');
-    const nextBtn = document.getElementById('heroNext');
-    const sliderContainer = document.getElementById('heroSlider');
+document.addEventListener('DOMContentLoaded', function () {
+    const video = document.getElementById('heroVideo');
 
-    if (!slides.length) return;
+    if (video) {
+        video.muted = true;
+        video.loop = true;
+        video.playsInline = true;
 
-    let currentSlide = 0;
-    let slideInterval;
-    let isDragging = false;
-    let startX = 0;
-    let currentX = 0;
-    let isTransitioning = false;
-    let touchStartX = 0;
-    let touchStartY = 0;
-    let isSwiping = false;
+        const playVideo = () => {
+            video.play().catch(() => {});
+        };
 
-    const totalSlides = slides.length;
-    const slideIntervalTime = 5000;
-
-    function goToSlide(index) {
-        if (isTransitioning) return;
-        if (index < 0) index = totalSlides - 1;
-        if (index >= totalSlides) index = 0;
-
-        isTransitioning = true;
-
-        slides.forEach((slide, i) => {
-            slide.style.opacity = i === index ? '1' : '0';
-            slide.style.transition = 'opacity 0.6s ease';
-        });
-
-        dots.forEach((dot, i) => {
-            if (i === index) {
-                dot.classList.remove('bg-white/50');
-                dot.classList.add('bg-white');
-            } else {
-                dot.classList.remove('bg-white');
-                dot.classList.add('bg-white/50');
-            }
-        });
-
-        currentSlide = index;
-
-        setTimeout(() => {
-            isTransitioning = false;
-        }, 600);
+        playVideo();
+        document.addEventListener('touchstart', playVideo, { once: true });
     }
-
-    function nextSlide() {
-        goToSlide(currentSlide + 1);
-    }
-
-    function prevSlide() {
-        goToSlide(currentSlide - 1);
-    }
-
-    function startAutoSlide() {
-        stopAutoSlide();
-        slideInterval = setInterval(nextSlide, slideIntervalTime);
-    }
-
-    function stopAutoSlide() {
-        if (slideInterval) {
-            clearInterval(slideInterval);
-            slideInterval = null;
-        }
-    }
-
-    function resetAutoSlide() {
-        stopAutoSlide();
-        startAutoSlide();
-    }
-
-    if (prevBtn) {
-        prevBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            prevSlide();
-            resetAutoSlide();
-        });
-    }
-
-    if (nextBtn) {
-        nextBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            nextSlide();
-            resetAutoSlide();
-        });
-    }
-
-    dots.forEach((dot, index) => {
-        dot.addEventListener('click', function() {
-            goToSlide(index);
-            resetAutoSlide();
-        });
-    });
-
-    if (sliderContainer) {
-        sliderContainer.addEventListener('mousedown', function(e) {
-            if (e.target.closest('button, a')) return;
-            isDragging = true;
-            startX = e.clientX;
-            currentX = 0;
-            stopAutoSlide();
-            sliderContainer.style.cursor = 'grabbing';
-        });
-
-        sliderContainer.addEventListener('mousemove', function(e) {
-            if (!isDragging) return;
-            currentX = e.clientX - startX;
-        });
-
-        sliderContainer.addEventListener('mouseup', function(e) {
-            if (!isDragging) return;
-            isDragging = false;
-            sliderContainer.style.cursor = '';
-            const diff = currentX;
-            const threshold = 50;
-
-            if (diff > threshold) {
-                prevSlide();
-            } else if (diff < -threshold) {
-                nextSlide();
-            }
-
-            resetAutoSlide();
-            currentX = 0;
-        });
-
-        sliderContainer.addEventListener('mouseleave', function() {
-            if (isDragging) {
-                isDragging = false;
-                sliderContainer.style.cursor = '';
-                resetAutoSlide();
-            }
-        });
-
-        sliderContainer.addEventListener('touchstart', function(e) {
-            touchStartX = e.changedTouches[0].screenX;
-            touchStartY = e.changedTouches[0].screenY;
-            isSwiping = false;
-            stopAutoSlide();
-        }, { passive: true });
-
-        sliderContainer.addEventListener('touchmove', function(e) {
-            const touchEndX = e.changedTouches[0].screenX;
-            const touchEndY = e.changedTouches[0].screenY;
-            const diffX = touchStartX - touchEndX;
-            const diffY = touchStartY - touchEndY;
-
-            if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 10) {
-                isSwiping = true;
-                e.preventDefault();
-            }
-        }, { passive: false });
-
-        sliderContainer.addEventListener('touchend', function(e) {
-            if (!isSwiping) {
-                resetAutoSlide();
-                return;
-            }
-            const touchEndX = e.changedTouches[0].screenX;
-            const diff = touchStartX - touchEndX;
-            const threshold = 50;
-
-            if (diff > threshold) {
-                nextSlide();
-            } else if (diff < -threshold) {
-                prevSlide();
-            }
-
-            resetAutoSlide();
-        }, { passive: true });
-
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'ArrowLeft') {
-                prevSlide();
-                resetAutoSlide();
-            } else if (e.key === 'ArrowRight') {
-                nextSlide();
-                resetAutoSlide();
-            }
-        });
-    }
-
-    goToSlide(0);
-    startAutoSlide();
-
-    if (sliderContainer) {
-        sliderContainer.addEventListener('mouseenter', stopAutoSlide);
-        sliderContainer.addEventListener('mouseleave', startAutoSlide);
-    }
-
-    // =========================================================
-    // ASSET SLIDER
-    // =========================================================
-    const slider = document.getElementById('assetSlider');
-    const assetDots = document.querySelectorAll('.asset-dot');
-    const cards = document.querySelectorAll('.asset-card');
-
-    if (slider && cards.length && assetDots.length) {
-        let currentIndex = 0;
-        const totalSlides = cards.length;
-        let assetInterval;
-
-        function slideAssets(index) {
-            if (index < 0) index = 0;
-            if (index >= totalSlides) index = totalSlides - 1;
-            const cardWidth = cards[0].offsetWidth + 12;
-            const offset = cardWidth * index;
-            slider.style.transform = `translateX(-${offset}px)`;
-            assetDots.forEach((dot, i) => {
-                if (i === index) {
-                    dot.classList.remove('bg-gray-300');
-                    dot.classList.add('bg-blue-700');
-                } else {
-                    dot.classList.remove('bg-blue-700');
-                    dot.classList.add('bg-gray-300');
-                }
-            });
-            currentIndex = index;
-        }
-
-        function nextAssetSlide() {
-            let next = currentIndex + 1;
-            if (next >= totalSlides) next = 0;
-            slideAssets(next);
-        }
-
-        function startAssetSlider() {
-            clearInterval(assetInterval);
-            assetInterval = setInterval(nextAssetSlide, 3000);
-        }
-
-        function stopAssetSlider() {
-            clearInterval(assetInterval);
-        }
-
-        assetDots.forEach((dot) => {
-            dot.addEventListener('click', function() {
-                const index = Number(this.dataset.slide);
-                slideAssets(index);
-                startAssetSlider();
-            });
-        });
-
-        const assetContainer = slider.closest('.relative');
-        if (assetContainer) {
-            assetContainer.addEventListener('mouseenter', stopAssetSlider);
-            assetContainer.addEventListener('mouseleave', startAssetSlider);
-        }
-
-        let assetStartX = 0;
-        let assetCurrentX = 0;
-        let isAssetDragging = false;
-
-        slider.addEventListener('mousedown', (e) => {
-            assetStartX = e.clientX;
-            isAssetDragging = true;
-            stopAssetSlider();
-        });
-
-        slider.addEventListener('mousemove', (e) => {
-            if (!isAssetDragging) return;
-            assetCurrentX = e.clientX;
-        });
-
-        slider.addEventListener('mouseup', (e) => {
-            if (!isAssetDragging) return;
-            isAssetDragging = false;
-            const diff = assetStartX - assetCurrentX;
-            if (Math.abs(diff) > 50) {
-                if (diff > 0) {
-                    nextAssetSlide();
-                } else {
-                    slideAssets(currentIndex - 1);
-                }
-            }
-            startAssetSlider();
-        });
-
-        slider.addEventListener('mouseleave', () => {
-            if (isAssetDragging) {
-                isAssetDragging = false;
-                startAssetSlider();
-            }
-        });
-
-        let assetTouchStartX = 0;
-        slider.addEventListener('touchstart', (e) => {
-            assetTouchStartX = e.touches[0].clientX;
-            stopAssetSlider();
-        });
-
-        slider.addEventListener('touchend', (e) => {
-            const touchEndX = e.changedTouches[0].clientX;
-            const diff = assetTouchStartX - touchEndX;
-            if (Math.abs(diff) > 50) {
-                if (diff > 0) {
-                    nextAssetSlide();
-                } else {
-                    slideAssets(currentIndex - 1);
-                }
-            }
-            startAssetSlider();
-        });
-
-        slideAssets(0);
-        startAssetSlider();
-
-        let resizeTimeout;
-        window.addEventListener('resize', () => {
-            clearTimeout(resizeTimeout);
-            resizeTimeout = setTimeout(() => {
-                slideAssets(currentIndex);
-            }, 200);
-        });
-    }
-
-    // =========================================================
-    // INIT MAP
-    // =========================================================
-    var map = L.map('map').setView([-2.5, 118.0], 5);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
-
-    @php
-        $markers = \App\Models\AsetTanah::whereNotNull('lat')->whereNotNull('lng')->get();
-    @endphp
-
-    var markers = [
-        @foreach ($markers as $marker)
-            {
-                lat: {{ $marker->lat }},
-                lng: {{ $marker->lng }},
-                status: '{{ $marker->status }}',
-                nama: '{{ $marker->nama_lokasi }}',
-                provinsi: '{{ $marker->provinsi }}',
-                luas: {{ $marker->luas_hektar }}
-            },
-        @endforeach
-    ];
-
-    markers.forEach(function(marker) {
-        var color = marker.status === 'Tersedia' ? '#16a34a' :
-                   (marker.status === 'Dalam Pengembangan' ? '#3b82f6' :
-                   (marker.status === 'Dalam Proses' ? '#f97316' : '#6b7280'));
-        L.circleMarker([marker.lat, marker.lng], {
-            color: color,
-            fillColor: color,
-            fillOpacity: 0.6,
-            radius: 8
-        }).addTo(map).bindPopup(`
-            <b>${marker.nama}</b><br>
-            ${marker.provinsi}<br>
-            <strong>${Number(marker.luas).toLocaleString('id-ID')} Ha</strong><br>
-            <span style="color:${color};font-weight:600">${marker.status}</span>
-        `);
-    });
 });
 </script>
 @endpush

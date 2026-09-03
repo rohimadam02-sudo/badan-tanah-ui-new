@@ -376,7 +376,7 @@
         .hamburger span {
             display: block;
             height: 2.5px;
-            background: #1f2937;
+            background: #ffffff !important;
             border-radius: 10px;
             transition: all 0.3s ease;
             transform-origin: center;
@@ -620,6 +620,73 @@
         body.dark #darkModeToggle:hover {
             background: #374151;
         }
+        @media (max-width: 1100px) {
+            #hamburgerBtn {
+                display: flex !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+                width: 40px !important;
+                height: 40px !important;
+                position: relative !important;
+                z-index: 9999 !important;
+                flex-shrink: 0 !important;
+            }
+
+            #hamburgerBtn span {
+            color: #ffffff !important;
+            background: #ffffff !important;
+
+                display: block !important;
+                width: 24px !important;
+                height: 3px !important;
+                margin: 4px auto !important;
+                background: #ffffff !important;
+            }
+        }
+
+        @media (max-width: 1023px) {
+            #hamburgerBtn span {
+                background: #1f2937 !important;
+            }
+
+            body.dark #hamburgerBtn span {
+                background: #ffffff !important;
+            }
+        }
+
+        @media (max-width: 1023px) {
+            #hamburgerBtn {
+                width: 42px !important;
+                height: 42px !important;
+                padding: 9px !important;
+                border: 0 !important;
+                border-radius: 10px !important;
+                background: transparent !important;
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                justify-content: center !important;
+                gap: 5px !important;
+                transition: background 0.2s ease, transform 0.2s ease !important;
+            }
+            #hamburgerBtn span {
+                width: 23px !important;
+                height: 2px !important;
+                margin: 0 !important;
+                border-radius: 999px !important;
+                transition: transform 0.25s ease, opacity 0.2s ease, background 0.2s ease !important;
+            }
+            #hamburgerBtn:hover {
+                background: rgba(15, 23, 42, 0.08) !important;
+            }
+            body.dark #hamburgerBtn:hover {
+                background: rgba(255, 255, 255, 0.12) !important;
+            }
+            #hamburgerBtn:active {
+                transform: scale(0.94) !important;
+            }
+        }
+
     </style>
 </head>
 
@@ -968,7 +1035,7 @@
                     </button>
 
                     <!-- Hamburger Menu (Mobile) -->
-                    <button class="lg:hidden hamburger" id="hamburgerBtn" aria-label="Toggle navigation menu"
+                    <button class="hamburger" id="hamburgerBtn" aria-label="Toggle navigation menu"
                         aria-expanded="false">
                         <span></span>
                         <span></span>
