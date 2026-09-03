@@ -5,18 +5,23 @@
 @section('content')
 
 <!-- ========================================================= -->
-<!-- HERO SINGLE BACKGROUND -->
-<div id="heroSlider"
-     class="relative h-[400px] sm:h-[500px] md:h-[600px] lg:h-[650px] overflow-hidden select-none"
-     style="background-image: url('/background-awal.jpg'); background-size: cover; background-position: center;">
+<!-- HERO VIDEO - SINGLE BACKGROUND -->
+<div id="heroSlider" class="relative h-[400px] sm:h-[500px] md:h-[600px] lg:h-[650px] overflow-hidden select-none">
 
-    <!-- Animated cloud overlay -->
-    <div class="hero-clouds" aria-hidden="true"></div>
+    <video
+        id="heroVideo"
+        class="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="auto"
+        aria-hidden="true">
+        <source src="{{ asset('background-vid.mp4') }}" type="video/mp4">
+    </video>
 
-    <!-- Overlay agar teks tetap terbaca -->
-    <div class="absolute inset-0 bg-gradient-to-r from-[#0B2A4A]/85 via-[#0B2A4A]/45 to-transparent z-10"></div>
+    <div class="absolute inset-0 bg-gradient-to-r from-[#0B2A4A]/90 via-[#0B2A4A]/60 to-transparent z-10"></div>
 
-    <!-- Konten hero -->
     <div class="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col justify-center">
         <span class="text-blue-200 text-xs sm:text-sm font-semibold uppercase tracking-widest mb-2 sm:mb-4">
             Badan Bank Tanah
@@ -45,6 +50,7 @@
             </a>
         </div>
     </div>
+
 </div>
 <!-- STATISTIK - DATA REAL DARI DATABASE -->
 <!-- ========================================================= -->
@@ -401,159 +407,373 @@
 
 @endsection
 
-<style>
-#heroSlider {
-    position: relative;
-    overflow: hidden;
-}
-
-#heroSlider .hero-clouds {
-    position: absolute;
-    inset: 0;
-    z-index: 10;
-    pointer-events: none;
-    opacity: 0.42;
-    background-image: url('/background_awan.png');
-    background-repeat: repeat-x;
-    background-position: 0 15%;
-    background-size: auto 48%;
-    animation: moveHeroClouds 110s linear infinite;
-}
-
-@keyframes moveHeroClouds {
-    from {
-        background-position: 0 15%;
-    }
-
-    to {
-        background-position: -2200px 15%;
-    }
-}
-
-@media (max-width: 640px) {
-    #heroSlider .hero-clouds {
-        background-size: auto 38%;
-        opacity: 0.32;
-        animation-duration: 130s;
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    #heroSlider .hero-clouds {
-        animation: none;
-    }
-}
-</style>
-
-@push("scripts")
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    console.log("🚀 Memulai inisialisasi peta...");
-
-    // Cek apakah Leaflet tersedia
-    if (typeof L === "undefined") {
-        console.error("❌ Leaflet tidak ditemukan! Pastikan leaflet.js sudah dimuat.");
-        return;
-    }
-
-    // Ambil elemen map
-    var mapElement = document.getElementById("map");
-    if (!mapElement) {
-        console.error("❌ Element #map tidak ditemukan!");
-        return;
-    }
-
-    console.log("✅ Element map ditemukan, lebar: " + mapElement.offsetWidth + "px");
-
-    try {
-        // Inisialisasi peta
-        var map = L.map("map").setView([-2.5, 118.0], 5);
-
-        // Tambahkan tile layer
-        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-            attribution: "&copy; OpenStreetMap contributors",
-            maxZoom: 19
-        }).addTo(map);
-
-        // Data markers dari database
-        var markers = @json($markers ?? []);
-
-        console.log("📌 Jumlah marker: " + markers.length);
-
-        // Jika ada marker, tambahkan ke peta
-        if (markers.length > 0) {
-            markers.forEach(function(marker, index) {
-                if (marker.lat && marker.lng) {
-                    var color = marker.status === "Tersedia" ? "#16a34a" :
-                               (marker.status === "Dalam Pengembangan" ? "#3b82f6" :
-                               (marker.status === "Dalam Proses" ? "#f97316" : "#6b7280"));
-
-                    var popupContent = `
-                        <div style="min-width:200px;font-family:Inter,sans-serif;padding:4px 0;">
-                            <div style="font-weight:700;font-size:15px;color:#111827;margin-bottom:4px;">
-                                ${marker.nama_lokasi || "Aset Tanah"}
-                            </div>
-                            <div style="font-size:12px;color:#6B7280;margin-bottom:8px;">
-                                📍 ${marker.provinsi || ""}${marker.kabupaten ? ", " + marker.kabupaten : ""}
-                            </div>
-                            <div style="background:#f0fdf4;padding:10px;border-radius:8px;margin-bottom:8px;">
-                                <div style="font-size:9px;color:#6B7280;text-transform:uppercase;">Total Luas</div>
-                                <div style="font-size:16px;font-weight:700;color:#006400;">
-                                    ${Number(marker.luas_hektar).toLocaleString("id-ID")} Ha
-                                </div>
-                            </div>
-                            <div style="font-size:12px;color:#4B5563;line-height:1.8;">
-                                <strong>Status:</strong> <span style="color:${color};font-weight:600;">${marker.status || "-"}</span><br>
-                                <strong>Peruntukan:</strong> ${marker.peruntukan || "-"}<br>
-                                <strong>Skema:</strong> ${marker.skema || "-"}
-                            </div>
-                        </div>
-                    `;
-
-                    L.circleMarker([marker.lat, marker.lng], {
-                        color: color,
-                        fillColor: color,
-                        fillOpacity: 0.7,
-                        radius: 8,
-                        weight: 2,
-                        opacity: 1
-                    }).addTo(map).bindPopup(popupContent);
-
-                    console.log("✅ Marker added: " + (marker.nama_lokasi || "Unknown"));
-                }
-            });
-
-            // Fit bounds ke semua marker
-            var bounds = markers.filter(m => m.lat && m.lng).map(m => [m.lat, m.lng]);
-            if (bounds.length > 0) {
-                map.fitBounds(bounds, { padding: [30, 30], maxZoom: 6 });
-                console.log("✅ Peta di-zoom ke semua marker");
-            }
-        } else {
-            console.log("ℹ️ Tidak ada marker untuk ditampilkan");
-        }
-
-        // Resize map setelah 500ms
-        setTimeout(function() {
-            map.invalidateSize();
-            console.log("✅ Peta di-resize");
-        }, 500);
-
-        console.log("✅ Peta berhasil diinisialisasi!");
-    } catch (e) {
-        console.error("❌ Error inisialisasi peta:", e);
-    }
-});
-</script>
-@endpush
-
 @push('scripts')
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    const hero = document.getElementById('heroSlider');
-    if (hero) {
-        hero.classList.add('hero-single-background');
+document.addEventListener('DOMContentLoaded', function() {
+    // =========================================================
+    // HERO SLIDER
+    // =========================================================
+    const slides = document.querySelectorAll('.hero-slide');
+    const dots = document.querySelectorAll('.hero-dot');
+    const prevBtn = document.getElementById('heroPrev');
+    const nextBtn = document.getElementById('heroNext');
+    const sliderContainer = document.getElementById('heroSlider');
+
+    if (!slides.length) return;
+
+    let currentSlide = 0;
+    let slideInterval;
+    let isDragging = false;
+    let startX = 0;
+    let currentX = 0;
+    let isTransitioning = false;
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let isSwiping = false;
+
+    const totalSlides = slides.length;
+    const slideIntervalTime = 5000;
+
+    function goToSlide(index) {
+        if (isTransitioning) return;
+        if (index < 0) index = totalSlides - 1;
+        if (index >= totalSlides) index = 0;
+
+        isTransitioning = true;
+
+        slides.forEach((slide, i) => {
+            slide.style.opacity = i === index ? '1' : '0';
+            slide.style.transition = 'opacity 0.6s ease';
+        });
+
+        dots.forEach((dot, i) => {
+            if (i === index) {
+                dot.classList.remove('bg-white/50');
+                dot.classList.add('bg-white');
+            } else {
+                dot.classList.remove('bg-white');
+                dot.classList.add('bg-white/50');
+            }
+        });
+
+        currentSlide = index;
+
+        setTimeout(() => {
+            isTransitioning = false;
+        }, 600);
     }
+
+    function nextSlide() {
+        goToSlide(currentSlide + 1);
+    }
+
+    function prevSlide() {
+        goToSlide(currentSlide - 1);
+    }
+
+    function startAutoSlide() {
+        stopAutoSlide();
+        slideInterval = setInterval(nextSlide, slideIntervalTime);
+    }
+
+    function stopAutoSlide() {
+        if (slideInterval) {
+            clearInterval(slideInterval);
+            slideInterval = null;
+        }
+    }
+
+    function resetAutoSlide() {
+        stopAutoSlide();
+        startAutoSlide();
+    }
+
+    if (prevBtn) {
+        prevBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            prevSlide();
+            resetAutoSlide();
+        });
+    }
+
+    if (nextBtn) {
+        nextBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            nextSlide();
+            resetAutoSlide();
+        });
+    }
+
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', function() {
+            goToSlide(index);
+            resetAutoSlide();
+        });
+    });
+
+    if (sliderContainer) {
+        sliderContainer.addEventListener('mousedown', function(e) {
+            if (e.target.closest('button, a')) return;
+            isDragging = true;
+            startX = e.clientX;
+            currentX = 0;
+            stopAutoSlide();
+            sliderContainer.style.cursor = 'grabbing';
+        });
+
+        sliderContainer.addEventListener('mousemove', function(e) {
+            if (!isDragging) return;
+            currentX = e.clientX - startX;
+        });
+
+        sliderContainer.addEventListener('mouseup', function(e) {
+            if (!isDragging) return;
+            isDragging = false;
+            sliderContainer.style.cursor = '';
+            const diff = currentX;
+            const threshold = 50;
+
+            if (diff > threshold) {
+                prevSlide();
+            } else if (diff < -threshold) {
+                nextSlide();
+            }
+
+            resetAutoSlide();
+            currentX = 0;
+        });
+
+        sliderContainer.addEventListener('mouseleave', function() {
+            if (isDragging) {
+                isDragging = false;
+                sliderContainer.style.cursor = '';
+                resetAutoSlide();
+            }
+        });
+
+        sliderContainer.addEventListener('touchstart', function(e) {
+            touchStartX = e.changedTouches[0].screenX;
+            touchStartY = e.changedTouches[0].screenY;
+            isSwiping = false;
+            stopAutoSlide();
+        }, { passive: true });
+
+        sliderContainer.addEventListener('touchmove', function(e) {
+            const touchEndX = e.changedTouches[0].screenX;
+            const touchEndY = e.changedTouches[0].screenY;
+            const diffX = touchStartX - touchEndX;
+            const diffY = touchStartY - touchEndY;
+
+            if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 10) {
+                isSwiping = true;
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        sliderContainer.addEventListener('touchend', function(e) {
+            if (!isSwiping) {
+                resetAutoSlide();
+                return;
+            }
+            const touchEndX = e.changedTouches[0].screenX;
+            const diff = touchStartX - touchEndX;
+            const threshold = 50;
+
+            if (diff > threshold) {
+                nextSlide();
+            } else if (diff < -threshold) {
+                prevSlide();
+            }
+
+            resetAutoSlide();
+        }, { passive: true });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowLeft') {
+                prevSlide();
+                resetAutoSlide();
+            } else if (e.key === 'ArrowRight') {
+                nextSlide();
+                resetAutoSlide();
+            }
+        });
+    }
+
+    goToSlide(0);
+    startAutoSlide();
+
+    if (sliderContainer) {
+        sliderContainer.addEventListener('mouseenter', stopAutoSlide);
+        sliderContainer.addEventListener('mouseleave', startAutoSlide);
+    }
+
+    // =========================================================
+    // ASSET SLIDER
+    // =========================================================
+    const slider = document.getElementById('assetSlider');
+    const assetDots = document.querySelectorAll('.asset-dot');
+    const cards = document.querySelectorAll('.asset-card');
+
+    if (slider && cards.length && assetDots.length) {
+        let currentIndex = 0;
+        const totalSlides = cards.length;
+        let assetInterval;
+
+        function slideAssets(index) {
+            if (index < 0) index = 0;
+            if (index >= totalSlides) index = totalSlides - 1;
+            const cardWidth = cards[0].offsetWidth + 12;
+            const offset = cardWidth * index;
+            slider.style.transform = `translateX(-${offset}px)`;
+            assetDots.forEach((dot, i) => {
+                if (i === index) {
+                    dot.classList.remove('bg-gray-300');
+                    dot.classList.add('bg-blue-700');
+                } else {
+                    dot.classList.remove('bg-blue-700');
+                    dot.classList.add('bg-gray-300');
+                }
+            });
+            currentIndex = index;
+        }
+
+        function nextAssetSlide() {
+            let next = currentIndex + 1;
+            if (next >= totalSlides) next = 0;
+            slideAssets(next);
+        }
+
+        function startAssetSlider() {
+            clearInterval(assetInterval);
+            assetInterval = setInterval(nextAssetSlide, 3000);
+        }
+
+        function stopAssetSlider() {
+            clearInterval(assetInterval);
+        }
+
+        assetDots.forEach((dot) => {
+            dot.addEventListener('click', function() {
+                const index = Number(this.dataset.slide);
+                slideAssets(index);
+                startAssetSlider();
+            });
+        });
+
+        const assetContainer = slider.closest('.relative');
+        if (assetContainer) {
+            assetContainer.addEventListener('mouseenter', stopAssetSlider);
+            assetContainer.addEventListener('mouseleave', startAssetSlider);
+        }
+
+        let assetStartX = 0;
+        let assetCurrentX = 0;
+        let isAssetDragging = false;
+
+        slider.addEventListener('mousedown', (e) => {
+            assetStartX = e.clientX;
+            isAssetDragging = true;
+            stopAssetSlider();
+        });
+
+        slider.addEventListener('mousemove', (e) => {
+            if (!isAssetDragging) return;
+            assetCurrentX = e.clientX;
+        });
+
+        slider.addEventListener('mouseup', (e) => {
+            if (!isAssetDragging) return;
+            isAssetDragging = false;
+            const diff = assetStartX - assetCurrentX;
+            if (Math.abs(diff) > 50) {
+                if (diff > 0) {
+                    nextAssetSlide();
+                } else {
+                    slideAssets(currentIndex - 1);
+                }
+            }
+            startAssetSlider();
+        });
+
+        slider.addEventListener('mouseleave', () => {
+            if (isAssetDragging) {
+                isAssetDragging = false;
+                startAssetSlider();
+            }
+        });
+
+        let assetTouchStartX = 0;
+        slider.addEventListener('touchstart', (e) => {
+            assetTouchStartX = e.touches[0].clientX;
+            stopAssetSlider();
+        });
+
+        slider.addEventListener('touchend', (e) => {
+            const touchEndX = e.changedTouches[0].clientX;
+            const diff = assetTouchStartX - touchEndX;
+            if (Math.abs(diff) > 50) {
+                if (diff > 0) {
+                    nextAssetSlide();
+                } else {
+                    slideAssets(currentIndex - 1);
+                }
+            }
+            startAssetSlider();
+        });
+
+        slideAssets(0);
+        startAssetSlider();
+
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                slideAssets(currentIndex);
+            }, 200);
+        });
+    }
+
+    // =========================================================
+    // INIT MAP
+    // =========================================================
+    var map = L.map('map').setView([-2.5, 118.0], 5);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    @php
+        $markers = \App\Models\AsetTanah::whereNotNull('lat')->whereNotNull('lng')->get();
+    @endphp
+
+    var markers = [
+        @foreach ($markers as $marker)
+            {
+                lat: {{ $marker->lat }},
+                lng: {{ $marker->lng }},
+                status: '{{ $marker->status }}',
+                nama: '{{ $marker->nama_lokasi }}',
+                provinsi: '{{ $marker->provinsi }}',
+                luas: {{ $marker->luas_hektar }}
+            },
+        @endforeach
+    ];
+
+    markers.forEach(function(marker) {
+        var color = marker.status === 'Tersedia' ? '#16a34a' :
+                   (marker.status === 'Dalam Pengembangan' ? '#3b82f6' :
+                   (marker.status === 'Dalam Proses' ? '#f97316' : '#6b7280'));
+        L.circleMarker([marker.lat, marker.lng], {
+            color: color,
+            fillColor: color,
+            fillOpacity: 0.6,
+            radius: 8
+        }).addTo(map).bindPopup(`
+            <b>${marker.nama}</b><br>
+            ${marker.provinsi}<br>
+            <strong>${Number(marker.luas).toLocaleString('id-ID')} Ha</strong><br>
+            <span style="color:${color};font-weight:600">${marker.status}</span>
+        `);
+    });
 });
 </script>
 @endpush

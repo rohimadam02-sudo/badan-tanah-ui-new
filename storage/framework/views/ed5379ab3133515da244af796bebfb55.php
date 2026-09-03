@@ -1,12 +1,10 @@
-@extends('layouts.admin')
+<?php $__env->startSection('title', 'Dashboard'); ?>
 
-@section('title', 'Dashboard')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 
 <div class="max-w-7xl mx-auto space-y-6">
 
-    @php
+    <?php
         $user = auth()->user();
         $role = $user->role;
         $roleLabel = [
@@ -28,7 +26,7 @@
         $publishedCount = \App\Models\Berita::where('status', 'Dipublikasikan')->count();
         $unreadCount = \App\Models\Kontak::where('is_read', 0)->count();
         $asets = \App\Models\AsetTanah::latest()->take(5)->get();
-    @endphp
+    ?>
 
     <!-- HEADER DASHBOARD -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -40,17 +38,17 @@
                 <div>
                     <h1 class="text-2xl font-bold text-gray-900">Dashboard</h1>
                     <p class="text-sm text-gray-500 mt-0.5">
-                        @if ($role == 'super_admin')
+                        <?php if($role == 'super_admin'): ?>
                             Kelola dan pantau seluruh aktivitas sistem Badan Bank Tanah.
-                        @elseif ($role == 'admin')
+                        <?php elseif($role == 'admin'): ?>
                             Kelola dan pantau aktivitas konten website Badan Bank Tanah.
-                        @elseif ($role == 'editor')
+                        <?php elseif($role == 'editor'): ?>
                             Buat dan kelola draft konten publikasi Badan Bank Tanah.
-                        @elseif ($role == 'publisher')
+                        <?php elseif($role == 'publisher'): ?>
                             Review, approve, dan publish konten publikasi Badan Bank Tanah.
-                        @else
+                        <?php else: ?>
                             Kelola dan pantau aktivitas Badan Bank Tanah.
-                        @endif
+                        <?php endif; ?>
                     </p>
                 </div>
             </div>
@@ -58,11 +56,13 @@
         <div class="flex items-center gap-3 text-sm">
             <span class="text-gray-400">
                 <i class="far fa-calendar-alt mr-1.5"></i>
-                {{ now()->format('l, d M Y') }}
+                <?php echo e(now()->format('l, d M Y')); ?>
+
             </span>
             <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-green-50 text-green-700 text-[10px] font-bold">
                 <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
-                {{ $roleLabel }}
+                <?php echo e($roleLabel); ?>
+
             </span>
         </div>
     </div>
@@ -72,9 +72,9 @@
     <!-- ========================================================= -->
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
 
-        {{-- SUPER ADMIN & ADMIN: Tambah Aset --}}
-        @if (in_array($role, ['super_admin', 'admin']))
-        <a href="{{ route('admin.aset.create') }}" 
+        
+        <?php if(in_array($role, ['super_admin', 'admin'])): ?>
+        <a href="<?php echo e(route('admin.aset.create')); ?>" 
            class="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-[#006400] transition group">
             <div class="w-10 h-10 rounded-xl bg-green-50 text-[#006400] flex items-center justify-center group-hover:bg-[#006400] group-hover:text-white transition">
                 <i class="fas fa-plus"></i>
@@ -84,11 +84,11 @@
                 <p class="text-[10px] text-gray-400">Aset Persediaan Tanah</p>
             </div>
         </a>
-        @endif
+        <?php endif; ?>
 
-        {{-- SUPER ADMIN, ADMIN, EDITOR: Tambah Berita --}}
-        @if (in_array($role, ['super_admin', 'admin', 'editor']))
-        <a href="{{ route('admin.berita.create') }}" 
+        
+        <?php if(in_array($role, ['super_admin', 'admin', 'editor'])): ?>
+        <a href="<?php echo e(route('admin.berita.create')); ?>" 
            class="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-[#006400] transition group">
             <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center group-hover:bg-[#006400] group-hover:text-white transition">
                 <i class="fas fa-plus"></i>
@@ -98,11 +98,11 @@
                 <p class="text-[10px] text-gray-400">Publikasi</p>
             </div>
         </a>
-        @endif
+        <?php endif; ?>
 
-        {{-- SUPER ADMIN & ADMIN: Tambah User --}}
-        @if (in_array($role, ['super_admin']))
-        <a href="{{ route('admin.user.create') }}" 
+        
+        <?php if(in_array($role, ['super_admin'])): ?>
+        <a href="<?php echo e(route('admin.user.create')); ?>" 
            class="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-[#006400] transition group">
             <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center group-hover:bg-[#006400] group-hover:text-white transition">
                 <i class="fas fa-user-plus"></i>
@@ -112,11 +112,11 @@
                 <p class="text-[10px] text-gray-400">Manajemen Pengguna</p>
             </div>
         </a>
-        @endif
+        <?php endif; ?>
 
-        {{-- SUPER ADMIN & ADMIN: Buat Microsite --}}
-        @if (in_array($role, ['super_admin', 'admin']))
-        <a href="{{ route('admin.microsite.create') }}" 
+        
+        <?php if(in_array($role, ['super_admin', 'admin'])): ?>
+        <a href="<?php echo e(route('admin.microsite.create')); ?>" 
            class="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-[#006400] transition group">
             <div class="w-10 h-10 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center group-hover:bg-[#006400] group-hover:text-white transition">
                 <i class="fas fa-file-lines"></i>
@@ -126,11 +126,11 @@
                 <p class="text-[10px] text-gray-400">Event / Campaign</p>
             </div>
         </a>
-        @endif
+        <?php endif; ?>
 
-        {{-- PUBLISHER: Tombol Review Berita --}}
-        @if ($role == 'publisher')
-        <a href="{{ route('admin.berita.index') }}" 
+        
+        <?php if($role == 'publisher'): ?>
+        <a href="<?php echo e(route('admin.berita.index')); ?>" 
            class="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-[#006400] transition group">
             <div class="w-10 h-10 rounded-xl bg-green-50 text-[#006400] flex items-center justify-center group-hover:bg-[#006400] group-hover:text-white transition">
                 <i class="fas fa-check-double"></i>
@@ -138,16 +138,16 @@
             <div>
                 <p class="text-sm font-bold text-gray-900">Review Berita</p>
                 <p class="text-[10px] text-gray-400">
-                    @if($pendingCount > 0)
-                        <span class="text-orange-600 font-bold">{{ $pendingCount }} menunggu</span>
-                    @else
+                    <?php if($pendingCount > 0): ?>
+                        <span class="text-orange-600 font-bold"><?php echo e($pendingCount); ?> menunggu</span>
+                    <?php else: ?>
                         Tidak ada pending
-                    @endif
+                    <?php endif; ?>
                 </p>
             </div>
         </a>
 
-        <a href="{{ route('admin.kontak.index') }}" 
+        <a href="<?php echo e(route('admin.kontak.index')); ?>" 
            class="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-[#006400] transition group">
             <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center group-hover:bg-[#006400] group-hover:text-white transition">
                 <i class="fas fa-envelope"></i>
@@ -155,19 +155,19 @@
             <div>
                 <p class="text-sm font-bold text-gray-900">Kontak Masuk</p>
                 <p class="text-[10px] text-gray-400">
-                    @if($unreadCount > 0)
-                        <span class="text-red-600 font-bold">{{ $unreadCount }} belum dibaca</span>
-                    @else
+                    <?php if($unreadCount > 0): ?>
+                        <span class="text-red-600 font-bold"><?php echo e($unreadCount); ?> belum dibaca</span>
+                    <?php else: ?>
                         Semua sudah dibaca
-                    @endif
+                    <?php endif; ?>
                 </p>
             </div>
         </a>
-        @endif
+        <?php endif; ?>
 
-        {{-- EDITOR: Tombol Buat Berita & Draft --}}
-        @if ($role == 'editor')
-        <a href="{{ route('admin.berita.create') }}" 
+        
+        <?php if($role == 'editor'): ?>
+        <a href="<?php echo e(route('admin.berita.create')); ?>" 
            class="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-[#006400] transition group">
             <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center group-hover:bg-[#006400] group-hover:text-white transition">
                 <i class="fas fa-pen"></i>
@@ -178,7 +178,7 @@
             </div>
         </a>
 
-        <a href="{{ route('admin.berita.index') }}" 
+        <a href="<?php echo e(route('admin.berita.index')); ?>" 
            class="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-[#006400] transition group">
             <div class="w-10 h-10 rounded-xl bg-yellow-50 text-yellow-600 flex items-center justify-center group-hover:bg-[#006400] group-hover:text-white transition">
                 <i class="fas fa-file-pen"></i>
@@ -186,62 +186,64 @@
             <div>
                 <p class="text-sm font-bold text-gray-900">Draft Saya</p>
                 <p class="text-[10px] text-gray-400">
-                    @php
+                    <?php
                         $myDrafts = \App\Models\Berita::where('penulis', auth()->user()->name)
                                     ->where('status_approval', 'Draft')
                                     ->count();
-                    @endphp
-                    @if($myDrafts > 0)
-                        <span class="text-yellow-600 font-bold">{{ $myDrafts }} draft</span>
-                    @else
+                    ?>
+                    <?php if($myDrafts > 0): ?>
+                        <span class="text-yellow-600 font-bold"><?php echo e($myDrafts); ?> draft</span>
+                    <?php else: ?>
                         Tidak ada draft
-                    @endif
+                    <?php endif; ?>
                 </p>
             </div>
         </a>
-        @endif
+        <?php endif; ?>
     </div>
 
     <!-- PROFIL ADMIN CARD -->
     <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:shadow-md transition">
         <div class="flex flex-col sm:flex-row sm:items-center gap-4">
-            @if ($user->foto)
-                <img src="{{ asset('storage/' . $user->foto) }}"
+            <?php if($user->foto): ?>
+                <img src="<?php echo e(asset('storage/' . $user->foto)); ?>"
                     class="w-16 h-16 rounded-full object-cover border-2 border-gray-200 flex-shrink-0"
-                    alt="{{ $user->name }}">
-            @else
+                    alt="<?php echo e($user->name); ?>">
+            <?php else: ?>
                 <div class="w-16 h-16 bg-[#006400] rounded-full flex items-center justify-center text-white font-bold text-2xl flex-shrink-0">
-                    {{ strtoupper(substr($user->name, 0, 1)) }}
+                    <?php echo e(strtoupper(substr($user->name, 0, 1))); ?>
+
                 </div>
-            @endif
+            <?php endif; ?>
 
             <div class="flex-1">
-                <h2 class="text-lg font-bold text-gray-900">{{ $user->name }}</h2>
+                <h2 class="text-lg font-bold text-gray-900"><?php echo e($user->name); ?></h2>
                 <div class="flex flex-wrap items-center gap-2 mt-0.5">
                     <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold
-                        {{ $user->role == 'super_admin' ? 'bg-purple-50 text-purple-700' :
+                        <?php echo e($user->role == 'super_admin' ? 'bg-purple-50 text-purple-700' :
                            ($user->role == 'admin' ? 'bg-blue-50 text-blue-700' :
                            ($user->role == 'editor' ? 'bg-yellow-50 text-yellow-700' :
                            ($user->role == 'publisher' ? 'bg-green-50 text-green-700' :
-                           'bg-gray-50 text-gray-500'))) }}">
-                        {{ ucfirst(str_replace('_', ' ', $user->role)) }}
+                           'bg-gray-50 text-gray-500')))); ?>">
+                        <?php echo e(ucfirst(str_replace('_', ' ', $user->role))); ?>
+
                     </span>
-                    <span class="text-xs text-gray-400">{{ $user->email }}</span>
+                    <span class="text-xs text-gray-400"><?php echo e($user->email); ?></span>
                 </div>
                 <p class="text-sm text-gray-500 mt-1.5">
-                    @if ($role == 'super_admin')
+                    <?php if($role == 'super_admin'): ?>
                         Anda memiliki akses penuh ke semua fitur.
-                    @elseif ($role == 'admin')
+                    <?php elseif($role == 'admin'): ?>
                         Anda dapat mengelola konten website.
-                    @elseif ($role == 'editor')
+                    <?php elseif($role == 'editor'): ?>
                         Anda dapat membuat dan mengedit draft konten.
-                    @elseif ($role == 'publisher')
+                    <?php elseif($role == 'publisher'): ?>
                         Anda dapat mereview dan mempublikasikan konten.
-                    @endif
+                    <?php endif; ?>
                 </p>
             </div>
 
-            <a href="{{ route('admin.user.edit', ['id' => 1]) }}" class="text-sm text-[#006400] hover:underline font-semibold">
+            <a href="<?php echo e(route('admin.user.edit', ['id' => 1])); ?>" class="text-sm text-[#006400] hover:underline font-semibold">
                 <i class="fas fa-pen mr-1"></i> Edit Profil
             </a>
         </div>
@@ -254,31 +256,31 @@
                 <i class="fas fa-shield-halved text-green-700 text-lg"></i>
             </div>
             <div class="text-sm text-green-800 leading-relaxed">
-                @if ($role == 'super_admin')
+                <?php if($role == 'super_admin'): ?>
                     <strong class="text-base">Selamat datang, Super Admin! 🚀</strong><br>
                     Anda memiliki akses penuh ke semua fitur termasuk <strong>Manajemen Pengguna</strong>,
                     <strong>Konfigurasi Sistem</strong>, dan <strong>Integrasi</strong>.
-                @elseif ($role == 'admin')
+                <?php elseif($role == 'admin'): ?>
                     <strong class="text-base">Selamat datang, Admin! 📋</strong><br>
                     Anda dapat mengelola <strong>Aset</strong>, <strong>Halaman Statis</strong>,
                     <strong>Menu Navigasi</strong>, <strong>Footer</strong>, <strong>FAQ</strong>,
                     <strong>Karier</strong>, dan <strong>Kontak</strong>.
-                @elseif ($role == 'editor')
+                <?php elseif($role == 'editor'): ?>
                     <strong class="text-base">Selamat datang, Editor! ✍️</strong><br>
                     Anda dapat membuat dan mengedit draft <strong>Berita</strong>, <strong>Siaran Pers</strong>,
                     dan <strong>Pengumuman</strong>. Konten yang sudah siap harus
                     <strong>disubmit</strong> untuk approval ke Publisher.
-                @elseif ($role == 'publisher')
+                <?php elseif($role == 'publisher'): ?>
                     <strong class="text-base">Selamat datang, Publisher! ✅</strong><br>
                     Anda dapat <strong>mereview</strong>, <strong>menyetujui</strong>, dan
                     <strong>mempublikasikan</strong> konten Publikasi yang sudah disubmit oleh Editor.
-                    @if($pendingCount > 0)
-                        <br><span class="text-orange-600 font-bold">🔔 {{ $pendingCount }} berita menunggu approval!</span>
-                    @endif
-                @else
+                    <?php if($pendingCount > 0): ?>
+                        <br><span class="text-orange-600 font-bold">🔔 <?php echo e($pendingCount); ?> berita menunggu approval!</span>
+                    <?php endif; ?>
+                <?php else: ?>
                     <strong class="text-base">Selamat datang!</strong><br>
                     Anda hanya dapat mengakses beberapa fitur terbatas.
-                @endif
+                <?php endif; ?>
             </div>
         </div>
     </div>
@@ -289,7 +291,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">Total Aset</p>
-                    <h3 class="text-2xl font-bold text-gray-900 mt-1.5">{{ number_format($totalAset, 0, ',', '.') }}</h3>
+                    <h3 class="text-2xl font-bold text-gray-900 mt-1.5"><?php echo e(number_format($totalAset, 0, ',', '.')); ?></h3>
                     <p class="text-[10px] text-green-600 mt-0.5"><i class="fas fa-arrow-up text-[8px] mr-1"></i>Data real</p>
                 </div>
                 <div class="w-11 h-11 rounded-xl bg-green-50 flex items-center justify-center">
@@ -302,7 +304,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">Total Berita</p>
-                    <h3 class="text-2xl font-bold text-gray-900 mt-1.5">{{ number_format($totalBerita, 0, ',', '.') }}</h3>
+                    <h3 class="text-2xl font-bold text-gray-900 mt-1.5"><?php echo e(number_format($totalBerita, 0, ',', '.')); ?></h3>
                     <p class="text-[10px] text-blue-600 mt-0.5"><i class="fas fa-arrow-up text-[8px] mr-1"></i>Data real</p>
                 </div>
                 <div class="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center">
@@ -315,7 +317,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">Total Pengunjung</p>
-                    <h3 class="text-2xl font-bold text-gray-900 mt-1.5">{{ number_format($totalPengunjung, 0, ',', '.') }}</h3>
+                    <h3 class="text-2xl font-bold text-gray-900 mt-1.5"><?php echo e(number_format($totalPengunjung, 0, ',', '.')); ?></h3>
                     <p class="text-[10px] text-purple-600 mt-0.5"><i class="fas fa-arrow-up text-[8px] mr-1"></i>Google Analytics</p>
                 </div>
                 <div class="w-11 h-11 rounded-xl bg-purple-50 flex items-center justify-center">
@@ -328,7 +330,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">Total Luas</p>
-                    <h3 class="text-2xl font-bold text-gray-900 mt-1.5">{{ number_format($totalLuas, 0, ',', '.') }}</h3>
+                    <h3 class="text-2xl font-bold text-gray-900 mt-1.5"><?php echo e(number_format($totalLuas, 0, ',', '.')); ?></h3>
                     <p class="text-[10px] text-orange-600 mt-0.5">Hektar</p>
                 </div>
                 <div class="w-11 h-11 rounded-xl bg-orange-50 flex items-center justify-center">
@@ -363,52 +365,56 @@
                     <h3 class="text-sm font-bold text-gray-900">Publikasi Terbaru</h3>
                     <p class="text-[11px] text-gray-400 mt-0.5">Konten yang baru diterbitkan</p>
                 </div>
-                <a href="{{ route('admin.berita.index') }}" class="text-[11px] font-semibold text-blue-600 hover:underline">Lihat Semua</a>
+                <a href="<?php echo e(route('admin.berita.index')); ?>" class="text-[11px] font-semibold text-blue-600 hover:underline">Lihat Semua</a>
             </div>
 
-            @php
+            <?php
                 $publikasiTerbaru = \App\Models\Berita::where('status', 'Dipublikasikan')->latest()->take(4)->get();
-            @endphp
+            ?>
 
             <div class="space-y-3">
-                @forelse($publikasiTerbaru as $item)
-                    <a href="{{ route('admin.berita.index') }}" class="flex items-center gap-3 group hover:bg-gray-50 rounded-xl p-2 -mx-2 transition">
+                <?php $__empty_1 = true; $__currentLoopData = $publikasiTerbaru; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                    <a href="<?php echo e(route('admin.berita.index')); ?>" class="flex items-center gap-3 group hover:bg-gray-50 rounded-xl p-2 -mx-2 transition">
                         <div class="w-12 h-12 rounded-xl overflow-hidden bg-gray-100 shrink-0">
-                            @if ($item->gambar)
-                                <img src="{{ asset('storage/' . $item->gambar) }}" class="w-full h-full object-cover" alt="{{ $item->judul }}">
-                            @else
+                            <?php if($item->gambar): ?>
+                                <img src="<?php echo e(asset('storage/' . $item->gambar)); ?>" class="w-full h-full object-cover" alt="<?php echo e($item->judul); ?>">
+                            <?php else: ?>
                                 <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#0B2A4A] to-[#163F66]">
                                     <i class="fas fa-newspaper text-white/30 text-lg"></i>
                                 </div>
-                            @endif
+                            <?php endif; ?>
                         </div>
                         <div class="min-w-0 flex-1">
                             <div class="flex items-center gap-2">
                                 <span class="text-[8px] font-bold uppercase px-1.5 py-0.5 rounded-full
-                                    {{ $item->kategori == 'Siaran Pers' ? 'bg-blue-50 text-blue-600' :
+                                    <?php echo e($item->kategori == 'Siaran Pers' ? 'bg-blue-50 text-blue-600' :
                                        ($item->kategori == 'Pengumuman' ? 'bg-orange-50 text-orange-600' :
-                                       'bg-green-50 text-green-600') }}">
-                                    {{ $item->kategori }}
+                                       'bg-green-50 text-green-600')); ?>">
+                                    <?php echo e($item->kategori); ?>
+
                                 </span>
                             </div>
                             <h4 class="text-[11px] font-semibold text-gray-900 truncate mt-1 group-hover:text-blue-600 transition">
-                                {{ $item->judul }}
+                                <?php echo e($item->judul); ?>
+
                             </h4>
                             <p class="text-[9px] text-gray-400 mt-0.5">
                                 <i class="far fa-calendar-alt mr-1"></i>
-                                {{ $item->tanggal_publikasi ? \Carbon\Carbon::parse($item->tanggal_publikasi)->format('d M Y') : $item->created_at?->format('d M Y') }}
+                                <?php echo e($item->tanggal_publikasi ? \Carbon\Carbon::parse($item->tanggal_publikasi)->format('d M Y') : $item->created_at?->format('d M Y')); ?>
+
                                 <span class="mx-1">•</span>
                                 <i class="far fa-eye mr-1"></i>
-                                {{ number_format($item->views ?? 0, 0, ',', '.') }}
+                                <?php echo e(number_format($item->views ?? 0, 0, ',', '.')); ?>
+
                             </p>
                         </div>
                     </a>
-                @empty
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                     <div class="text-center py-8 text-gray-400 text-xs">
                         <i class="fas fa-newspaper text-2xl block mb-2 text-gray-300"></i>
                         Belum ada publikasi.
                     </div>
-                @endforelse
+                <?php endif; ?>
             </div>
         </div>
     </div>
@@ -420,15 +426,15 @@
                 <h3 class="text-sm font-bold text-gray-900">Aktivitas Terbaru</h3>
                 <p class="text-[11px] text-gray-400 mt-0.5">Aktivitas pengelolaan sistem</p>
             </div>
-            <a href="{{ route('admin.activity-log') }}" class="text-[10px] font-semibold text-blue-600 hover:underline">Lihat Semua</a>
+            <a href="<?php echo e(route('admin.activity-log')); ?>" class="text-[10px] font-semibold text-blue-600 hover:underline">Lihat Semua</a>
         </div>
         <div class="divide-y divide-gray-100">
-            @php
+            <?php
                 $activities = \Spatie\Activitylog\Models\Activity::with('causer')->latest()->take(5)->get();
-            @endphp
+            ?>
             
-            @forelse($activities as $activity)
-                @php
+            <?php $__empty_1 = true; $__currentLoopData = $activities; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $activity): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                <?php
                     $icon = 'fa-pen';
                     $color = 'blue';
                     $bg = 'blue-50';
@@ -465,25 +471,26 @@
                     
                     $subjectType = class_basename($activity->subject_type ?? '');
                     $causerName = $activity->causer?->name ?? 'Sistem';
-                @endphp
+                ?>
                 <div class="flex items-center gap-3 px-5 py-3 hover:bg-gray-50 transition">
-                    <div class="w-8 h-8 rounded-lg {{ $bg }} flex items-center justify-center flex-shrink-0">
-                        <i class="fas {{ $icon }} text-{{ $color }}-600 text-xs"></i>
+                    <div class="w-8 h-8 rounded-lg <?php echo e($bg); ?> flex items-center justify-center flex-shrink-0">
+                        <i class="fas <?php echo e($icon); ?> text-<?php echo e($color); ?>-600 text-xs"></i>
                     </div>
                     <div class="flex-1">
-                        <p class="text-xs font-medium text-gray-800">{{ ucfirst($activity->description) }}</p>
+                        <p class="text-xs font-medium text-gray-800"><?php echo e(ucfirst($activity->description)); ?></p>
                         <p class="text-[10px] text-gray-400 mt-0.5">
-                            {{ $subjectType }} • oleh {{ $causerName }}
+                            <?php echo e($subjectType); ?> • oleh <?php echo e($causerName); ?>
+
                         </p>
                     </div>
-                    <span class="text-[9px] text-gray-400 flex-shrink-0">{{ $activity->created_at->diffForHumans() }}</span>
+                    <span class="text-[9px] text-gray-400 flex-shrink-0"><?php echo e($activity->created_at->diffForHumans()); ?></span>
                 </div>
-            @empty
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                 <div class="px-5 py-8 text-center text-xs text-gray-400">
                     <i class="fas fa-inbox text-2xl block mb-2 text-gray-300"></i>
                     Belum ada aktivitas.
                 </div>
-            @endforelse
+            <?php endif; ?>
         </div>
     </div>
 
@@ -494,7 +501,7 @@
                 <h3 class="text-sm font-bold text-gray-900">Aset Terbaru</h3>
                 <p class="text-[11px] text-gray-400 mt-0.5">Data aset tanah yang terakhir ditambahkan</p>
             </div>
-            <a href="{{ route('admin.aset.index') }}" class="text-[11px] font-semibold text-blue-600 hover:underline">Lihat Semua</a>
+            <a href="<?php echo e(route('admin.aset.index')); ?>" class="text-[11px] font-semibold text-blue-600 hover:underline">Lihat Semua</a>
         </div>
         <div class="overflow-x-auto">
             <table class="w-full text-left">
@@ -507,41 +514,42 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
-                    @forelse($asets as $aset)
+                    <?php $__empty_1 = true; $__currentLoopData = $asets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $aset): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                         <tr class="hover:bg-gray-50 transition">
                             <td class="px-5 py-3.5">
                                 <div class="flex items-center gap-2.5">
                                     <div class="w-8 h-8 rounded-lg bg-gray-100 overflow-hidden flex-shrink-0">
-                                        @if($aset->gambar)
-                                            <img src="{{ asset('storage/' . $aset->gambar) }}" class="w-full h-full object-cover" alt="{{ $aset->nama_lokasi }}">
-                                        @else
+                                        <?php if($aset->gambar): ?>
+                                            <img src="<?php echo e(asset('storage/' . $aset->gambar)); ?>" class="w-full h-full object-cover" alt="<?php echo e($aset->nama_lokasi); ?>">
+                                        <?php else: ?>
                                             <div class="w-full h-full flex items-center justify-center bg-[#0B2A4A]/10">
                                                 <i class="fas fa-map-pin text-gray-400 text-xs"></i>
                                             </div>
-                                        @endif
+                                        <?php endif; ?>
                                     </div>
-                                    <p class="text-xs font-semibold text-gray-900 truncate max-w-[120px]">{{ $aset->nama_lokasi }}</p>
+                                    <p class="text-xs font-semibold text-gray-900 truncate max-w-[120px]"><?php echo e($aset->nama_lokasi); ?></p>
                                 </div>
                             </td>
-                            <td class="px-5 py-3.5 text-xs text-gray-500">{{ $aset->provinsi }}</td>
-                            <td class="px-5 py-3.5 text-xs font-semibold text-gray-700">{{ number_format($aset->luas_hektar, 2, ',', '.') }} Ha</td>
+                            <td class="px-5 py-3.5 text-xs text-gray-500"><?php echo e($aset->provinsi); ?></td>
+                            <td class="px-5 py-3.5 text-xs font-semibold text-gray-700"><?php echo e(number_format($aset->luas_hektar, 2, ',', '.')); ?> Ha</td>
                             <td class="px-5 py-3.5">
                                 <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[9px] font-bold
-                                    {{ $aset->status == 'Tersedia' ? 'bg-green-50 text-green-700' :
+                                    <?php echo e($aset->status == 'Tersedia' ? 'bg-green-50 text-green-700' :
                                        ($aset->status == 'Dalam Pengembangan' ? 'bg-blue-50 text-blue-700' :
-                                       'bg-orange-50 text-orange-700') }}">
-                                    {{ $aset->status }}
+                                       'bg-orange-50 text-orange-700')); ?>">
+                                    <?php echo e($aset->status); ?>
+
                                 </span>
                             </td>
                         </tr>
-                    @empty
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                         <tr>
                             <td colspan="4" class="px-5 py-12 text-center text-xs text-gray-400">
                                 <i class="fas fa-database text-2xl block mb-2 text-gray-300"></i>
                                 Belum ada data aset.
                             </td>
                         </tr>
-                    @endforelse
+                    <?php endif; ?>
                 </tbody>
             </table>
         </div>
@@ -550,7 +558,7 @@
     <!-- FOOTER DASHBOARD -->
     <div class="text-center text-[10px] text-gray-400 py-4 border-t border-gray-200/50">
         <p>
-            &copy; {{ date('Y') }} Badan Bank Tanah - Indonesia Land Bank Authority.
+            &copy; <?php echo e(date('Y')); ?> Badan Bank Tanah - Indonesia Land Bank Authority.
             <span class="hidden sm:inline">Dikelola melalui CMS Admin Panel.</span>
         </p>
         <p class="mt-0.5">
@@ -559,7 +567,8 @@
                 Sistem berjalan dengan baik
             </span>
             <span class="mx-1">•</span>
-            Laravel v{{ app()->version() }}
+            Laravel v<?php echo e(app()->version()); ?>
+
         </p>
     </div>
 
@@ -644,4 +653,5 @@
     });
 </script>
 
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH /home/u250369146/laravel-app/resources/views/admin/dashboard.blade.php ENDPATH**/ ?>

@@ -1,10 +1,8 @@
-@extends('layouts.frontend')
+<?php $__env->startSection('title', ($isEnglish ? $halaman->judul_en ?? $halaman->judul : $halaman->judul) . ' - Badan Bank Tanah'); ?>
 
-@section('title', ($isEnglish ? $halaman->judul_en ?? $halaman->judul : $halaman->judul) . ' - Badan Bank Tanah')
+<?php $__env->startSection('content'); ?>
 
-@section('content')
-
-    @php
+    <?php
         $proyekInvestasi = \App\Models\ProyekInvestasi::where('is_active', true)->orderBy('urutan')->get();
         $dokumenKerjasama = \App\Models\DokumenKerjasama::where('is_active', true)->orderBy('urutan')->get();
 
@@ -15,11 +13,9 @@
         $persyaratanList = $halaman->persyaratan ?? [];
         $dokumenList = $halaman->dokumen_pendukung ?? [];
         $faqList = $halaman->faq_pemanfaatan ?? [];
-    @endphp
+    ?>
 
-    {{-- =========================================================
-    HERO
-========================================================= --}}
+    
     <section class="bg-[#0B2A4A]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
 
@@ -33,16 +29,19 @@
 
                     <i class="fas fa-handshake"></i>
 
-                    {{ $isEnglish ? 'Utilization & Business Partnership' : 'Pemanfaatan & Kerjasama Usaha' }}
+                    <?php echo e($isEnglish ? 'Utilization & Business Partnership' : 'Pemanfaatan & Kerjasama Usaha'); ?>
+
 
                 </div>
 
                 <h1 class="text-3xl md:text-4xl lg:text-5xl
                        font-extrabold text-white leading-tight">
 
-                    {{ $isEnglish ? 'Utilization and Partnership' : 'Pemanfaatan dan Kerjasama' }}
+                    <?php echo e($isEnglish ? 'Utilization and Partnership' : 'Pemanfaatan dan Kerjasama'); ?>
+
                     <span class="text-blue-300">
-                        {{ $isEnglish ? 'of Land Assets' : 'Aset Tanah' }}
+                        <?php echo e($isEnglish ? 'of Land Assets' : 'Aset Tanah'); ?>
+
                     </span>
 
                 </h1>
@@ -50,27 +49,30 @@
                 <p class="text-blue-100 text-base md:text-lg
                       leading-relaxed mt-5 max-w-2xl">
 
-                    {{ $isEnglish ? $halaman->isi_en ?? $halaman->isi : $halaman->isi }}
+                    <?php echo e($isEnglish ? $halaman->isi_en ?? $halaman->isi : $halaman->isi); ?>
+
 
                 </p>
 
                 <div class="flex flex-col sm:flex-row gap-3 mt-8">
 
-                    <a href="{{ route('assets') }}"
+                    <a href="<?php echo e(route('assets')); ?>"
                         class="btn-primary inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg text-sm font-bold transition">
 
                         <i class="fas fa-map-location-dot"></i>
 
-                        {{ $isEnglish ? 'View Land Assets' : 'Lihat Aset Persediaan' }}
+                        <?php echo e($isEnglish ? 'View Land Assets' : 'Lihat Aset Persediaan'); ?>
+
 
                     </a>
 
-                    <a href="{{ route('kontak') }}"
+                    <a href="<?php echo e(route('kontak')); ?>"
                         class="btn-primary inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg text-sm font-bold transition">
 
                         <i class="fas fa-comments"></i>
 
-                        {{ $isEnglish ? 'Contact Us' : 'Hubungi Kami' }}
+                        <?php echo e($isEnglish ? 'Contact Us' : 'Hubungi Kami'); ?>
+
 
                     </a>
 
@@ -82,9 +84,7 @@
     </section>
 
 
-    {{-- =========================================================
-    INTRO
-========================================================= --}}
+    
     <section class="bg-white">
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
@@ -96,32 +96,36 @@
 
                     <span class="text-xs font-bold uppercase
                              tracking-wider text-blue-700">
-                        {{ $isEnglish ? 'About Utilization' : 'Tentang Pemanfaatan' }}
+                        <?php echo e($isEnglish ? 'About Utilization' : 'Tentang Pemanfaatan'); ?>
+
                     </span>
 
                     <h2 class="text-2xl md:text-3xl
                            font-extrabold text-gray-900 mt-2">
 
-                        {{ $isEnglish ? 'Unlocking professional land asset utilization opportunities' : 'Membuka peluang pemanfaatan aset tanah secara profesional' }}
+                        <?php echo e($isEnglish ? 'Unlocking professional land asset utilization opportunities' : 'Membuka peluang pemanfaatan aset tanah secara profesional'); ?>
+
 
                     </h2>
 
                     <p class="text-gray-600 leading-relaxed mt-5">
 
-                        {{ $isEnglish ? 'The Land Bank Agency provides information regarding the utilization and business cooperation of available land assets. This information helps prospective partners understand the scheme options and stages before continuing the cooperation process.' : 'Badan Bank Tanah menyediakan informasi mengenai pemanfaatan dan kerja sama usaha atas aset tanah yang tersedia. Informasi ini membantu calon mitra memahami pilihan skema dan tahapan sebelum melanjutkan proses kerja sama.' }}
+                        <?php echo e($isEnglish ? 'The Land Bank Agency provides information regarding the utilization and business cooperation of available land assets. This information helps prospective partners understand the scheme options and stages before continuing the cooperation process.' : 'Badan Bank Tanah menyediakan informasi mengenai pemanfaatan dan kerja sama usaha atas aset tanah yang tersedia. Informasi ini membantu calon mitra memahami pilihan skema dan tahapan sebelum melanjutkan proses kerja sama.'); ?>
+
 
                     </p>
 
                     <p class="text-gray-600 leading-relaxed mt-4">
 
-                        {{ $isEnglish ? 'Visitors can first view the land inventory, understand the characteristics of the assets, then study the utilization or cooperation schemes that suit their needs.' : 'Pengunjung dapat terlebih dahulu melihat aset persediaan tanah, memahami karakteristik aset, kemudian mempelajari skema pemanfaatan atau kerja sama yang sesuai dengan kebutuhan.' }}
+                        <?php echo e($isEnglish ? 'Visitors can first view the land inventory, understand the characteristics of the assets, then study the utilization or cooperation schemes that suit their needs.' : 'Pengunjung dapat terlebih dahulu melihat aset persediaan tanah, memahami karakteristik aset, kemudian mempelajari skema pemanfaatan atau kerja sama yang sesuai dengan kebutuhan.'); ?>
+
 
                     </p>
 
                 </div>
 
 
-                {{-- INFO CARD --}}
+                
 
                 <div class="bg-[#0B2A4A] rounded-2xl p-7 text-white">
 
@@ -135,12 +139,14 @@
                     </div>
 
                     <h3 class="text-xl font-bold">
-                        {{ $isEnglish ? 'Integrated Information' : 'Informasi Terintegrasi' }}
+                        <?php echo e($isEnglish ? 'Integrated Information' : 'Informasi Terintegrasi'); ?>
+
                     </h3>
 
                     <p class="text-blue-100 text-sm leading-relaxed mt-3">
 
-                        {{ $isEnglish ? 'From finding assets, understanding schemes, studying requirements, to contacting the Land Bank Agency.' : 'Mulai dari menemukan aset, memahami skema, mempelajari persyaratan hingga menghubungi Badan Bank Tanah.' }}
+                        <?php echo e($isEnglish ? 'From finding assets, understanding schemes, studying requirements, to contacting the Land Bank Agency.' : 'Mulai dari menemukan aset, memahami skema, mempelajari persyaratan hingga menghubungi Badan Bank Tanah.'); ?>
+
 
                     </p>
 
@@ -148,22 +154,26 @@
 
                         <div class="flex items-center gap-3 text-sm">
                             <i class="fas fa-check text-green-400"></i>
-                            📋 {{ $isEnglish ? 'Utilization Scheme' : 'Skema Pemanfaatan' }}
+                            📋 <?php echo e($isEnglish ? 'Utilization Scheme' : 'Skema Pemanfaatan'); ?>
+
                         </div>
 
                         <div class="flex items-center gap-3 text-sm">
                             <i class="fas fa-check text-green-400"></i>
-                            {{ $isEnglish ? 'Cooperation form information' : 'Informasi bentuk kerja sama' }}
+                            <?php echo e($isEnglish ? 'Cooperation form information' : 'Informasi bentuk kerja sama'); ?>
+
                         </div>
 
                         <div class="flex items-center gap-3 text-sm">
                             <i class="fas fa-check text-green-400"></i>
-                            {{ $isEnglish ? 'Procedures and stages' : 'Prosedur dan tahapan' }}
+                            <?php echo e($isEnglish ? 'Procedures and stages' : 'Prosedur dan tahapan'); ?>
+
                         </div>
 
                         <div class="flex items-center gap-3 text-sm">
                             <i class="fas fa-check text-green-400"></i>
-                            {{ $isEnglish ? 'Requirements and documents' : 'Persyaratan dan dokumen' }}
+                            <?php echo e($isEnglish ? 'Requirements and documents' : 'Persyaratan dan dokumen'); ?>
+
                         </div>
 
                     </div>
@@ -177,9 +187,7 @@
     </section>
 
 
-    {{-- =========================================================
-    SKEMA PEMANFAATAN (Dari Database)
-    ========================================================= --}}
+    
     <section class="bg-gray-50 border-y border-gray-100">
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -190,20 +198,23 @@
                     class="text-xs font-bold uppercase
                          tracking-wider text-blue-700 ">
 
-                    {{ $isEnglish ? 'Utilization Schemes' : 'Skema Pemanfaatan' }}
+                    <?php echo e($isEnglish ? 'Utilization Schemes' : 'Skema Pemanfaatan'); ?>
+
 
                 </span>
 
                 <h2 class="text-2xl md:text-3xl
                        font-extrabold text-gray-900 mt-2">
 
-                    {{ $isEnglish ? 'Asset utilization options' : 'Pilihan pemanfaatan aset' }}
+                    <?php echo e($isEnglish ? 'Asset utilization options' : 'Pilihan pemanfaatan aset'); ?>
+
 
                 </h2>
 
                 <p class="text-gray-500  text-sm leading-relaxed mt-3">
 
-                    {{ $isEnglish ? '📌 Choose the right scheme for your needs' : '📌 Pilih skema yang sesuai dengan kebutuhan Anda' }}
+                    <?php echo e($isEnglish ? '📌 Choose the right scheme for your needs' : '📌 Pilih skema yang sesuai dengan kebutuhan Anda'); ?>
+
 
                 </p>
 
@@ -211,8 +222,8 @@
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-                @forelse ($skemaList as $index => $skema)
-                    <div id="skema-{{ $index }}"
+                <?php $__empty_1 = true; $__currentLoopData = $skemaList; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $skema): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                    <div id="skema-<?php echo e($index); ?>"
                         class="bg-white rounded-2xl
                             border border-gray-200 
                             shadow-sm
@@ -227,13 +238,14 @@
                                 text-[#0B2A4A]
                                 flex items-center justify-center">
 
-                            <i class="fas {{ $skema['icon'] ?? 'fa-circle' }} text-xl"></i>
+                            <i class="fas <?php echo e($skema['icon'] ?? 'fa-circle'); ?> text-xl"></i>
 
                         </div>
 
                         <h3 class="text-lg font-bold text-gray-900 mt-5">
 
-                            {{ $isEnglish ? $skema['title_en'] ?? ($skema['title'] ?? '') : $skema['title'] ?? '' }}
+                            <?php echo e($isEnglish ? $skema['title_en'] ?? ($skema['title'] ?? '') : $skema['title'] ?? ''); ?>
+
 
                         </h3>
 
@@ -241,16 +253,18 @@
                             class="text-sm text-gray-500 
                               leading-relaxed mt-3">
 
-                            {{ $isEnglish ? $skema['description_en'] ?? ($skema['description'] ?? '') : $skema['description'] ?? '' }}
+                            <?php echo e($isEnglish ? $skema['description_en'] ?? ($skema['description'] ?? '') : $skema['description'] ?? ''); ?>
+
 
                         </p>
 
                         <div class="mt-5 pt-4 border-t border-gray-100 ">
 
-                            <a href="#skema-{{ $index }}" class="text-xs font-semibold text-blue-600 hover:text-blue-800 hover:underline inline-flex items-center gap-1 transition group scroll-mt-24">
+                            <a href="#skema-<?php echo e($index); ?>" class="text-xs font-semibold text-blue-600 hover:text-blue-800 hover:underline inline-flex items-center gap-1 transition group scroll-mt-24">
 
                                 <span class="inline-flex items-center gap-1">
-                                    📖 {{ $isEnglish ? 'Learn Scheme' : 'Pelajari Skema' }}
+                                    📖 <?php echo e($isEnglish ? 'Learn Scheme' : 'Pelajari Skema'); ?>
+
                                     <i class="fas fa-arrow-right text-[10px] transition-transform group-hover:translate-x-1"></i>
                                 </span>
 
@@ -259,12 +273,13 @@
                         </div>
 
                     </div>
-                @empty
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                     <div class="col-span-3 text-center text-gray-500  py-8">
-                        <p>{{ $isEnglish ? 'No utilization schemes available yet.' : 'Belum ada skema pemanfaatan yang tersedia.' }}
+                        <p><?php echo e($isEnglish ? 'No utilization schemes available yet.' : 'Belum ada skema pemanfaatan yang tersedia.'); ?>
+
                         </p>
                     </div>
-                @endforelse
+                <?php endif; ?>
 
             </div>
 
@@ -272,9 +287,7 @@
 
     </section>
 
-    {{-- =========================================================
-    BENTUK KERJA SAMA (Dari Database)
-========================================================= --}}
+    
     <section class="bg-white">
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -287,14 +300,16 @@
                     <span class="text-xs font-bold uppercase
                              tracking-wider text-blue-700">
 
-                        {{ $isEnglish ? 'Forms of Cooperation' : 'Bentuk Kerja Sama' }}
+                        <?php echo e($isEnglish ? 'Forms of Cooperation' : 'Bentuk Kerja Sama'); ?>
+
 
                     </span>
 
                     <h2 class="text-2xl md:text-3xl
                            font-extrabold text-gray-900 mt-2">
 
-                        {{ $isEnglish ? 'Business cooperation options' : 'Pilihan bentuk kerja sama usaha' }}
+                        <?php echo e($isEnglish ? 'Business cooperation options' : 'Pilihan bentuk kerja sama usaha'); ?>
+
 
                     </h2>
 
@@ -302,7 +317,8 @@
 
                 <p class="text-sm text-gray-500 max-w-md">
 
-                    {{ $isEnglish ? 'Data that can be managed through CMS.' : 'Data yang dapat dikelola melalui CMS.' }}
+                    <?php echo e($isEnglish ? 'Data that can be managed through CMS.' : 'Data yang dapat dikelola melalui CMS.'); ?>
+
 
                 </p>
 
@@ -310,8 +326,8 @@
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-                @forelse ($kerjasamaList as $index => $item)
-                    <div id="kerjasama-{{ $index }}"
+                <?php $__empty_1 = true; $__currentLoopData = $kerjasamaList; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                    <div id="kerjasama-<?php echo e($index); ?>"
                         class="rounded-2xl
                 border border-gray-200 
                 p-6
@@ -325,7 +341,8 @@
                                 class="text-3xl font-extrabold
                          text-[#0B2A4A]/20 /30">
 
-                                {{ $item['number'] ?? '' }}
+                                <?php echo e($item['number'] ?? ''); ?>
+
 
                             </span>
 
@@ -336,24 +353,27 @@
 
                         <h3 class="font-bold text-lg text-gray-900 mt-5">
 
-                            {{ $isEnglish ? $item['title_en'] ?? ($item['title'] ?? '') : $item['title'] ?? '' }}
+                            <?php echo e($isEnglish ? $item['title_en'] ?? ($item['title'] ?? '') : $item['title'] ?? ''); ?>
+
 
                         </h3>
 
                         <p class="text-sm text-gray-500 
                       leading-relaxed mt-3">
 
-                            {{ $isEnglish ? $item['description_en'] ?? ($item['description'] ?? '') : $item['description'] ?? '' }}
+                            <?php echo e($isEnglish ? $item['description_en'] ?? ($item['description'] ?? '') : $item['description'] ?? ''); ?>
+
 
                         </p>
 
                     </div>
-                @empty
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                     <div class="col-span-3 text-center text-gray-500  py-8">
-                        <p>{{ $isEnglish ? 'No cooperation forms available yet.' : 'Belum ada bentuk kerjasama yang tersedia.' }}
+                        <p><?php echo e($isEnglish ? 'No cooperation forms available yet.' : 'Belum ada bentuk kerjasama yang tersedia.'); ?>
+
                         </p>
                     </div>
-                @endforelse
+                <?php endif; ?>
 
             </div>
 
@@ -362,9 +382,7 @@
     </section>
 
 
-    {{-- =========================================================
-    PROYEK INVESTASI (Dari Database)
-========================================================= --}}
+    
     <section class="bg-gray-50 border-y border-gray-100">
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -374,20 +392,23 @@
                 <span class="text-xs font-bold uppercase
                          tracking-wider text-green-700">
 
-                    {{ $isEnglish ? 'Investment Projects' : 'Proyek Investasi' }}
+                    <?php echo e($isEnglish ? 'Investment Projects' : 'Proyek Investasi'); ?>
+
 
                 </span>
 
                 <h2 class="text-2xl md:text-3xl
                        font-extrabold text-gray-900 mt-2">
 
-                    {{ $isEnglish ? 'Land Bank Agency Investment Projects' : 'Proyek Investasi Badan Bank Tanah' }}
+                    <?php echo e($isEnglish ? 'Land Bank Agency Investment Projects' : 'Proyek Investasi Badan Bank Tanah'); ?>
+
 
                 </h2>
 
                 <p class="text-gray-500 text-sm leading-relaxed mt-3">
 
-                    {{ $isEnglish ? 'List of ongoing investment projects managed by the Land Bank Agency.' : 'Daftar proyek investasi yang sedang berjalan dan dikelola oleh Badan Bank Tanah.' }}
+                    <?php echo e($isEnglish ? 'List of ongoing investment projects managed by the Land Bank Agency.' : 'Daftar proyek investasi yang sedang berjalan dan dikelola oleh Badan Bank Tanah.'); ?>
+
 
                 </p>
 
@@ -395,61 +416,68 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-                @forelse ($proyekInvestasi as $item)
+                <?php $__empty_1 = true; $__currentLoopData = $proyekInvestasi; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                     <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 hover:shadow-lg transition group">
 
-                        @if ($item->gambar)
-                            <img src="{{ asset('storage/' . $item->gambar) }}"
+                        <?php if($item->gambar): ?>
+                            <img src="<?php echo e(asset('storage/' . $item->gambar)); ?>"
                                 class="w-full h-44 object-cover rounded-xl mb-4">
-                        @else
+                        <?php else: ?>
                             <div class="w-full h-44 bg-gray-100 rounded-xl mb-4 flex items-center justify-center">
                                 <i class="fas fa-building text-4xl text-gray-300"></i>
                             </div>
-                        @endif
+                        <?php endif; ?>
 
                         <h4 class="font-bold text-gray-900 text-lg group-hover:text-[var(--color-secondary)] transition">
-                            {{ $isEnglish ? $item->judul_en ?? $item->judul : $item->judul }}
+                            <?php echo e($isEnglish ? $item->judul_en ?? $item->judul : $item->judul); ?>
+
                         </h4>
 
                         <p class="text-sm text-gray-500 mt-1">
                             <i class="fas fa-location-dot text-[var(--color-secondary)] mr-1"></i>
-                            {{ $isEnglish ? $item->lokasi_en ?? $item->lokasi : $item->lokasi }}
+                            <?php echo e($isEnglish ? $item->lokasi_en ?? $item->lokasi : $item->lokasi); ?>
+
                         </p>
 
                         <div class="flex items-center gap-2 mt-3">
                             <span
                                 class="text-xs font-bold px-2.5 py-1 rounded-full
-                            {{ $item->status == 'Aktif'
+                            <?php echo e($item->status == 'Aktif'
                                 ? 'bg-green-50 text-green-700'
                                 : ($item->status == 'Dalam Proses'
                                     ? 'bg-orange-50 text-orange-700'
-                                    : 'bg-blue-50 text-blue-700') }}">
-                                {{ $isEnglish ? $item->status_en ?? $item->status : $item->status }}
+                                    : 'bg-blue-50 text-blue-700')); ?>">
+                                <?php echo e($isEnglish ? $item->status_en ?? $item->status : $item->status); ?>
+
                             </span>
                             <span class="text-xs bg-gray-100 text-gray-600 px-2.5 py-1 rounded-full">
-                                {{ $isEnglish ? $item->sektor_en ?? $item->sektor : $item->sektor }}
+                                <?php echo e($isEnglish ? $item->sektor_en ?? $item->sektor : $item->sektor); ?>
+
                             </span>
                         </div>
 
-                        @if ($item->nilai_investasi)
+                        <?php if($item->nilai_investasi): ?>
                             <p class="text-sm font-bold text-[#006400] mt-3">
-                                Rp {{ number_format($item->nilai_investasi, 0, ',', '.') }}
+                                Rp <?php echo e(number_format($item->nilai_investasi, 0, ',', '.')); ?>
+
                             </p>
-                        @endif
+                        <?php endif; ?>
 
                         <p class="text-sm text-gray-600 mt-2 line-clamp-2">
-                            {{ $isEnglish ? $item->deskripsi_en ?? $item->deskripsi : $item->deskripsi }}
+                            <?php echo e($isEnglish ? $item->deskripsi_en ?? $item->deskripsi : $item->deskripsi); ?>
+
                         </p>
 
                     </div>
-                @empty
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                     <div class="col-span-3 text-center text-gray-500 py-12">
                         <i class="fas fa-chart-line text-4xl text-gray-300 block mb-3"></i>
                         <p class="text-sm">
-                            {{ $isEnglish ? 'No investment projects available yet.' : 'Belum ada proyek investasi yang tersedia.' }}
+                            <?php echo e($isEnglish ? 'No investment projects available yet.' : 'Belum ada proyek investasi yang tersedia.'); ?>
+
                         </p>
                     </div>
-                @endforelse
+                <?php endif; ?>
 
             </div>
 
@@ -458,9 +486,7 @@
     </section>
 
 
-    {{-- =========================================================
-    DOKUMEN & BOOKLET (Dari Database)
-========================================================= --}}
+    
     <section class="bg-white">
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -470,20 +496,23 @@
                 <span class="text-xs font-bold uppercase
                          tracking-wider text-purple-700">
 
-                    {{ $isEnglish ? 'Documents & Booklets' : 'Dokumen & Booklet' }}
+                    <?php echo e($isEnglish ? 'Documents & Booklets' : 'Dokumen & Booklet'); ?>
+
 
                 </span>
 
                 <h2 class="text-2xl md:text-3xl
                        font-extrabold text-gray-900 mt-2">
 
-                    {{ $isEnglish ? 'Cooperation Documents & Booklets' : 'Dokumen & Booklet Kerjasama' }}
+                    <?php echo e($isEnglish ? 'Cooperation Documents & Booklets' : 'Dokumen & Booklet Kerjasama'); ?>
+
 
                 </h2>
 
                 <p class="text-gray-500 text-sm leading-relaxed mt-3">
 
-                    {{ $isEnglish ? 'Download cooperation documents and information booklets from the Land Bank Agency.' : 'Unduh dokumen dan booklet informasi kerjasama Badan Bank Tanah.' }}
+                    <?php echo e($isEnglish ? 'Download cooperation documents and information booklets from the Land Bank Agency.' : 'Unduh dokumen dan booklet informasi kerjasama Badan Bank Tanah.'); ?>
+
 
                 </p>
 
@@ -491,8 +520,8 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl mx-auto">
 
-                @forelse ($dokumenKerjasama as $item)
-                    <a href="{{ route('dokumen.download', $item->id) }}"
+                <?php $__empty_1 = true; $__currentLoopData = $dokumenKerjasama; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                    <a href="<?php echo e(route('dokumen.download', $item->id)); ?>"
                         class="flex items-center gap-4 p-4 bg-gray-50 border border-gray-100 rounded-xl hover:shadow-md hover:bg-white transition group">
 
                         <div
@@ -503,11 +532,13 @@
                         <div class="flex-1 min-w-0">
                             <p
                                 class="text-sm font-medium text-gray-800 group-hover:text-[var(--color-secondary)] transition truncate">
-                                {{ $isEnglish ? $item->judul_en ?? $item->judul : $item->judul }}
+                                <?php echo e($isEnglish ? $item->judul_en ?? $item->judul : $item->judul); ?>
+
                             </p>
                             <p class="text-xs text-gray-400">
-                                {{ $item->ukuran ?? 'PDF' }} •
-                                {{ ucfirst($isEnglish ? $item->kategori_en ?? $item->kategori : $item->kategori) }}
+                                <?php echo e($item->ukuran ?? 'PDF'); ?> •
+                                <?php echo e(ucfirst($isEnglish ? $item->kategori_en ?? $item->kategori : $item->kategori)); ?>
+
                             </p>
                         </div>
 
@@ -515,13 +546,13 @@
                             class="fas fa-download text-gray-400 group-hover:text-[var(--color-secondary)] transition text-sm"></i>
 
                     </a>
-                @empty
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                     <div class="col-span-2 text-center text-gray-500 py-12">
                         <i class="fas fa-file-pdf text-4xl text-gray-300 block mb-3"></i>
                         <p class="text-sm">
-                            {{ $isEnglish ? 'No documents available yet.' : 'Belum ada dokumen yang tersedia.' }}</p>
+                            <?php echo e($isEnglish ? 'No documents available yet.' : 'Belum ada dokumen yang tersedia.'); ?></p>
                     </div>
-                @endforelse
+                <?php endif; ?>
 
             </div>
 
@@ -530,9 +561,7 @@
     </section>
 
 
-    {{-- =========================================================
-    PROSEDUR / TAHAPAN (Dari Database)
-========================================================= --}}
+    
     <section class="bg-gray-50 border-y border-gray-100">
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -542,20 +571,23 @@
                 <span class="text-xs font-bold uppercase
                          tracking-wider text-blue-700">
 
-                    {{ $isEnglish ? 'Procedures & Stages' : 'Prosedur & Tahapan' }}
+                    <?php echo e($isEnglish ? 'Procedures & Stages' : 'Prosedur & Tahapan'); ?>
+
 
                 </span>
 
                 <h2 class="text-2xl md:text-3xl
                        font-extrabold text-gray-900 mt-2">
 
-                    {{ $isEnglish ? 'How does the process work?' : 'Bagaimana prosesnya?' }}
+                    <?php echo e($isEnglish ? 'How does the process work?' : 'Bagaimana prosesnya?'); ?>
+
 
                 </h2>
 
                 <p class="text-gray-500 text-sm mt-3">
 
-                    {{ $isEnglish ? 'Overview of the utilization and cooperation flow from asset search to further communication.' : 'Gambaran alur informasi pemanfaatan dan kerja sama dari pencarian aset hingga komunikasi lebih lanjut.' }}
+                    <?php echo e($isEnglish ? 'Overview of the utilization and cooperation flow from asset search to further communication.' : 'Gambaran alur informasi pemanfaatan dan kerja sama dari pencarian aset hingga komunikasi lebih lanjut.'); ?>
+
 
                 </p>
 
@@ -563,8 +595,8 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 
-                @forelse ($prosedurList as $index => $step)
-                    <div id="prosedur-{{ $index }}" class="relative scroll-mt-24">
+                <?php $__empty_1 = true; $__currentLoopData = $prosedurList; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $step): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                    <div id="prosedur-<?php echo e($index); ?>" class="relative scroll-mt-24">
 
                         <div
                             class="bg-white rounded-2xl
@@ -576,7 +608,7 @@
                                     text-white
                                     flex items-center justify-center">
 
-                                <i class="fas {{ $step['icon'] ?? 'fa-circle' }} text-sm"></i>
+                                <i class="fas <?php echo e($step['icon'] ?? 'fa-circle'); ?> text-sm"></i>
 
                             </div>
 
@@ -585,32 +617,36 @@
                                 text-[10px] font-bold
                                 text-[#0B2A4A]/30">
 
-                                {{ $step['number'] ?? '' }}
+                                <?php echo e($step['number'] ?? ''); ?>
+
 
                             </span>
 
                             <h3 class="font-bold text-gray-900 mt-5">
 
-                                {{ $isEnglish ? $step['title_en'] ?? ($step['title'] ?? '') : $step['title'] ?? '' }}
+                                <?php echo e($isEnglish ? $step['title_en'] ?? ($step['title'] ?? '') : $step['title'] ?? ''); ?>
+
 
                             </h3>
 
                             <p class="text-sm text-gray-500
                                   leading-relaxed mt-3">
 
-                                {{ $isEnglish ? $step['description_en'] ?? ($step['description'] ?? '') : $step['description'] ?? '' }}
+                                <?php echo e($isEnglish ? $step['description_en'] ?? ($step['description'] ?? '') : $step['description'] ?? ''); ?>
+
 
                             </p>
 
                         </div>
 
                     </div>
-                @empty
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                     <div class="col-span-4 text-center text-gray-500 py-8">
-                        <p>{{ $isEnglish ? 'No procedures and stages available yet.' : 'Belum ada prosedur dan tahapan yang tersedia.' }}
+                        <p><?php echo e($isEnglish ? 'No procedures and stages available yet.' : 'Belum ada prosedur dan tahapan yang tersedia.'); ?>
+
                         </p>
                     </div>
-                @endforelse
+                <?php endif; ?>
 
             </div>
 
@@ -619,9 +655,7 @@
     </section>
 
 
-    {{-- =========================================================
-    PERSYARATAN & DOKUMEN (Dari Database)
-========================================================= --}}
+    
     <section class="bg-white">
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -629,7 +663,7 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
 
-                {{-- PERSYARATAN --}}
+                
 
                 <div
                     class="bg-white rounded-2xl
@@ -651,11 +685,13 @@
                         <div>
 
                             <h2 class="text-xl font-bold text-gray-900">
-                                {{ $isEnglish ? 'Requirements' : 'Persyaratan' }}
+                                <?php echo e($isEnglish ? 'Requirements' : 'Persyaratan'); ?>
+
                             </h2>
 
                             <p class="text-sm text-gray-500">
-                                {{ $isEnglish ? 'Required requirements' : 'Persyaratan yang diperlukan' }}
+                                <?php echo e($isEnglish ? 'Required requirements' : 'Persyaratan yang diperlukan'); ?>
+
                             </p>
 
                         </div>
@@ -664,7 +700,7 @@
 
                     <div class="space-y-4">
 
-                        @forelse ($persyaratanList as $item)
+                        <?php $__empty_1 = true; $__currentLoopData = $persyaratanList; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                             <div class="flex items-start gap-3">
 
                                 <div
@@ -679,15 +715,17 @@
                                 </div>
 
                                 <p class="text-sm text-gray-600">
-                                    {{ $isEnglish ? $item['text_en'] ?? $item : $item }}
+                                    <?php echo e($isEnglish ? $item['text_en'] ?? $item : $item); ?>
+
                                 </p>
 
                             </div>
-                        @empty
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                             <p class="text-sm text-gray-500">
-                                {{ $isEnglish ? 'No requirements available yet.' : 'Belum ada persyaratan yang tersedia.' }}
+                                <?php echo e($isEnglish ? 'No requirements available yet.' : 'Belum ada persyaratan yang tersedia.'); ?>
+
                             </p>
-                        @endforelse
+                        <?php endif; ?>
 
                     </div>
 
@@ -695,7 +733,7 @@
 
 
 
-                {{-- DOKUMEN --}}
+                
 
                 <div
                     class="bg-white rounded-2xl
@@ -717,11 +755,13 @@
                         <div>
 
                             <h2 class="text-xl font-bold text-gray-900">
-                                {{ $isEnglish ? 'Documents' : 'Dokumen' }}
+                                <?php echo e($isEnglish ? 'Documents' : 'Dokumen'); ?>
+
                             </h2>
 
                             <p class="text-sm text-gray-500">
-                                {{ $isEnglish ? 'Required supporting documents' : 'Dokumen pendukung yang diperlukan' }}
+                                <?php echo e($isEnglish ? 'Required supporting documents' : 'Dokumen pendukung yang diperlukan'); ?>
+
                             </p>
 
                         </div>
@@ -730,7 +770,7 @@
 
                     <div class="space-y-4">
 
-                        @forelse ($dokumenList as $item)
+                        <?php $__empty_1 = true; $__currentLoopData = $dokumenList; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                             <div
                                 class="flex items-center gap-3
                                     p-3 rounded-lg
@@ -741,16 +781,18 @@
 
                                 <span class="text-sm text-gray-600">
 
-                                    {{ $isEnglish ? $item['text_en'] ?? $item : $item }}
+                                    <?php echo e($isEnglish ? $item['text_en'] ?? $item : $item); ?>
+
 
                                 </span>
 
                             </div>
-                        @empty
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                             <p class="text-sm text-gray-500">
-                                {{ $isEnglish ? 'No supporting documents available yet.' : 'Belum ada dokumen pendukung yang tersedia.' }}
+                                <?php echo e($isEnglish ? 'No supporting documents available yet.' : 'Belum ada dokumen pendukung yang tersedia.'); ?>
+
                             </p>
-                        @endforelse
+                        <?php endif; ?>
 
                     </div>
 
@@ -763,9 +805,7 @@
     </section>
 
 
-    {{-- =========================================================
-    FAQ (Dari Database)
-========================================================= --}}
+    
     <section class="bg-gray-50 border-y border-gray-100">
 
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -782,7 +822,8 @@
                 <h2 class="text-2xl md:text-3xl
                        font-extrabold text-gray-900 mt-2">
 
-                    {{ $isEnglish ? 'Frequently Asked Questions' : 'Pertanyaan yang sering diajukan' }}
+                    <?php echo e($isEnglish ? 'Frequently Asked Questions' : 'Pertanyaan yang sering diajukan'); ?>
+
 
                 </h2>
 
@@ -790,7 +831,7 @@
 
             <div class="space-y-4">
 
-                @forelse ($faqList as $item)
+                <?php $__empty_1 = true; $__currentLoopData = $faqList; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                     <details
                         class="group bg-white rounded-xl
                             border border-gray-200
@@ -805,7 +846,8 @@
                                     font-semibold
                                     text-gray-900">
 
-                            {{ $isEnglish ? $item['question_en'] ?? ($item['question'] ?? '') : $item['question'] ?? '' }}
+                            <?php echo e($isEnglish ? $item['question_en'] ?? ($item['question'] ?? '') : $item['question'] ?? ''); ?>
+
 
                             <i
                                 class="fas fa-chevron-down
@@ -820,16 +862,17 @@
                                 text-sm text-gray-500
                                 leading-relaxed">
 
-                            {{ $isEnglish ? $item['answer_en'] ?? ($item['answer'] ?? '') : $item['answer'] ?? '' }}
+                            <?php echo e($isEnglish ? $item['answer_en'] ?? ($item['answer'] ?? '') : $item['answer'] ?? ''); ?>
+
 
                         </div>
 
                     </details>
-                @empty
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                     <div class="text-center text-gray-500 py-8">
-                        <p>{{ $isEnglish ? 'No FAQ available yet.' : 'Belum ada FAQ yang tersedia.' }}</p>
+                        <p><?php echo e($isEnglish ? 'No FAQ available yet.' : 'Belum ada FAQ yang tersedia.'); ?></p>
                     </div>
-                @endforelse
+                <?php endif; ?>
 
             </div>
 
@@ -838,9 +881,7 @@
     </section>
 
 
-    {{-- =========================================================
-    CTA
-========================================================= --}}
+    
     <section class="bg-[#0B2A4A]">
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
@@ -860,21 +901,24 @@
                     <span class="text-xs font-bold uppercase
                              tracking-wider text-blue-300">
 
-                        {{ $isEnglish ? 'Start here' : 'Mulai dari sini' }}
+                        <?php echo e($isEnglish ? 'Start here' : 'Mulai dari sini'); ?>
+
 
                     </span>
 
                     <h2 class="text-2xl md:text-3xl
                            font-extrabold text-white mt-2">
 
-                        {{ $isEnglish ? 'Discover land utilization opportunities' : 'Temukan peluang pemanfaatan aset' }}
+                        <?php echo e($isEnglish ? 'Discover land utilization opportunities' : 'Temukan peluang pemanfaatan aset'); ?>
+
 
                     </h2>
 
                     <p class="text-blue-100 text-sm
                           leading-relaxed mt-3 max-w-2xl">
 
-                        {{ $isEnglish ? 'View the land inventory, study the utilization and cooperation information, then contact the Land Bank Agency for further information.' : 'Lihat aset persediaan tanah, pelajari informasi pemanfaatan dan kerja sama, kemudian hubungi Badan Bank Tanah untuk informasi lebih lanjut.' }}
+                        <?php echo e($isEnglish ? 'View the land inventory, study the utilization and cooperation information, then contact the Land Bank Agency for further information.' : 'Lihat aset persediaan tanah, pelajari informasi pemanfaatan dan kerja sama, kemudian hubungi Badan Bank Tanah untuk informasi lebih lanjut.'); ?>
+
 
                     </p>
 
@@ -883,21 +927,23 @@
 
                 <div class="flex flex-col sm:flex-row gap-3 shrink-0">
 
-                    <a href="{{ route('assets') }}"
+                    <a href="<?php echo e(route('assets')); ?>"
                         class="btn-primary inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg text-sm font-bold transition">
 
                         <i class="fas fa-map-location-dot"></i>
 
-                        {{ $isEnglish ? 'View Assets' : 'Lihat Aset' }}
+                        <?php echo e($isEnglish ? 'View Assets' : 'Lihat Aset'); ?>
+
 
                     </a>
 
-                    <a href="{{ route('kontak') }}"
+                    <a href="<?php echo e(route('kontak')); ?>"
                         class="btn-primary inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg text-sm font-bold transition">
 
                         <i class="fas fa-phone"></i>
 
-                        {{ $isEnglish ? 'Contact' : 'Kontak' }}
+                        <?php echo e($isEnglish ? 'Contact' : 'Kontak'); ?>
+
 
                     </a>
 
@@ -909,4 +955,6 @@
 
     </section>
 
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.frontend', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH /home/u250369146/laravel-app/resources/views/frontend/partnership.blade.php ENDPATH**/ ?>

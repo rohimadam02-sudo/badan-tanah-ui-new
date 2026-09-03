@@ -241,7 +241,7 @@
                 </p>
             </div>
 
-            <a href="{{ route('admin.user.edit', ['id' => 1]) }}" class="text-sm text-[#006400] hover:underline font-semibold">
+            <a href="{{ route('profile.edit') }}" class="text-sm text-[#006400] hover:underline font-semibold">
                 <i class="fas fa-pen mr-1"></i> Edit Profil
             </a>
         </div>
