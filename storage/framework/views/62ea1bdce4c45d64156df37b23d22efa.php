@@ -5,34 +5,34 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
 
-    @php
+    <?php
         $metaTitle = $metaTitle ?? 'Badan Bank Tanah - Mengelola Tanah, Memajukan Negeri';
         $metaDescription =
             $metaDescription ??
             'Badan Bank Tanah mengelola aset tanah negara secara profesional, transparan, dan berkelanjutan untuk kepentingan rakyat.';
         $isEnglish = session('locale', 'id') === 'en';
-    @endphp
+    ?>
 
-    <title>{{ $metaTitle }}</title>
-    <meta name="description" content="{{ $metaDescription }}">
-    <meta property="og:title" content="{{ $metaTitle }}">
-    <meta property="og:description" content="{{ $metaDescription }}">
+    <title><?php echo e($metaTitle); ?></title>
+    <meta name="description" content="<?php echo e($metaDescription); ?>">
+    <meta property="og:title" content="<?php echo e($metaTitle); ?>">
+    <meta property="og:description" content="<?php echo e($metaDescription); ?>">
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
-    {{-- ========================================================= --}}
-    {{-- GOOGLE ANALYTICS --}}
-    {{-- ========================================================= --}}
-    @if (isset($pengaturan) && $pengaturan->google_analytics)
+    
+    
+    
+    <?php if(isset($pengaturan) && $pengaturan->google_analytics): ?>
         <!-- Google tag (gtag.js) -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id={{ $pengaturan->google_analytics }}"></script>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo e($pengaturan->google_analytics); ?>"></script>
         <script>
             window.dataLayer = window.dataLayer || [];
 
@@ -40,9 +40,9 @@
                 dataLayer.push(arguments);
             }
             gtag('js', new Date());
-            gtag('config', '{{ $pengaturan->google_analytics }}');
+            gtag('config', '<?php echo e($pengaturan->google_analytics); ?>');
         </script>
-    @endif
+    <?php endif; ?>
 
     <style>
         /* =========================================================
@@ -86,9 +86,9 @@
            DINAMIC COLORS - DARI PENGATURAN
         ========================================================= */
         :root {
-            --color-primary: {{ $pengaturan->warna_utama ?? '#0B2A4A' }};
-            --color-secondary: {{ $pengaturan->warna_sekunder ?? '#1D4ED8' }};
-            --color-secondary-hover: {{ $pengaturan->warna_utama ?? '#0B2A4A' }};
+            --color-primary: <?php echo e($pengaturan->warna_utama ?? '#0B2A4A'); ?>;
+            --color-secondary: <?php echo e($pengaturan->warna_sekunder ?? '#1D4ED8'); ?>;
+            --color-secondary-hover: <?php echo e($pengaturan->warna_utama ?? '#0B2A4A'); ?>;
         }
 
         /* NAVBAR - Active link menggunakan warna sekunder */
@@ -783,7 +783,7 @@
 
 <body class="bg-white text-gray-800 antialiased">
 
-    @php
+    <?php
         // Ambil halaman yang aktif dari database
         $activePages = \App\Models\Halaman::where('is_active', true)->get();
         $activePageTitles = $activePages
@@ -850,7 +850,7 @@
             'terms' => $isEnglish ? 'Terms & Conditions' : 'Syarat & Ketentuan',
             'accessibility' => $isEnglish ? 'Accessibility' : 'Aksesibilitas',
         ];
-    @endphp
+    ?>
 
     <!-- ========================================================= -->
     <!-- MOBILE OVERLAY -->
@@ -869,15 +869,16 @@
         </div>
 
         <div class="nav-list">
-            <div class="nav-section-title">{{ $menuLabels['home'] }}</div>
+            <div class="nav-section-title"><?php echo e($menuLabels['home']); ?></div>
 
-            <a href="{{ route('home') }}" class="nav-item {{ request()->routeIs('home') ? 'active' : '' }}"
-                aria-current="{{ request()->routeIs('home') ? 'page' : 'false' }}">
+            <a href="<?php echo e(route('home')); ?>" class="nav-item <?php echo e(request()->routeIs('home') ? 'active' : ''); ?>"
+                aria-current="<?php echo e(request()->routeIs('home') ? 'page' : 'false'); ?>">
                 <i class="fas fa-house" aria-hidden="true"></i>
-                {{ $menuLabels['home'] }}
+                <?php echo e($menuLabels['home']); ?>
+
             </a>
 
-            @php
+            <?php
                 $menuItems = [
                     [
                         'route' => 'about',
@@ -899,10 +900,10 @@
                         'check' => 'publikasi',
                     ],
                 ];
-            @endphp
+            ?>
 
-            @foreach ($menuItems as $item)
-                @php
+            <?php $__currentLoopData = $menuItems; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <?php
                     // Cek apakah menu ini aktif berdasarkan halaman aktif
                     $isActive = false;
                     if ($item['check'] == 'tentang') {
@@ -920,40 +921,44 @@
                     } else {
                         $isActive = true;
                     }
-                @endphp
-                @if ($isActive)
-                    <a href="{{ route($item['route']) }}"
-                        class="nav-item {{ request()->routeIs($item['route']) ? 'active' : '' }}"
-                        aria-current="{{ request()->routeIs($item['route']) ? 'page' : 'false' }}">
-                        <i class="fas {{ $item['icon'] }}" aria-hidden="true"></i>
-                        {{ $item['label'] }}
+                ?>
+                <?php if($isActive): ?>
+                    <a href="<?php echo e(route($item['route'])); ?>"
+                        class="nav-item <?php echo e(request()->routeIs($item['route']) ? 'active' : ''); ?>"
+                        aria-current="<?php echo e(request()->routeIs($item['route']) ? 'page' : 'false'); ?>">
+                        <i class="fas <?php echo e($item['icon']); ?>" aria-hidden="true"></i>
+                        <?php echo e($item['label']); ?>
+
                     </a>
-                @endif
-            @endforeach
+                <?php endif; ?>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
             <div class="nav-divider"></div>
 
-            <div class="nav-section-title">{{ $menuLabels['others'] }}</div>
+            <div class="nav-section-title"><?php echo e($menuLabels['others']); ?></div>
 
-            <a href="{{ route('faq') }}" class="nav-item {{ request()->routeIs('faq') ? 'active' : '' }}"
-                aria-current="{{ request()->routeIs('faq') ? 'page' : 'false' }}">
+            <a href="<?php echo e(route('faq')); ?>" class="nav-item <?php echo e(request()->routeIs('faq') ? 'active' : ''); ?>"
+                aria-current="<?php echo e(request()->routeIs('faq') ? 'page' : 'false'); ?>">
                 <i class="fas fa-circle-question" aria-hidden="true"></i>
-                {{ $menuLabels['faq'] }}
+                <?php echo e($menuLabels['faq']); ?>
+
                 <span class="nav-badge">FAQ</span>
             </a>
 
-            <a href="{{ route('karier') }}" class="nav-item {{ request()->routeIs('karier') ? 'active' : '' }}"
-                aria-current="{{ request()->routeIs('karier') ? 'page' : 'false' }}">
+            <a href="<?php echo e(route('karier')); ?>" class="nav-item <?php echo e(request()->routeIs('karier') ? 'active' : ''); ?>"
+                aria-current="<?php echo e(request()->routeIs('karier') ? 'page' : 'false'); ?>">
                 <i class="fas fa-briefcase" aria-hidden="true"></i>
-                {{ $menuLabels['career'] }}
-                <span class="nav-badge">{{ $isEnglish ? 'Career' : 'Karir' }}</span>
+                <?php echo e($menuLabels['career']); ?>
+
+                <span class="nav-badge"><?php echo e($isEnglish ? 'Career' : 'Karir'); ?></span>
             </a>
 
-            <a href="{{ route('kontak') }}" class="nav-item {{ request()->routeIs('kontak') ? 'active' : '' }}"
-                aria-current="{{ request()->routeIs('kontak') ? 'page' : 'false' }}">
+            <a href="<?php echo e(route('kontak')); ?>" class="nav-item <?php echo e(request()->routeIs('kontak') ? 'active' : ''); ?>"
+                aria-current="<?php echo e(request()->routeIs('kontak') ? 'page' : 'false'); ?>">
                 <i class="fas fa-envelope" aria-hidden="true"></i>
-                {{ $menuLabels['contact'] }}
-                <span class="nav-badge">{{ $isEnglish ? 'Contact' : 'Hubungi' }}</span>
+                <?php echo e($menuLabels['contact']); ?>
+
+                <span class="nav-badge"><?php echo e($isEnglish ? 'Contact' : 'Hubungi'); ?></span>
             </a>
         </div>
 
@@ -964,17 +969,17 @@
     <!-- TOP BAR -->
     <!-- ========================================================= -->
     <div class="text-white text-xs hidden sm:block"
-        style="background-color: {{ $pengaturan->warna_utama ?? '#0B2A4A' }};">
+        style="background-color: <?php echo e($pengaturan->warna_utama ?? '#0B2A4A'); ?>;">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center py-2">
             <div class="flex items-center gap-2">
                 <i class="fas fa-globe text-blue-300" aria-hidden="true"></i>
                 <span
-                    class="truncate">{{ $isEnglish ? 'Advancing Productive, Transparent, and Sustainable Land Management' : 'Memajukan Pengelolaan Tanah yang Produktif, Transparan, dan Berkelanjutan' }}</span>
+                    class="truncate"><?php echo e($isEnglish ? 'Advancing Productive, Transparent, and Sustainable Land Management' : 'Memajukan Pengelolaan Tanah yang Produktif, Transparan, dan Berkelanjutan'); ?></span>
             </div>
             <div class="flex items-center gap-4">
-                <a href="{{ route('kontak') }}"
-                    class="hover:text-blue-300 transition">{{ $menuLabels['contact'] }}</a>
-                <a href="{{ route('search') }}" class="hover:text-blue-300 transition">{{ $menuLabels['search'] }}</a>
+                <a href="<?php echo e(route('kontak')); ?>"
+                    class="hover:text-blue-300 transition"><?php echo e($menuLabels['contact']); ?></a>
+                <a href="<?php echo e(route('search')); ?>" class="hover:text-blue-300 transition"><?php echo e($menuLabels['search']); ?></a>
                 <i class="fas fa-search cursor-pointer hover:text-blue-300 transition" aria-hidden="true"></i>
             </div>
         </div>
@@ -990,10 +995,10 @@
                 <!-- ========================================================= -->
                 <!-- LOGO -->
                 <!-- ========================================================= -->
-                <a href="{{ route('home') }}" class="flex items-center flex-shrink-0"
+                <a href="<?php echo e(route('home')); ?>" class="flex items-center flex-shrink-0"
                     aria-label="Badan Bank Tanah - Home">
                     <div class="logo-container">
-                        <img src="{{ asset('images/Logo-badan-bank-tanah.png') }}" alt="Logo Badan Bank Tanah"
+                        <img src="<?php echo e(asset('images/Logo-badan-bank-tanah.png')); ?>" alt="Logo Badan Bank Tanah"
                             class="w-full h-full object-contain"
                             onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 fill=%22%230B2A4A%22/%3E%3Ctext x=%2250%22 y=%2255%22 text-anchor=%22middle%22 font-size=%2240%22 fill=%22white%22 font-weight=%22bold%22%3EBT%3C/text%3E%3C/svg%3E'">
                     </div>
@@ -1005,7 +1010,7 @@
                 <nav class="hidden lg:flex items-center space-x-8 xl:space-x-10 text-gray-700"
                     aria-label="Main Navigation">
 
-                    @php
+                    <?php
                         $navItems = [
                             ['route' => 'about', 'label' => $menuLabels['about'], 'check' => 'tentang'],
                             ['route' => 'assets', 'label' => $menuLabels['assets'], 'check' => 'aset'],
@@ -1016,10 +1021,10 @@
                                 'check' => 'publikasi',
                             ],
                         ];
-                    @endphp
+                    ?>
 
-                    @foreach ($navItems as $item)
-                        @php
+                    <?php $__currentLoopData = $navItems; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <?php
                             $isActive = false;
                             $isRouteActive = request()->routeIs($item['route']);
                             if ($item['check'] == 'tentang') {
@@ -1037,25 +1042,27 @@
                             } else {
                                 $isActive = true;
                             }
-                        @endphp
-                        @if ($isActive)
-                            <a href="{{ route($item['route']) }}"
-                                class="hover:text-[var(--color-secondary)] transition font-medium {{ $isRouteActive ? 'text-[var(--color-secondary)] font-semibold active-nav' : '' }}"
-                                aria-current="{{ $isRouteActive ? 'page' : 'false' }}">
-                                {{ $item['label'] }}
+                        ?>
+                        <?php if($isActive): ?>
+                            <a href="<?php echo e(route($item['route'])); ?>"
+                                class="hover:text-[var(--color-secondary)] transition font-medium <?php echo e($isRouteActive ? 'text-[var(--color-secondary)] font-semibold active-nav' : ''); ?>"
+                                aria-current="<?php echo e($isRouteActive ? 'page' : 'false'); ?>">
+                                <?php echo e($item['label']); ?>
+
                             </a>
-                        @endif
-                    @endforeach
+                        <?php endif; ?>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
                     <!-- Dropdown Lainnya (Desktop) - FIXED -->
-                    @if ($otherMenus->count() > 0)
+                    <?php if($otherMenus->count() > 0): ?>
                         <div class="relative inline-block">
                             <!-- Tombol Dropdown -->
                             <button id="dropdownLainnyaBtn"
                                 class="flex items-center gap-1.5 py-2 px-1 text-sm font-medium text-gray-700 hover:text-[var(--color-secondary)] transition 
-        {{ request()->routeIs('faq') || request()->routeIs('karier') || request()->routeIs('kontak') ? 'text-[var(--color-secondary)] font-semibold' : '' }}"
+        <?php echo e(request()->routeIs('faq') || request()->routeIs('karier') || request()->routeIs('kontak') ? 'text-[var(--color-secondary)] font-semibold' : ''); ?>"
                                 onclick="toggleDropdownLainnya()" aria-expanded="false">
-                                {{ $menuLabels['others'] ?? 'Lainnya' }}
+                                <?php echo e($menuLabels['others'] ?? 'Lainnya'); ?>
+
                                 <i id="dropdownLainnyaIcon"
                                     class="fas fa-chevron-down text-[10px] transition-transform duration-200"
                                     aria-hidden="true"></i>
@@ -1067,8 +1074,8 @@
                transition-all duration-200 ease-out"
                                 role="menu" style="min-width: 200px;">
 
-                                @foreach ($otherMenus as $menu)
-                                    @php
+                                <?php $__currentLoopData = $otherMenus; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $menu): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <?php
                                         $icon = match (strtolower($menu->nama)) {
                                             'faq' => 'fa-circle-question',
                                             'karier' => 'fa-briefcase',
@@ -1088,23 +1095,24 @@
                                             default => $menu->nama,
                                         };
                                         $isActive = request()->routeIs($routeName);
-                                    @endphp
-                                    <a href="{{ route($routeName) }}"
+                                    ?>
+                                    <a href="<?php echo e(route($routeName)); ?>"
                                         class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-[var(--color-secondary)] transition
-                                        {{ $isActive ? 'bg-gray-50 text-[var(--color-secondary)] font-semibold' : '' }}"
+                                        <?php echo e($isActive ? 'bg-gray-50 text-[var(--color-secondary)] font-semibold' : ''); ?>"
                                         role="menuitem">
-                                        <i class="fas {{ $icon }} w-5 text-center text-gray-400"
+                                        <i class="fas <?php echo e($icon); ?> w-5 text-center text-gray-400"
                                             aria-hidden="true"></i>
-                                        {{ $label }}
-                                        @if ($isActive)
+                                        <?php echo e($label); ?>
+
+                                        <?php if($isActive): ?>
                                             <span
                                                 class="ml-auto w-1.5 h-1.5 rounded-full bg-[var(--color-secondary)]"></span>
-                                        @endif
+                                        <?php endif; ?>
                                     </a>
-                                @endforeach
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </div>
                         </div>
-                    @endif
+                    <?php endif; ?>
                 </nav>
 
                 <!-- ========================================================= -->
@@ -1117,7 +1125,7 @@
                         class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium border border-gray-200 hover:border-[var(--color-secondary)] hover:text-[var(--color-secondary)] transition"
                         id="langToggle" title="Ganti Bahasa">
                         <i class="fas fa-globe text-xs"></i>
-                        <span id="langText">{{ $isEnglish ? 'EN' : 'ID' }}</span>
+                        <span id="langText"><?php echo e($isEnglish ? 'EN' : 'ID'); ?></span>
                     </button>
 
                     <!-- Dark Mode Toggle -->
@@ -1143,13 +1151,13 @@
     <!-- MAIN CONTENT -->
     <!-- ========================================================= -->
     <main role="main">
-        @yield('content')
+        <?php echo $__env->yieldContent('content'); ?>
     </main>
 
     <!-- ========================================================= -->
     <!-- FOOTER -->
     <!-- ========================================================= -->
-    <footer class="text-white mt-20" style="background-color: {{ $pengaturan->warna_utama ?? '#0B2A4A' }};"
+    <footer class="text-white mt-20" style="background-color: <?php echo e($pengaturan->warna_utama ?? '#0B2A4A'); ?>;"
         role="contentinfo">
         <div
             class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10 border-b border-white/10">
@@ -1158,103 +1166,105 @@
             <div>
                 <div class="flex items-center gap-3 mb-4">
                     <div class="flex items-center justify-center w-13 h-12 rounded">
-                        <img src="{{ asset('images/Logo-badan-bank-tanah.png') }}" alt="Logo Badan Bank Tanah"
+                        <img src="<?php echo e(asset('images/Logo-badan-bank-tanah.png')); ?>" alt="Logo Badan Bank Tanah"
                             class="w-full h-full object-contain"
                             onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 fill=%22%230B2A4A%22/%3E%3Ctext x=%2250%22 y=%2255%22 text-anchor=%22middle%22 font-size=%2240%22 fill=%22white%22 font-weight=%22bold%22%3EBT%3C/text%3E%3C/svg%3E'">
                     </div>
                 </div>
                 <p class="text-sm text-gray-300 leading-relaxed">
-                    {{ $footer->deskripsi ?? ($isEnglish ? 'Managing state land professionally, transparently, and sustainably for the benefit of the people.' : 'Mengelola tanah negara secara profesional, transparan, dan berkelanjutan untuk kepentingan rakyat.') }}
+                    <?php echo e($footer->deskripsi ?? ($isEnglish ? 'Managing state land professionally, transparently, and sustainably for the benefit of the people.' : 'Mengelola tanah negara secara profesional, transparan, dan berkelanjutan untuk kepentingan rakyat.')); ?>
+
                 </p>
             </div>
 
             <!-- Kolom 2: Tautan Cepat -->
             <div>
                 <h4 class="font-bold text-white mb-4 uppercase text-xs tracking-wider">
-                    {{ $menuLabels['quick_links'] }}</h4>
+                    <?php echo e($menuLabels['quick_links']); ?></h4>
                 <ul class="space-y-2 text-sm text-gray-300">
-                    @foreach ($footer->quick_links ?? [] as $link)
-                        <li><a href="{{ $link['url'] ?? '#' }}"
-                                class="hover:text-white transition">{{ $link['label'] ?? 'Link' }}</a></li>
-                    @endforeach
+                    <?php $__currentLoopData = $footer->quick_links ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $link): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <li><a href="<?php echo e($link['url'] ?? '#'); ?>"
+                                class="hover:text-white transition"><?php echo e($link['label'] ?? 'Link'); ?></a></li>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </ul>
             </div>
 
             <!-- Kolom 3: Kontak & Sosial Media -->
             <div>
                 <h4 class="font-bold text-white mb-4 uppercase text-xs tracking-wider">
-                    {{ $menuLabels['contact_info'] }}</h4>
+                    <?php echo e($menuLabels['contact_info']); ?></h4>
                 <ul class="space-y-3 text-sm text-gray-300">
                     <li class="flex items-start gap-3">
                         <i class="fas fa-map-marker-alt text-blue-400 mt-0.5" aria-hidden="true"></i>
-                        <span>{{ $footer->alamat ?? 'Jl. H. Juanda No. 15, Jakarta Pusat' }}</span>
+                        <span><?php echo e($footer->alamat ?? 'Jl. H. Juanda No. 15, Jakarta Pusat'); ?></span>
                     </li>
                     <li class="flex items-center gap-3">
                         <i class="fas fa-envelope text-blue-400" aria-hidden="true"></i>
-                        <a href="mailto:{{ $footer->email ?? 'info@bantah.go.id' }}"
-                            class="hover:text-white transition">{{ $footer->email ?? 'info@bantah.go.id' }}</a>
+                        <a href="mailto:<?php echo e($footer->email ?? 'info@bantah.go.id'); ?>"
+                            class="hover:text-white transition"><?php echo e($footer->email ?? 'info@bantah.go.id'); ?></a>
                     </li>
                     <li class="flex items-center gap-3">
                         <i class="fas fa-phone text-blue-400" aria-hidden="true"></i>
-                        <a href="tel:{{ $footer->telepon ?? '02134567890' }}"
-                            class="hover:text-white transition">{{ $footer->telepon ?? '(021) 3456-7890' }}</a>
+                        <a href="tel:<?php echo e($footer->telepon ?? '02134567890'); ?>"
+                            class="hover:text-white transition"><?php echo e($footer->telepon ?? '(021) 3456-7890'); ?></a>
                     </li>
                 </ul>
 
-                @php
+                <?php
                     $socialMedias = \App\Models\SocialMedia::active()->ordered()->get();
-                @endphp
+                ?>
 
-                @if ($socialMedias->count() > 0)
+                <?php if($socialMedias->count() > 0): ?>
                     <div class="flex flex-wrap gap-3 mt-4">
-                        @foreach ($socialMedias as $social)
-                            <a href="{{ $social->url }}" target="_blank" rel="noopener noreferrer"
+                        <?php $__currentLoopData = $socialMedias; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $social): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <a href="<?php echo e($social->url); ?>" target="_blank" rel="noopener noreferrer"
                                 class="w-9 h-9 rounded-full flex items-center justify-center hover:scale-110 transition group"
-                                style="background-color: {{ $social->warna ?? '#ffffff' }}; color: white;"
-                                title="{{ $social->nama }}" aria-label="{{ $social->nama }}">
-                                <i class="{{ $social->icon }} text-sm group-hover:scale-110 transition"
+                                style="background-color: <?php echo e($social->warna ?? '#ffffff'); ?>; color: white;"
+                                title="<?php echo e($social->nama); ?>" aria-label="<?php echo e($social->nama); ?>">
+                                <i class="<?php echo e($social->icon); ?> text-sm group-hover:scale-110 transition"
                                     aria-hidden="true"></i>
                             </a>
-                        @endforeach
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </div>
-                @endif
+                <?php endif; ?>
             </div>
 
             <!-- Kolom 4: Newsletter -->
-            @if ($footer->show_newsletter)
+            <?php if($footer->show_newsletter): ?>
                 <div>
                     <h4 class="font-bold text-white mb-4 uppercase text-xs tracking-wider">
-                        {{ $menuLabels['newsletter'] }}</h4>
+                        <?php echo e($menuLabels['newsletter']); ?></h4>
                     <p class="text-sm text-gray-300 mb-3">
-                        {{ $isEnglish ? 'Get the latest information from the Land Bank Agency.' : 'Dapatkan informasi terbaru dari Badan Bank Tanah.' }}
+                        <?php echo e($isEnglish ? 'Get the latest information from the Land Bank Agency.' : 'Dapatkan informasi terbaru dari Badan Bank Tanah.'); ?>
+
                     </p>
                     <div class="flex">
-                        <input type="email" placeholder="{{ $isEnglish ? 'Your Email' : 'Email Anda' }}"
+                        <input type="email" placeholder="<?php echo e($isEnglish ? 'Your Email' : 'Email Anda'); ?>"
                             class="flex-1 bg-white/10 text-white px-4 py-3 rounded-l-lg border border-white/20 focus:outline-none focus:border-blue-400 text-sm placeholder-gray-400"
                             aria-label="Email address for newsletter">
                         <button class="px-4 rounded-r-lg transition hover:opacity-90"
-                            style="background-color: {{ $pengaturan->warna_sekunder ?? '#1D4ED8' }};"
+                            style="background-color: <?php echo e($pengaturan->warna_sekunder ?? '#1D4ED8'); ?>;"
                             aria-label="Subscribe to newsletter">
                             <i class="fas fa-paper-plane" aria-hidden="true"></i>
                         </button>
                     </div>
                 </div>
-            @endif
+            <?php endif; ?>
 
         </div>
 
         <!-- Copyright -->
         <div
             class="max-w-7xl mx-auto px-4 py-5 flex flex-col md:flex-row justify-between items-center gap-2 text-[10px] md:text-xs text-gray-400">
-            <p>{!! str_replace(
+            <p><?php echo str_replace(
                 '{year}',
                 date('Y'),
                 $footer->footer_text ?? '&copy; {year} Badan Bank Tanah. Hak Cipta Dilindungi.',
-            ) !!}</p>
+            ); ?></p>
             <div class="flex gap-4">
-                <a href="#" class="hover:text-white transition">{{ $menuLabels['privacy'] }}</a>
-                <a href="#" class="hover:text-white transition">{{ $menuLabels['terms'] }}</a>
-                <a href="#" class="hover:text-white transition">{{ $menuLabels['accessibility'] }}</a>
+                <a href="#" class="hover:text-white transition"><?php echo e($menuLabels['privacy']); ?></a>
+                <a href="#" class="hover:text-white transition"><?php echo e($menuLabels['terms']); ?></a>
+                <a href="#" class="hover:text-white transition"><?php echo e($menuLabels['accessibility']); ?></a>
             </div>
         </div>
     </footer>
@@ -1263,7 +1273,7 @@
     <!-- SCRIPTS -->
     <!-- ========================================================= -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    @stack('scripts')
+    <?php echo $__env->yieldPushContent('scripts'); ?>
 
     <!-- Mobile Nav Script -->
     <script>
@@ -1409,14 +1419,14 @@
         document.addEventListener('DOMContentLoaded', function() {
             const langText = document.getElementById('langText');
             if (langText) {
-                const currentLang = '{{ session('locale', 'id') }}';
+                const currentLang = '<?php echo e(session('locale', 'id')); ?>';
                 langText.textContent = currentLang === 'en' ? 'EN' : 'ID';
             }
         });
     </script>
 
-    {{-- CHATBOT --}}
-    @include('components.chatbot')
+    
+    <?php echo $__env->make('components.chatbot', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
 
     <script>
@@ -1489,3 +1499,4 @@
 </body>
 
 </html>
+<?php /**PATH /home/u250369146/laravel-app/resources/views/layouts/frontend.blade.php ENDPATH**/ ?>
