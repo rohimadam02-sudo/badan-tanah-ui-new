@@ -1,9 +1,15 @@
+{{-- =========================================================
+    LAYOUT & TITLE
+========================================================= --}}
 @extends('layouts.admin')
 
 @section('title', 'Daftar Pengguna')
 
 @section('content')
 
+{{-- =========================================================
+    HEADER HALAMAN
+========================================================= --}}
 <div class="flex justify-between items-center mb-8">
     <div>
         <h1 class="text-2xl font-bold text-gray-900">Daftar Pengguna</h1>
@@ -15,6 +21,9 @@
     </a>
 </div>
 
+{{-- =========================================================
+    TABEL DAFTAR PENGGUNA
+========================================================= --}}
 <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
     <div class="overflow-x-auto">
         <table class="w-full text-left text-sm">
@@ -30,6 +39,10 @@
             <tbody class="divide-y divide-gray-100">
                 @foreach ($users as $user)
                 <tr class="hover:bg-gray-50 transition">
+
+                    {{-- =========================================================
+                        KOLOM FOTO
+                    ========================================================= --}}
                     <td class="px-6 py-4">
                         @if ($user->foto)
                             <img src="{{ asset('storage/' . $user->foto) }}" 
@@ -40,12 +53,24 @@
                             </div>
                         @endif
                     </td>
+
+                    {{-- =========================================================
+                        KOLOM NAMA
+                    ========================================================= --}}
                     <td class="px-6 py-4">
                         <div class="flex items-center gap-3">
                             <span class="font-medium text-gray-900">{{ $user->name }}</span>
                         </div>
                     </td>
+
+                    {{-- =========================================================
+                        KOLOM EMAIL
+                    ========================================================= --}}
                     <td class="px-6 py-4">{{ $user->email }}</td>
+
+                    {{-- =========================================================
+                        KOLOM ROLE
+                    ========================================================= --}}
                     <td class="px-6 py-4">
                         <span class="inline-flex px-2.5 py-1 rounded-full text-[10px] font-bold
                             {{ $user->role == 'super_admin' ? 'bg-purple-50 text-purple-700' :
@@ -56,9 +81,14 @@
                             {{ ucfirst(str_replace('_', ' ', $user->role)) }}
                         </span>
                     </td>
+
+                    {{-- =========================================================
+                        KOLOM AKSI
+                    ========================================================= --}}
                     <td class="px-6 py-4">
                         <div class="flex gap-2">
-                            <!-- Update Role -->
+
+                            {{-- UPDATE ROLE (KHUSUS SUPER ADMIN) --}}
                             @if (auth()->user()->role == 'super_admin')
                                 <form action="{{ route('admin.user.quickUpdateRole', $user->id) }}" method="POST" class="inline-flex items-center gap-2">
                                     @csrf
@@ -72,8 +102,10 @@
                                 </form>
                             @endif
                             
+                            {{-- TOMBOL EDIT --}}
                             <a href="{{ route('admin.user.edit', $user->id) }}" class="text-blue-600 hover:text-blue-800 text-sm font-bold">Edit</a>
                             
+                            {{-- TOMBOL HAPUS (KHUSUS SUPER ADMIN & BUKAN DIRI SENDIRI) --}}
                             @if (auth()->user()->role == 'super_admin' && $user->id != auth()->id())
                                 <form action="{{ route('admin.user.destroy', $user->id) }}" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus user ini?')">
                                     @csrf

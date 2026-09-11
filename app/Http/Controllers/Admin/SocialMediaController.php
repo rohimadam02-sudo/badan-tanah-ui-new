@@ -1,24 +1,39 @@
 <?php
 
+/* =========================================================
+    NAMESPACE & IMPORT
+========================================================= */
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\SocialMedia;
 use Illuminate\Http\Request;
 
+/* =========================================================
+    CONTROLLER: SOCIAL MEDIA
+========================================================= */
 class SocialMediaController extends Controller
 {
+    /* =========================================================
+        DAFTAR SOCIAL MEDIA
+    ========================================================= */
     public function index()
     {
         $socialMedias = SocialMedia::ordered()->get();
         return view('admin.social_media_index', compact('socialMedias'));
     }
 
+    /* =========================================================
+        FORM TAMBAH SOCIAL MEDIA
+    ========================================================= */
     public function create()
     {
         return view('admin.social_media_create');
     }
 
+    /* =========================================================
+        SIMPAN SOCIAL MEDIA BARU
+    ========================================================= */
     public function store(Request $request)
     {
         $request->validate([
@@ -43,12 +58,18 @@ class SocialMediaController extends Controller
             ->with('success', 'Social media berhasil ditambahkan!');
     }
 
+    /* =========================================================
+        FORM EDIT SOCIAL MEDIA
+    ========================================================= */
     public function edit($id)
     {
         $socialMedia = SocialMedia::findOrFail($id);
         return view('admin.social_media_edit', compact('socialMedia'));
     }
 
+    /* =========================================================
+        UPDATE SOCIAL MEDIA
+    ========================================================= */
     public function update(Request $request, $id)
     {
         $socialMedia = SocialMedia::findOrFail($id);
@@ -72,6 +93,9 @@ class SocialMediaController extends Controller
             ->with('success', 'Social media berhasil diperbarui!');
     }
 
+    /* =========================================================
+        HAPUS SOCIAL MEDIA
+    ========================================================= */
     public function destroy($id)
     {
         $socialMedia = SocialMedia::findOrFail($id);
@@ -81,6 +105,9 @@ class SocialMediaController extends Controller
             ->with('success', 'Social media berhasil dihapus!');
     }
 
+    /* =========================================================
+        TOGGLE STATUS AKTIF
+    ========================================================= */
     public function toggle($id)
     {
         $socialMedia = SocialMedia::findOrFail($id);
@@ -93,6 +120,9 @@ class SocialMediaController extends Controller
         ]);
     }
 
+    /* =========================================================
+        UPDATE URUTAN SOCIAL MEDIA
+    ========================================================= */
     public function updateOrder(Request $request)
     {
         $orders = $request->input('order', []);

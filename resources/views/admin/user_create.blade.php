@@ -1,15 +1,24 @@
+{{-- =========================================================
+    LAYOUT & TITLE
+========================================================= --}}
 @extends('layouts.admin')
 
 @section('title', 'Tambah Pengguna')
 
 @section('content')
 
+{{-- =========================================================
+    HEADER HALAMAN
+========================================================= --}}
 <div class="max-w-4xl mx-auto">
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-2xl font-bold text-gray-900">Tambah Pengguna</h1>
         <a href="{{ route('admin.user.index') }}" class="text-sm text-gray-600 hover:text-[#006400]">Kembali ke Daftar</a>
     </div>
 
+    {{-- =========================================================
+        ALERT ERROR VALIDASI
+    ========================================================= --}}
     @if ($errors->any())
         <div class="bg-red-50 border border-red-200 text-red-700 rounded-xl p-4 mb-6">
             <div class="flex items-start gap-3">
@@ -28,12 +37,18 @@
         </div>
     @endif
 
+    {{-- =========================================================
+        FORM TAMBAH PENGGUNA
+    ========================================================= --}}
     <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
         <form action="{{ route('admin.user.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Foto -->
+
+                {{-- =========================================================
+                    INPUT FOTO PROFIL
+                ========================================================= --}}
                 <div class="md:col-span-2">
                     <label class="block text-sm font-semibold text-gray-700 mb-1.5">Foto Profil</label>
                     <div class="flex items-center gap-4">
@@ -57,28 +72,36 @@
                     @enderror
                 </div>
 
-                <!-- Nama -->
+                {{-- =========================================================
+                    INPUT NAMA
+                ========================================================= --}}
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-1.5">Nama <span class="text-red-500">*</span></label>
                     <input type="text" name="name" value="{{ old('name') }}" 
                         class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#006400]/30 focus:border-[#006400] transition" required>
                 </div>
 
-                <!-- Email -->
+                {{-- =========================================================
+                    INPUT EMAIL
+                ========================================================= --}}
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-1.5">Email <span class="text-red-500">*</span></label>
                     <input type="email" name="email" value="{{ old('email') }}" 
                         class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#006400]/30 focus:border-[#006400] transition" required>
                 </div>
 
-                <!-- Password -->
+                {{-- =========================================================
+                    INPUT PASSWORD
+                ========================================================= --}}
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-1.5">Password <span class="text-red-500">*</span></label>
                     <input type="password" name="password" 
                         class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#006400]/30 focus:border-[#006400] transition" required>
                 </div>
 
-                <!-- Role -->
+                {{-- =========================================================
+                    INPUT ROLE
+                ========================================================= --}}
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-1.5">Role <span class="text-red-500">*</span></label>
                     <select name="role" class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#006400]/30 focus:border-[#006400] transition" required>
@@ -90,6 +113,9 @@
                 </div>
             </div>
             
+            {{-- =========================================================
+                TOMBOL SIMPAN
+            ========================================================= --}}
             <div class="mt-6 flex justify-end">
                 <button type="submit" class="bg-[#006400] hover:bg-[#005500] text-white px-6 py-3 rounded-xl font-bold text-sm transition shadow-md hover:shadow-lg">
                     <i class="fas fa-save mr-1.5"></i>
@@ -100,6 +126,9 @@
     </div>
 </div>
 
+{{-- =========================================================
+    SCRIPT PREVIEW FOTO
+========================================================= --}}
 <script>
     function previewFoto(event) {
         const input = event.target;

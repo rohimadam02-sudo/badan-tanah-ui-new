@@ -1,8 +1,15 @@
+{{-- =========================================================
+    LAYOUT & TITLE
+========================================================= --}}
 @extends('layouts.admin')
 
 @section('title', 'Menu Navigasi')
 
 @section('content')
+
+{{-- =========================================================
+    HEADER HALAMAN
+========================================================= --}}
 <div class="flex justify-between items-center mb-8">
     <div>
         <h1 class="text-2xl font-bold text-gray-900">Menu Navigasi</h1>
@@ -10,12 +17,18 @@
     </div>
 </div>
 
+{{-- =========================================================
+    ALERT SUKSES
+========================================================= --}}
 @if (session('success'))
     <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
         {{ session('success') }}
     </div>
 @endif
 
+{{-- =========================================================
+    FORM MENU NAVIGASI
+========================================================= --}}
 <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
     <form action="{{ route('admin.menu_navigasi.update') }}" method="POST">
         @csrf
@@ -37,6 +50,10 @@
             </div>
             @endforeach
         </div>
+
+        {{-- =========================================================
+            TOMBOL SIMPAN
+        ========================================================= --}}
         <div class="mt-6">
             <button type="submit" class="bg-[#006400] hover:bg-[#005500] text-white px-5 py-2.5 rounded font-bold text-sm">Simpan Menu</button>
         </div>

@@ -1,5 +1,8 @@
 <?php
 
+/* =========================================================
+    NAMESPACE & IMPORT
+========================================================= */
 namespace App\Http\Controllers;
 
 use App\Models\Microsite;
@@ -7,8 +10,14 @@ use App\Models\MenuNavigasi;
 use App\Models\PengaturanWebsite;
 use Illuminate\Http\Request;
 
+/* =========================================================
+    CONTROLLER: MICROSITE (FRONTEND)
+========================================================= */
 class MicrositeController extends Controller
 {
+    /* =========================================================
+        DAFTAR MICROSITE
+    ========================================================= */
     public function index()
     {
         $microsites = Microsite::where('is_active', true)
@@ -21,6 +30,9 @@ class MicrositeController extends Controller
         return view('frontend.microsite_list', compact('microsites', 'menuNavigasi', 'pengaturan'));
     }
 
+    /* =========================================================
+        DETAIL MICROSITE
+    ========================================================= */
     public function show($slug)
     {
         $microsite = Microsite::where('slug', $slug)

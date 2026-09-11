@@ -1,5 +1,8 @@
 <?php
 
+/* =========================================================
+    NAMESPACE & IMPORT
+========================================================= */
 namespace App\Http\Controllers;
 
 use App\Models\Karier;
@@ -9,8 +12,14 @@ use App\Models\PengaturanWebsite;
 use App\Helpers\TranslationHelper;
 use Illuminate\Http\Request;
 
+/* =========================================================
+    CONTROLLER: KARIER (FRONTEND)
+========================================================= */
 class KarierController extends Controller
 {
+    /* =========================================================
+        HALAMAN DAFTAR LOWONGAN
+    ========================================================= */
     public function index()
     {
         $kariers = Karier::all();
@@ -21,6 +30,9 @@ class KarierController extends Controller
         return view('frontend.karier', compact('kariers', 'menuNavigasi', 'pengaturan', 'isEnglish'));
     }
 
+    /* =========================================================
+        HALAMAN FORM LAMARAN
+    ========================================================= */
     public function lamar($id)
     {
         $karier = Karier::findOrFail($id);
@@ -31,6 +43,9 @@ class KarierController extends Controller
         return view('frontend.lamar', compact('karier', 'menuNavigasi', 'pengaturan', 'isEnglish'));
     }
 
+    /* =========================================================
+        SIMPAN LAMARAN
+    ========================================================= */
     public function storeLamaran(Request $request, $id)
     {
         $request->validate([

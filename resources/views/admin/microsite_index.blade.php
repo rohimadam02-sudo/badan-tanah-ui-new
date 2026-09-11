@@ -1,8 +1,15 @@
+{{-- =========================================================
+    LAYOUT & TITLE
+========================================================= --}}
 @extends('layouts.admin')
 
 @section('title', 'Microsite / Event')
 
 @section('content')
+
+{{-- =========================================================
+    HEADER HALAMAN
+========================================================= --}}
 <div class="max-w-7xl mx-auto">
     <div class="flex justify-between items-center mb-6">
         <div>
@@ -15,6 +22,9 @@
         </a>
     </div>
 
+    {{-- =========================================================
+        TABEL MICROSITE / EVENT
+    ========================================================= --}}
     <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full text-left text-sm">
@@ -104,6 +114,9 @@
     </div>
 </div>
 
+{{-- =========================================================
+    SCRIPT TOGGLE STATUS
+========================================================= --}}
 <script>
 function toggleStatus(id) {
     fetch(`/admin/microsite/${id}/toggle`, {

@@ -1,5 +1,8 @@
 <?php
 
+/* =========================================================
+    NAMESPACE & IMPORT
+========================================================= */
 namespace App\Http\Controllers;
 
 use App\Models\AsetTanah;
@@ -8,8 +11,14 @@ use App\Models\MenuNavigasi;
 use App\Models\PengaturanWebsite;
 use Illuminate\Http\Request;
 
+/* =========================================================
+    CONTROLLER: SEARCH (FRONTEND)
+========================================================= */
 class SearchController extends Controller
 {
+    /* =========================================================
+        HALAMAN PENCARIAN
+    ========================================================= */
     public function index(Request $request)
     {
         $keyword = $request->input('q');

@@ -1,19 +1,31 @@
 <?php
 
+/* =========================================================
+    NAMESPACE & IMPORT
+========================================================= */
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\PengaturanWebsite;
 
+/* =========================================================
+    CONTROLLER: INTEGRASI
+========================================================= */
 class IntegrasiController extends Controller
 {
+    /* =========================================================
+        HALAMAN PENGATURAN INTEGRASI
+    ========================================================= */
     public function index()
     {
         $pengaturan = PengaturanWebsite::first();
         return view('admin.integrasi', compact('pengaturan'));
     }
 
+    /* =========================================================
+        UPDATE PENGATURAN INTEGRASI
+    ========================================================= */
     public function update(Request $request)
     {
         $request->validate([

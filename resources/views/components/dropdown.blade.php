@@ -1,5 +1,11 @@
+{{-- =========================================================
+    PROPS
+========================================================= --}}
 @props(['align' => 'right', 'width' => '48', 'contentClasses' => 'py-1 bg-white dark:bg-gray-700'])
 
+{{-- =========================================================
+    LOGIKA ALIGNMENT & WIDTH
+========================================================= --}}
 @php
 $alignmentClasses = match ($align) {
     'left' => 'ltr:origin-top-left rtl:origin-top-right start-0',
@@ -13,11 +19,21 @@ $width = match ($width) {
 };
 @endphp
 
+{{-- =========================================================
+    DROPDOWN
+========================================================= --}}
 <div class="relative" x-data="{ open: false }" @click.outside="open = false" @close.stop="open = false">
+
+    {{-- =========================================================
+        TRIGGER
+    ========================================================= --}}
     <div @click="open = ! open">
         {{ $trigger }}
     </div>
 
+    {{-- =========================================================
+        CONTENT DROPDOWN
+    ========================================================= --}}
     <div x-show="open"
             x-transition:enter="transition ease-out duration-200"
             x-transition:enter-start="opacity-0 scale-95"

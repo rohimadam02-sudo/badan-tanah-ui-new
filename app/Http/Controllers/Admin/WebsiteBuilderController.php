@@ -1,19 +1,31 @@
 <?php
 
+/* =========================================================
+    NAMESPACE & IMPORT
+========================================================= */
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\PengaturanWebsite;
 use Illuminate\Http\Request;
 
+/* =========================================================
+    CONTROLLER: WEBSITE BUILDER
+========================================================= */
 class WebsiteBuilderController extends Controller
 {
+    /* =========================================================
+        HALAMAN WEBSITE BUILDER
+    ========================================================= */
     public function edit()
     {
         $pengaturan = PengaturanWebsite::first();
         return view('admin.website', compact('pengaturan'));
     }
 
+    /* =========================================================
+        UPDATE PENGATURAN WEBSITE
+    ========================================================= */
     public function update(Request $request)
     {
         $pengaturan = PengaturanWebsite::first();

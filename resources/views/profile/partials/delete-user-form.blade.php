@@ -1,4 +1,11 @@
+{{-- =========================================================
+    SECTION: DELETE ACCOUNT
+========================================================= --}}
 <section class="space-y-6">
+
+    {{-- =========================================================
+        HEADER
+    ========================================================= --}}
     <header>
         <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
             {{ __('Delete Account') }}
@@ -9,11 +16,17 @@
         </p>
     </header>
 
+    {{-- =========================================================
+        TOMBOL BUKA MODAL HAPUS AKUN
+    ========================================================= --}}
     <x-danger-button
         x-data=""
         x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')"
     >{{ __('Delete Account') }}</x-danger-button>
 
+    {{-- =========================================================
+        MODAL KONFIRMASI HAPUS AKUN
+    ========================================================= --}}
     <x-modal name="confirm-user-deletion" :show="$errors->userDeletion->isNotEmpty()" focusable>
         <form method="post" action="{{ route('profile.destroy') }}" class="p-6">
             @csrf
@@ -27,6 +40,9 @@
                 {{ __('Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.') }}
             </p>
 
+            {{-- =========================================================
+                INPUT PASSWORD KONFIRMASI
+            ========================================================= --}}
             <div class="mt-6">
                 <x-input-label for="password" value="{{ __('Password') }}" class="sr-only" />
 
@@ -41,6 +57,9 @@
                 <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-2" />
             </div>
 
+            {{-- =========================================================
+                TOMBOL AKSI (CANCEL & DELETE)
+            ========================================================= --}}
             <div class="mt-6 flex justify-end">
                 <x-secondary-button x-on:click="$dispatch('close')">
                     {{ __('Cancel') }}

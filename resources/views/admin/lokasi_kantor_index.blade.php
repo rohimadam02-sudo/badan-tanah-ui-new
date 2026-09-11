@@ -1,9 +1,15 @@
+{{-- =========================================================
+    LAYOUT & TITLE
+========================================================= --}}
 @extends('layouts.admin')
 
 @section('title', 'Lokasi Kantor')
 
 @section('content')
 
+{{-- =========================================================
+    HEADER HALAMAN
+========================================================= --}}
 <div class="max-w-7xl mx-auto">
     <div class="flex justify-between items-center mb-6 flex-wrap gap-3">
         <div>
@@ -16,7 +22,9 @@
         </a>
     </div>
 
-    <!-- Informasi -->
+    {{-- =========================================================
+        INFORMASI
+    ========================================================= --}}
     <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6">
         <div class="flex items-start gap-3">
             <i class="fas fa-map-location-dot text-blue-500 mt-0.5"></i>
@@ -27,6 +35,9 @@
         </div>
     </div>
 
+    {{-- =========================================================
+        TABEL LOKASI KANTOR
+    ========================================================= --}}
     <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full text-left text-sm">
@@ -99,6 +110,9 @@
     </div>
 </div>
 
+{{-- =========================================================
+    SCRIPT SORTABLE & TOAST
+========================================================= --}}
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
