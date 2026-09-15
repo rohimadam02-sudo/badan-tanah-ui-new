@@ -1,0 +1,31 @@
+ APP_NAME="Badan Bank Tanah"
+APP_ENV=production
+APP_DEBUG=true
+APP_URL=https://magenta-shrew-655238.hostingersite.com
+
+# Database
+DB_CONNECTION=mysql
+DB_HOST=localhost
+DB_PORT=3306
+DB_DATABASE=u250369146_badan_tanah3
+DB_USERNAME=u250369146_btanah3
+DB_PASSWORD=Bcr215oke
+
+# Cache & Session
+CACHE_STORE=file
+SESSION_DRIVER=file
+QUEUE_CONNECTION=sync
+
+# Mail (opsional - kosongkan dulu)
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.hostinger.com
+MAIL_PORT=587
+MAIL_USERNAME=
+MAIL_PASSWORD=
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=
+MAIL_FROM_NAME="Badan Bank Tanah"
+
+# Storage
+FILESYSTEM_DISK=public
+APP_KEY=base64:u9endMZuqNzotTTevuRPHvNtLZCcAEBaNpLpmWOZSDs=

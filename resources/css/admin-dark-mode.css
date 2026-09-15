@@ -1,0 +1,194 @@
+/* =========================================
+   ADMIN DARK MODE
+========================================= */
+
+body.dark-mode {
+    background-color: #111827 !important;
+    color: #e5e7eb !important;
+}
+
+/* =========================================
+   SIDEBAR
+========================================= */
+
+body.dark-mode aside {
+    background-color: #111827 !important;
+    color: #e5e7eb !important;
+}
+
+body.dark-mode aside * {
+    border-color: #374151 !important;
+}
+
+body.dark-mode aside a,
+body.dark-mode aside button,
+body.dark-mode aside span,
+body.dark-mode aside p {
+    color: #e5e7eb !important;
+}
+
+body.dark-mode aside a:hover,
+body.dark-mode aside button:hover {
+    color: #ffffff !important;
+}
+
+/* =========================================
+   HEADER
+========================================= */
+
+body.dark-mode header {
+    background-color: #1f2937 !important;
+    color: #f9fafb !important;
+    border-color: #374151 !important;
+}
+
+body.dark-mode header * {
+    color: #e5e7eb;
+}
+
+/* =========================================
+   MAIN
+========================================= */
+
+body.dark-mode main {
+    background-color: #111827 !important;
+    color: #e5e7eb !important;
+}
+
+/* =========================================
+   CARD
+========================================= */
+
+body.dark-mode .bg-white {
+    background-color: #1f2937 !important;
+    color: #e5e7eb !important;
+}
+
+/* =========================================
+   BACKGROUND
+========================================= */
+
+body.dark-mode .bg-gray-50 {
+    background-color: #1f2937 !important;
+}
+
+body.dark-mode .bg-gray-100 {
+    background-color: #111827 !important;
+}
+
+/* =========================================
+   TEXT
+========================================= */
+
+body.dark-mode .text-gray-900 {
+    color: #f9fafb !important;
+}
+
+body.dark-mode .text-gray-800 {
+    color: #f3f4f6 !important;
+}
+
+body.dark-mode .text-gray-700 {
+    color: #e5e7eb !important;
+}
+
+body.dark-mode .text-gray-600 {
+    color: #d1d5db !important;
+}
+
+body.dark-mode .text-gray-500 {
+    color: #9ca3af !important;
+}
+
+body.dark-mode .text-gray-400 {
+    color: #9ca3af !important;
+}
+
+/* =========================================
+   BORDER
+========================================= */
+
+body.dark-mode .border,
+body.dark-mode .border-gray-100,
+body.dark-mode .border-gray-200,
+body.dark-mode .border-gray-300 {
+    border-color: #374151 !important;
+}
+
+/* =========================================
+   INPUT
+========================================= */
+
+body.dark-mode input,
+body.dark-mode textarea,
+body.dark-mode select {
+    background-color: #111827 !important;
+    color: #f9fafb !important;
+    border-color: #4b5563 !important;
+}
+
+body.dark-mode input::placeholder,
+body.dark-mode textarea::placeholder {
+    color: #6b7280 !important;
+}
+
+/* =========================================
+   TABLE
+========================================= */
+
+body.dark-mode table {
+    background-color: #1f2937 !important;
+    color: #e5e7eb !important;
+}
+
+body.dark-mode thead {
+    background-color: #374151 !important;
+}
+
+body.dark-mode tbody {
+    background-color: #1f2937 !important;
+}
+
+body.dark-mode tbody tr {
+    border-color: #374151 !important;
+}
+
+body.dark-mode tbody tr:hover {
+    background-color: #374151 !important;
+}
+
+/* =========================================
+   HOVER
+========================================= */
+
+body.dark-mode .hover\:bg-gray-50:hover {
+    background-color: #374151 !important;
+}
+
+/* =========================================
+   DARK MODE BUTTON
+========================================= */
+
+#darkModeButton {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition: all 0.2s ease;
+}
+
+#darkModeButton:hover {
+    background-color: #f3f4f6;
+}
+
+body.dark-mode #darkModeButton {
+    color: #facc15 !important;
+}
+
+body.dark-mode #darkModeButton:hover {
+    background-color: #374151 !important;
+}

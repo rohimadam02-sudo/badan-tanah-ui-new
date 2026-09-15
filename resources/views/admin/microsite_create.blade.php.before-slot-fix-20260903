@@ -1,0 +1,71 @@
+@extends('layouts.app')
+
+@section('content')
+<div class="max-w-4xl mx-auto py-8 px-4">
+    <div class="bg-white rounded-xl shadow p-6">
+        <h1 class="text-2xl font-bold mb-6">Buat Microsite</h1>
+
+        @if ($errors->any())
+            <div class="bg-red-100 text-red-700 p-4 rounded mb-5">
+                <ul class="list-disc ml-5">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        <form action="{{ route('admin.microsite.store') }}"
+              method="POST"
+              enctype="multipart/form-data"
+              class="space-y-5">
+            @csrf
+
+            <div>
+                <label class="block font-semibold mb-1">Judul</label>
+                <input type="text" name="judul" value="{{ old('judul') }}"
+                       class="w-full border rounded-lg p-3" required>
+            </div>
+
+            <div>
+                <label class="block font-semibold mb-1">Konten</label>
+                <textarea name="konten" rows="8"
+                          class="w-full border rounded-lg p-3" required>{{ old('konten') }}</textarea>
+            </div>
+
+            <div>
+                <label class="block font-semibold mb-1">Gambar</label>
+                <input type="file" name="gambar"
+                       class="w-full border rounded-lg p-3"
+                       accept=".jpg,.jpeg,.png,.gif,.webp">
+            </div>
+
+            <div>
+                <label class="inline-flex items-center gap-2">
+                    <input type="checkbox" name="is_active" value="1" checked>
+                    <span>Aktif</span>
+                </label>
+            </div>
+
+            <div>
+                <label class="inline-flex items-center gap-2">
+                    <input type="checkbox" name="is_featured" value="1">
+                    <span>Unggulan</span>
+                </label>
+            </div>
+
+            <div class="flex gap-3">
+                <button type="submit"
+                        class="bg-blue-600 text-white px-5 py-3 rounded-lg font-semibold">
+                    Simpan Microsite
+                </button>
+
+                <a href="{{ route('admin.microsite.index') }}"
+                   class="bg-gray-200 px-5 py-3 rounded-lg">
+                    Batal
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+@endsection
