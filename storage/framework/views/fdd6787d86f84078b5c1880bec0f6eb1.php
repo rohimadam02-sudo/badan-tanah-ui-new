@@ -440,7 +440,7 @@
 
 #heroSlider .hero-clouds {
     position: absolute;
-    inset: 0;
+    inset: -10%;
     z-index: 10;
     pointer-events: none;
     opacity: 0.42;
@@ -448,7 +448,10 @@
     background-repeat: repeat-x;
     background-position: 0 15%;
     background-size: auto 48%;
-    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+
+    /* TIDAK ADA animation — awan diam secara default */
+    /* Transition untuk smoothing saat JS update transform */
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
     will-change: transform;
 }
 
@@ -469,29 +472,35 @@
 
 <?php $__env->startPush("scripts"); ?>
 <script>
+/* ============================================================
+   PETA LEAFLET — tidak diubah
+   ============================================================ */
 document.addEventListener("DOMContentLoaded", function() {
-    console.log("🚀 Memulai inisialisasi peta...");
     if (typeof L === "undefined") {
         console.error("❌ Leaflet tidak ditemukan!");
         return;
     }
+
     var mapElement = document.getElementById("map");
-    if (!mapElement) { return; }
+    if (!mapElement) return;
 
     try {
         var map = L.map("map").setView([-2.5, 118.0], 5);
+
         L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
             attribution: "&copy; OpenStreetMap contributors",
             maxZoom: 19
         }).addTo(map);
 
         var markers = <?php echo json_encode($markers ?? [], 15, 512) ?>;
+
         if (markers.length > 0) {
             markers.forEach(function(marker) {
                 if (marker.lat && marker.lng) {
                     var color = marker.status === "Tersedia" ? "#16a34a" :
                                (marker.status === "Dalam Pengembangan" ? "#3b82f6" :
                                (marker.status === "Dalam Proses" ? "#f97316" : "#6b7280"));
+
                     var popupContent = `
                         <div style="min-width:200px;font-family:Inter,sans-serif;padding:4px 0;">
                             <div style="font-weight:700;font-size:15px;color:#111827;margin-bottom:4px;">
@@ -513,17 +522,24 @@ document.addEventListener("DOMContentLoaded", function() {
                             </div>
                         </div>
                     `;
+
                     L.circleMarker([marker.lat, marker.lng], {
-                        color: color, fillColor: color, fillOpacity: 0.7,
-                        radius: 8, weight: 2, opacity: 1
+                        color: color,
+                        fillColor: color,
+                        fillOpacity: 0.7,
+                        radius: 8,
+                        weight: 2,
+                        opacity: 1
                     }).addTo(map).bindPopup(popupContent);
                 }
             });
+
             var bounds = markers.filter(m => m.lat && m.lng).map(m => [m.lat, m.lng]);
             if (bounds.length > 0) {
                 map.fitBounds(bounds, { padding: [30, 30], maxZoom: 6 });
             }
         }
+
         setTimeout(function() { map.invalidateSize(); }, 500);
     } catch (e) {
         console.error("❌ Error inisialisasi peta:", e);
@@ -534,44 +550,89 @@ document.addEventListener("DOMContentLoaded", function() {
 
 <?php $__env->startPush('scripts'); ?>
 <script>
-/* ============ KODE AWAN MENGIKUTI KURSOR ============ */
+/* ============================================================
+   AWAN MENGIKUTI KURSOR — hanya aktif saat mouse di atas hero
+   ============================================================ */
 document.addEventListener('DOMContentLoaded', function () {
-    const hero = document.getElementById('heroSlider');
-    if (!hero) return;
-    const clouds = hero.querySelector('.hero-clouds');
-    if (!clouds) return;
+    const hero   = document.getElementById('heroSlider');
+    const clouds = hero ? hero.querySelector('.hero-clouds') : null;
+
+    if (!hero || !clouds) return;
+
+    // Hormati setting aksesibilitas user
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-    let rafId = null;
-    let targetX = 0, targetY = 0;
-    let currentX = 0, currentY = 0;
-    const MAX_X = 40, MAX_Y = 20, EASE = 0.08;
+    // ===== Konfigurasi =====
+    const MAX_X    = 25;    // geser horizontal maksimal (px)
+    const MAX_Y    = 12;    // geser vertikal maksimal (px)
+    const EASE     = 0.10;  // 0..1 — makin kecil makin halus
+    const RETURN_TO_ORIGIN = true; // kembali ke posisi awal saat mouse keluar
 
-    function onMouseMove(e) {
-        const rect = hero.getBoundingClientRect();
-        const relX = (e.clientX - rect.left) / rect.width  * 2 - 1;
-        const relY = (e.clientY - rect.top)  / rect.height * 2 - 1;
-        targetX = -relX * MAX_X;
-        targetY = -relY * MAX_Y;
-        if (!rafId) loop();
-    }
-    function onMouseLeave() {
-        targetX = 0; targetY = 0;
-        if (!rafId) loop();
-    }
-    function loop() {
+    // ===== State =====
+    let targetX = 0, targetY = 0;   // target posisi
+    let currentX = 0, currentY = 0; // posisi saat ini (interpolasi)
+    let rafId = null;
+    let isInside = false;
+
+    // ===== Loop animasi (pakai requestAnimationFrame) =====
+    function tick() {
+        // Interpolasi eksponensial — smooth tanpa hentakan
         currentX += (targetX - currentX) * EASE;
         currentY += (targetY - currentY) * EASE;
+
         clouds.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
-        if (Math.abs(targetX - currentX) < 0.1 && Math.abs(targetY - currentY) < 0.1) {
-            currentX = targetX; currentY = targetY;
+
+        // Berhenti kalau sudah cukup dekat dengan target
+        const dx = Math.abs(targetX - currentX);
+        const dy = Math.abs(targetY - currentY);
+
+        if (dx < 0.1 && dy < 0.1) {
+            currentX = targetX;
+            currentY = targetY;
             clouds.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
-            rafId = null; return;
+            rafId = null;
+            return;
         }
-        rafId = requestAnimationFrame(loop);
+
+        rafId = requestAnimationFrame(tick);
     }
-    hero.addEventListener('mousemove', onMouseMove);
-    hero.addEventListener('mouseleave', onMouseLeave);
+
+    function startLoop() {
+        if (!rafId) rafId = requestAnimationFrame(tick);
+    }
+
+    // ===== Event: mouse masuk ke area hero =====
+    hero.addEventListener('mouseenter', function () {
+        isInside = true;
+    });
+
+    // ===== Event: mouse bergerak di area hero =====
+    hero.addEventListener('mousemove', function (e) {
+        if (!isInside) return;
+
+        const rect = hero.getBoundingClientRect();
+
+        // Posisi relatif kursor (-1 .. 1)
+        const relX = ((e.clientX - rect.left) / rect.width)  * 2 - 1;
+        const relY = ((e.clientY - rect.top)  / rect.height) * 2 - 1;
+
+        // Awan bergerak searah kursor (bukan berlawanan)
+        targetX =  relX * MAX_X;
+        targetY =  relY * MAX_Y;
+
+        startLoop();
+    });
+
+    // ===== Event: mouse keluar dari area hero =====
+    hero.addEventListener('mouseleave', function () {
+        isInside = false;
+
+        if (RETURN_TO_ORIGIN) {
+            targetX = 0;
+            targetY = 0;
+            startLoop();
+        }
+    });
 });
 </script>
 <?php $__env->stopPush(); ?>
