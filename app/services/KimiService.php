@@ -15,9 +15,6 @@ class KimiService
         $this->apiKey = config('services.kimi.api_key');
     }
 
-    /**
-     * Translate text from Indonesian to English using Kimi K2.5
-     */
     public function translateToEnglish(string $text): string
     {
         if (empty($this->apiKey)) {
@@ -63,9 +60,6 @@ class KimiService
         }
     }
 
-    /**
-     * Check if API key is configured
-     */
     public function isConfigured(): bool
     {
         return !empty($this->apiKey);
