@@ -1,8 +1,6 @@
-@extends('layouts.admin')
+<?php $__env->startSection('title', 'Peta Interaktif'); ?>
 
-@section('title', 'Peta Interaktif')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 
     <div class="max-w-7xl mx-auto">
 
@@ -19,77 +17,77 @@
 
         <!-- TAB NAVIGASI ASET - RESPONSIVE -->
         <div class="flex flex-wrap items-center gap-1.5 border-b border-gray-200 pb-3 mb-5">
-            <a href="{{ route('admin.aset.index') }}"
+            <a href="<?php echo e(route('admin.aset.index')); ?>"
                 class="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition
-            {{ request()->routeIs('admin.aset.index') ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100 hover:text-[#006400]' }}">
+            <?php echo e(request()->routeIs('admin.aset.index') ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100 hover:text-[#006400]'); ?>">
                 <i class="fas fa-database text-sm"></i>
                 <span>Data Aset</span>
             </a>
 
-            <a href="{{ route('admin.aset.peta') }}"
+            <a href="<?php echo e(route('admin.aset.peta')); ?>"
                 class="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition
-            {{ request()->routeIs('admin.aset.peta') ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100 hover:text-[#006400]' }}">
+            <?php echo e(request()->routeIs('admin.aset.peta') ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100 hover:text-[#006400]'); ?>">
                 <i class="fas fa-map-location-dot text-sm"></i>
                 <span>Peta Interaktif</span>
             </a>
 
-            <a href="{{ route('admin.aset.profil') }}"
+            <a href="<?php echo e(route('admin.aset.profil')); ?>"
                 class="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition
-            {{ request()->routeIs('admin.aset.profil') ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100 hover:text-[#006400]' }}">
+            <?php echo e(request()->routeIs('admin.aset.profil') ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100 hover:text-[#006400]'); ?>">
                 <i class="fas fa-layer-group text-sm"></i>
                 <span>Profil Persediaan Tanah</span>
             </a>
 
-            <a href="{{ route('admin.aset.pengelolaan') }}"
+            <a href="<?php echo e(route('admin.aset.pengelolaan')); ?>"
                 class="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition
-            {{ request()->routeIs('admin.aset.pengelolaan') ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100 hover:text-[#006400]' }}">
+            <?php echo e(request()->routeIs('admin.aset.pengelolaan') ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100 hover:text-[#006400]'); ?>">
                 <i class="fas fa-gear text-sm"></i>
                 <span>Pengelolaan Tanah</span>
             </a>
 
-            <a href="{{ route('admin.aset.pengembangan') }}"
+            <a href="<?php echo e(route('admin.aset.pengembangan')); ?>"
                 class="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition
-            {{ request()->routeIs('admin.aset.pengembangan') ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100 hover:text-[#006400]' }}">
+            <?php echo e(request()->routeIs('admin.aset.pengembangan') ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100 hover:text-[#006400]'); ?>">
                 <i class="fas fa-chart-line text-sm"></i>
                 <span>Pengembangan Tanah</span>
             </a>
 
-            <a href="{{ route('admin.aset.wilayah') }}"
+            <a href="<?php echo e(route('admin.aset.wilayah')); ?>"
                 class="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition
-            {{ request()->routeIs('admin.aset.wilayah') ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100 hover:text-[#006400]' }}">
+            <?php echo e(request()->routeIs('admin.aset.wilayah') ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100 hover:text-[#006400]'); ?>">
                 <i class="fas fa-map text-sm"></i>
                 <span>Wilayah</span>
             </a>
 
-            <a href="{{ route('admin.aset.status') }}"
+            <a href="<?php echo e(route('admin.aset.status')); ?>"
                 class="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition
-            {{ request()->routeIs('admin.aset.status') ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100 hover:text-[#006400]' }}">
+            <?php echo e(request()->routeIs('admin.aset.status') ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100 hover:text-[#006400]'); ?>">
                 <i class="fas fa-circle-check text-sm"></i>
                 <span>Status Tanah</span>
             </a>
 
-            <a href="{{ route('admin.aset.dokumen') }}"
+            <a href="<?php echo e(route('admin.aset.dokumen')); ?>"
                 class="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition
-            {{ request()->routeIs('admin.aset.dokumen') ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100 hover:text-[#006400]' }}">
+            <?php echo e(request()->routeIs('admin.aset.dokumen') ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100 hover:text-[#006400]'); ?>">
                 <i class="fas fa-file-lines text-sm"></i>
                 <span>Dokumen</span>
             </a>
 
-            <a href="{{ route('admin.aset.statistik') }}"
+            <a href="<?php echo e(route('admin.aset.statistik')); ?>"
                 class="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition
-            {{ request()->routeIs('admin.aset.statistik') ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100 hover:text-[#006400]' }}">
+            <?php echo e(request()->routeIs('admin.aset.statistik') ? 'bg-[#006400] text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100 hover:text-[#006400]'); ?>">
                 <i class="fas fa-chart-pie text-sm"></i>
                 <span>Statistik</span>
             </a>
         </div>
 
         <!-- KARTU STATISTIK - DATA REAL -->
-        @php
+        <?php
             $totalLuas = \App\Models\AsetTanah::sum('luas_hektar');
             $totalAset = \App\Models\AsetTanah::count();
             $totalProvinsi = \App\Models\AsetTanah::distinct('provinsi')->count('provinsi');
             $totalKabupaten = \App\Models\AsetTanah::distinct('kabupaten')->count('kabupaten');
-        @endphp
+        ?>
 
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-5">
             <div class="bg-white px-3 py-3 rounded-xl shadow-sm border border-gray-100">
@@ -99,7 +97,7 @@
                     </div>
                     <div>
                         <p class="text-[8px] text-gray-500">Total Luas</p>
-                        <p class="text-sm font-bold text-gray-900">{{ number_format($totalLuas, 2, ',', '.') }} Ha</p>
+                        <p class="text-sm font-bold text-gray-900"><?php echo e(number_format($totalLuas, 2, ',', '.')); ?> Ha</p>
                         <p class="text-[7px] text-gray-400">Seluruh aset</p>
                     </div>
                 </div>
@@ -112,7 +110,7 @@
                     </div>
                     <div>
                         <p class="text-[8px] text-gray-500">Total Aset</p>
-                        <p class="text-sm font-bold text-gray-900">{{ number_format($totalAset) }}</p>
+                        <p class="text-sm font-bold text-gray-900"><?php echo e(number_format($totalAset)); ?></p>
                         <p class="text-[7px] text-gray-400">Aset terdaftar</p>
                     </div>
                 </div>
@@ -125,7 +123,7 @@
                     </div>
                     <div>
                         <p class="text-[8px] text-gray-500">Provinsi</p>
-                        <p class="text-sm font-bold text-gray-900">{{ number_format($totalProvinsi) }}</p>
+                        <p class="text-sm font-bold text-gray-900"><?php echo e(number_format($totalProvinsi)); ?></p>
                         <p class="text-[7px] text-gray-400">Wilayah terdata</p>
                     </div>
                 </div>
@@ -138,7 +136,7 @@
                     </div>
                     <div>
                         <p class="text-[8px] text-gray-500">Kabupaten/Kota</p>
-                        <p class="text-sm font-bold text-gray-900">{{ number_format($totalKabupaten) }}</p>
+                        <p class="text-sm font-bold text-gray-900"><?php echo e(number_format($totalKabupaten)); ?></p>
                         <p class="text-[7px] text-gray-400">Daerah terdata</p>
                     </div>
                 </div>
@@ -322,11 +320,11 @@
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200">
                     <div class="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
                         <h2 class="text-xs font-bold text-gray-900">Ringkasan Per Provinsi</h2> <a
-                            href="{{ route('admin.aset.wilayah') }}"
+                            href="<?php echo e(route('admin.aset.wilayah')); ?>"
                             class="text-[8px] text-blue-600 hover:underline">Lihat Semua</a>
                     </div>
                     <div class="p-4 space-y-3">
-                        @php
+                        <?php
                             $provinsiData = \App\Models\AsetTanah::select(
                                 'provinsi',
                                 \DB::raw('sum(luas_hektar) as total_luas'),
@@ -336,23 +334,24 @@
                                 ->take(5)
                                 ->get();
                             $maxLuas = $provinsiData->max('total_luas') ?: 1;
-                        @endphp
-                        @forelse ($provinsiData as $item)
+                        ?>
+                        <?php $__empty_1 = true; $__currentLoopData = $provinsiData; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                             <div>
                                 <div class="flex items-center justify-between mb-1">
-                                    <span class="text-[9px] font-semibold text-gray-600">{{ $item->provinsi }}</span>
+                                    <span class="text-[9px] font-semibold text-gray-600"><?php echo e($item->provinsi); ?></span>
                                     <span
-                                        class="text-[8px] text-gray-400">{{ number_format($item->total_luas, 0, ',', '.') }}
+                                        class="text-[8px] text-gray-400"><?php echo e(number_format($item->total_luas, 0, ',', '.')); ?>
+
                                         Ha</span>
                                 </div>
                                 <div class="h-1.5 bg-gray-100 rounded-full overflow-hidden">
                                     <div class="h-full bg-[#006400] rounded-full"
-                                        style="width: {{ min(100, ($item->total_luas / $maxLuas) * 100) }}%"></div>
+                                        style="width: <?php echo e(min(100, ($item->total_luas / $maxLuas) * 100)); ?>%"></div>
                                 </div>
                             </div>
-                        @empty
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                             <p class="text-[9px] text-gray-400">Belum ada data provinsi.</p>
-                        @endforelse
+                        <?php endif; ?>
                     </div>
                 </div>
 
@@ -377,14 +376,14 @@
                             <select id="filterProvinsi"
                                 class="w-full px-2 py-1.5 text-[9px] border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500">
                                 <option value="">Semua Provinsi</option>
-                                @php
+                                <?php
                                     $provinsiList = \App\Models\AsetTanah::distinct('provinsi')
                                         ->pluck('provinsi')
                                         ->sort();
-                                @endphp
-                                @foreach ($provinsiList as $provinsi)
-                                    <option value="{{ $provinsi }}">{{ $provinsi }}</option>
-                                @endforeach
+                                ?>
+                                <?php $__currentLoopData = $provinsiList; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $provinsi): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="<?php echo e($provinsi); ?>"><?php echo e($provinsi); ?></option>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </select>
                         </div>
                         <button type="button" onclick="applyMapFilter()"
@@ -469,18 +468,19 @@
                                    DATA ASET DARI LARAVEL (existing, dipertahankan)
                                    ========================================================= */
         const assetData = [
-            @foreach ($asets as $aset)
+            <?php $__currentLoopData = $asets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $aset): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 {
-                    id: {{ $aset->id }},
-                    nama: @json($aset->nama_lokasi),
-                    provinsi: @json($aset->provinsi),
-                    kabupaten: @json($aset->kabupaten),
-                    luas: {{ $aset->luas_hektar ?? 0 }},
-                    status: @json($aset->status),
-                    lat: {{ $aset->lat ?? 0 }},
-                    lng: {{ $aset->lng ?? 0 }}
+                    id: <?php echo e($aset->id); ?>,
+                    nama: <?php echo json_encode($aset->nama_lokasi, 15, 512) ?>,
+                    provinsi: <?php echo json_encode($aset->provinsi, 15, 512) ?>,
+                    kabupaten: <?php echo json_encode($aset->kabupaten, 15, 512) ?>,
+                    luas: <?php echo e($aset->luas_hektar ?? 0); ?>,
+                    status: <?php echo json_encode($aset->status, 15, 512) ?>,
+                    lat: <?php echo e($aset->lat ?? 0); ?>,
+                    lng: <?php echo e($aset->lng ?? 0); ?>
+
                 },
-            @endforeach
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         ];
 
         /* =========================================================
@@ -684,7 +684,7 @@
             document.getElementById('ppKab').textContent = `${p.jumlah_kabupaten} Daerah`;
 
             // Link detail: ke halaman wilayah dengan filter provinsi
-            const detailUrl = `{{ route('admin.aset.wilayah') }}?provinsi=${encodeURIComponent(p.provinsi)}`;
+            const detailUrl = `<?php echo e(route('admin.aset.wilayah')); ?>?provinsi=${encodeURIComponent(p.provinsi)}`;
             document.getElementById('ppDetailLink').href = detailUrl;
 
             document.getElementById('provincePanel').classList.remove('hidden');
@@ -818,4 +818,6 @@
         renderMarkers(assetData);
     </script>
 
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Users\Lenovo\badan-tanah-ui-new\resources\views/admin/aset_peta.blade.php ENDPATH**/ ?>
