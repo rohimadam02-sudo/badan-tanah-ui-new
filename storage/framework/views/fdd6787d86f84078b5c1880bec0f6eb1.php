@@ -508,7 +508,7 @@
                 inset: 0 -300px -200px 0;
                 z-index: 5;
                 pointer-events: none;
-                opacity: 1.8;
+                opacity: 1;
                 background-image: url('/backgroundawanbaru.png');
                 background-repeat: no-repeat;
                 background-position: right 5px top;

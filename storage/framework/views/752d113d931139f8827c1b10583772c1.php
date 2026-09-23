@@ -213,7 +213,7 @@
 
                 <p class="text-gray-500  text-sm leading-relaxed mt-3">
 
-                    <?php echo e($isEnglish ? '📌 Choose the right scheme for your needs' : '📌 Pilih skema yang sesuai dengan kebutuhan Anda'); ?>
+                    <?php echo e($isEnglish ? ' Choose the right scheme for your needs' : ' Pilih skema yang sesuai dengan kebutuhan Anda'); ?>
 
 
                 </p>
@@ -263,7 +263,7 @@
                             <a href="#skema-<?php echo e($index); ?>" class="text-xs font-semibold text-blue-600 hover:text-blue-800 hover:underline inline-flex items-center gap-1 transition group scroll-mt-24">
 
                                 <span class="inline-flex items-center gap-1">
-                                    📖 <?php echo e($isEnglish ? 'Learn Scheme' : 'Pelajari Skema'); ?>
+                                     <?php echo e($isEnglish ? 'Learn Scheme' : 'Pelajari Skema'); ?>
 
                                     <i class="fas fa-arrow-right text-[10px] transition-transform group-hover:translate-x-1"></i>
                                 </span>

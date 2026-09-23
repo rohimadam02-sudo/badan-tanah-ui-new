@@ -100,4 +100,4 @@
 </section>
 
 <?php $__env->stopSection(); ?>
-<?php echo $__env->make('layouts.frontend', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH /home/u250369146/laravel-app/resources/views/frontend/publikasi.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('layouts.frontend', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Users\Lenovo\badan-tanah-ui-new\resources\views/frontend/publikasi.blade.php ENDPATH**/ ?>

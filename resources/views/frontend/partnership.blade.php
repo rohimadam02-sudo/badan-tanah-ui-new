@@ -203,7 +203,7 @@
 
                 <p class="text-gray-500  text-sm leading-relaxed mt-3">
 
-                    {{ $isEnglish ? '📌 Choose the right scheme for your needs' : '📌 Pilih skema yang sesuai dengan kebutuhan Anda' }}
+                    {{ $isEnglish ? ' Choose the right scheme for your needs' : ' Pilih skema yang sesuai dengan kebutuhan Anda' }}
 
                 </p>
 
@@ -250,7 +250,7 @@
                             <a href="#skema-{{ $index }}" class="text-xs font-semibold text-blue-600 hover:text-blue-800 hover:underline inline-flex items-center gap-1 transition group scroll-mt-24">
 
                                 <span class="inline-flex items-center gap-1">
-                                    📖 {{ $isEnglish ? 'Learn Scheme' : 'Pelajari Skema' }}
+                                     {{ $isEnglish ? 'Learn Scheme' : 'Pelajari Skema' }}
                                     <i class="fas fa-arrow-right text-[10px] transition-transform group-hover:translate-x-1"></i>
                                 </span>
 
