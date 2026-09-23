@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
-    
+
 
 <head>
     <meta charset="utf-8">
@@ -298,7 +298,8 @@
     <!-- ========================================================= -->
     <!-- SIDEBAR -->
     <!-- ========================================================= -->
-    <aside class="sidebar-desktop w-64 bg-white border-r border-gray-200 flex-shrink-0 flex flex-col sidebar-transition"
+    <aside
+        class="sidebar-desktop w-64 h-screen bg-white border-r border-gray-200 flex-shrink-0 flex flex-col sidebar-transition sticky top-0"
         id="adminSidebar" aria-label="Admin Sidebar Navigation">
         <!-- Logo -->
         <div class="p-4 sm:p-5 border-b border-gray-100">
@@ -335,7 +336,6 @@
                         class="fas fa-home w-5 text-center {{ request()->routeIs('admin.dashboard') ? 'text-white' : 'text-gray-400' }}"></i>
                     <span>Dashboard</span>
                 </a>
-                <span class="tooltip-text">Dashboard</span>
             </div>
 
             <!-- ============================================= -->

@@ -4,474 +4,537 @@
 
 @section('content')
 
-<!-- ========================================================= -->
-<!-- HERO SINGLE BACKGROUND -->
-<div id="heroSlider"
-     class="relative h-[400px] sm:h-[500px] md:h-[600px] lg:h-[650px] overflow-hidden select-none"
-     style="background-image: url('/background-awal.jpg'); background-size: cover; background-position: center;">
+    <!-- ========================================================= -->
+    <!-- HERO SINGLE BACKGROUND -->
+    <div id="heroSlider" class="relative h-[400px] sm:h-[500px] md:h-[600px] lg:h-[650px] overflow-hidden select-none"
+        style="background-image: url('/images/header.jpeg'); background-size: cover; background-position: center;">
 
-    <!-- Animated cloud overlay -->
-    <div class="hero-clouds" aria-hidden="true"></div>
+        <!-- Animated cloud overlay -->
+        <div class="hero-clouds" aria-hidden="true"></div>
 
-    <!-- Overlay agar teks tetap terbaca -->
-    <div class="absolute inset-0 bg-gradient-to-r from-[#0B2A4A]/85 via-[#0B2A4A]/45 to-transparent z-10"></div>
+        <!-- Overlay agar teks tetap terbaca -->
+        <div class="absolute inset-0 bg-gradient-to-r from-[#0B2A4A]/85 via-[#0B2A4A]/45 to-transparent z-5"></div>
 
-    <!-- Konten hero -->
-    <div class="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col justify-center">
-        <span class="text-blue-200 text-xs sm:text-sm font-semibold uppercase tracking-widest mb-2 sm:mb-4">
-            Badan Bank Tanah
-        </span>
+        <!-- Konten hero -->
+        <div class="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col justify-center">
+            <span class="text-blue-200 text-xs sm:text-sm font-semibold uppercase tracking-widest mb-2 sm:mb-4">
+                Badan Bank Tanah
+            </span>
 
-        <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight max-w-2xl">
-            @if($isEnglish && !empty($pengaturan->judul_hero_en))
-                {{ $pengaturan->judul_hero_en }}
-            @else
-                {{ $pengaturan->judul_hero ?? 'Mengelola Tanah, Memajukan Negeri' }}
-            @endif
-        </h1>
+            <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight max-w-2xl">
+                @if ($isEnglish && !empty($pengaturan->judul_hero_en))
+                    {{ $pengaturan->judul_hero_en }}
+                @else
+                    {{ $pengaturan->judul_hero ?? 'Mengelola Tanah, Memajukan Negeri' }}
+                @endif
+            </h1>
 
-        <p class="text-white/90 text-sm sm:text-base md:text-lg mt-3 sm:mt-4 mb-6 sm:mb-8 max-w-xl leading-relaxed">
-            @if($isEnglish && !empty($pengaturan->subjudul_hero_en))
-                {{ $pengaturan->subjudul_hero_en }}
-            @else
-                {{ $pengaturan->subjudul_hero ?? 'Badan Bank Tanah mengelola aset tanah negara secara profesional, transparan, dan berkelanjutan untuk kepentingan rakyat.' }}
-            @endif
-        </p>
+            <p class="text-white/90 text-sm sm:text-base md:text-lg mt-3 sm:mt-4 mb-6 sm:mb-8 max-w-xl leading-relaxed">
+                @if ($isEnglish && !empty($pengaturan->subjudul_hero_en))
+                    {{ $pengaturan->subjudul_hero_en }}
+                @else
+                    {{ $pengaturan->subjudul_hero ?? 'Badan Bank Tanah mengelola aset tanah negara secara profesional, transparan, dan berkelanjutan untuk kepentingan rakyat.' }}
+                @endif
+            </p>
 
-        <div class="flex flex-wrap items-center gap-3 sm:gap-4">
-            <a href="{{ $pengaturan->tombol_link ?? '/aset' }}"
-               class="btn-primary px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-bold text-sm sm:text-base transition inline-block">
-                {{ $pengaturan->tombol_text ?? ($isEnglish ? 'Learn More' : 'Selengkapnya') }}
-            </a>
-        </div>
-    </div>
-</div>
-<!-- STATISTIK - DATA REAL DARI DATABASE -->
-<!-- ========================================================= -->
-@php
-    $totalLuas = \App\Models\AsetTanah::sum('luas_hektar');
-    $totalAset = \App\Models\AsetTanah::count();
-    $totalProvinsi = \App\Models\AsetTanah::distinct('provinsi')->count('provinsi');
-    $totalKerjasama = \App\Models\ProyekInvestasi::where('is_active', true)->count();
-    $nilaiAset = 68450000000000;
-
-    // Translation labels
-    $statLabels = [
-        'total_luas' => $isEnglish ? 'Total Land Area' : 'Total Luas Aset',
-        'total_asets' => $isEnglish ? 'Total Assets' : 'Lokasi Aset',
-        'wilayah' => $isEnglish ? 'Regions' : 'Wilayah',
-        'kerjasama' => $isEnglish ? 'Active Partnerships' : 'Kerja Sama Aktif',
-        'nilai_aset' => $isEnglish ? 'Asset Value' : 'Nilai Aset',
-        'estimasi' => $isEnglish ? 'Estimated Value' : 'Estimasi Nilai',
-    ];
-@endphp
-
-<div class="w-full px-3 sm:px-4 -mt-10 sm:-mt-16 relative z-10">
-    <div class="max-w-7xl mx-auto bg-white rounded-2xl shadow-lg px-4 sm:px-6 md:px-10 py-4 sm:py-6">
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 md:gap-6">
-
-            <!-- Total Luas Aset -->
-            <div class="flex items-center gap-2 sm:gap-3 px-2 sm:px-3 py-2 sm:py-3">
-                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-blue-50 text-blue-700 flex items-center justify-center flex-shrink-0">
-                    <i class="fas fa-layer-group text-base sm:text-xl"></i>
-                </div>
-                <div class="min-w-0">
-                    <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium truncate">{{ $statLabels['total_luas'] }}</p>
-                    <p class="text-sm sm:text-base md:text-xl font-extrabold text-gray-900">{{ number_format($totalLuas, 0, ',', '.') }} Ha</p>
-                    <p class="text-[7px] sm:text-[8px] text-green-600">{{ $isEnglish ? 'Real data' : 'Data real dari database' }}</p>
-                </div>
-            </div>
-
-            <!-- Lokasi Aset -->
-            <div class="flex items-center gap-2 sm:gap-3 px-2 sm:px-3 py-2 sm:py-3">
-                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-blue-50 text-blue-700 flex items-center justify-center flex-shrink-0">
-                    <i class="fas fa-location-dot text-base sm:text-xl"></i>
-                </div>
-                <div class="min-w-0">
-                    <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium truncate">{{ $statLabels['total_asets'] }}</p>
-                    <p class="text-sm sm:text-base md:text-xl font-extrabold text-gray-900">{{ number_format($totalAset) }}</p>
-                    <p class="text-[7px] sm:text-[8px] text-gray-400 truncate">{{ $isEnglish ? 'Land Plots' : 'Bidang Tanah' }}</p>
-                </div>
-            </div>
-
-            <!-- Wilayah -->
-            <div class="flex items-center gap-2 sm:gap-3 px-2 sm:px-3 py-2 sm:py-3">
-                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-blue-50 text-blue-700 flex items-center justify-center flex-shrink-0">
-                    <i class="fas fa-building text-base sm:text-xl"></i>
-                </div>
-                <div class="min-w-0">
-                    <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium truncate">{{ $statLabels['wilayah'] }}</p>
-                    <p class="text-sm sm:text-base md:text-xl font-extrabold text-gray-900">{{ number_format($totalProvinsi) }}</p>
-                    <p class="text-[7px] sm:text-[8px] text-gray-400 truncate">{{ $isEnglish ? 'Provinces' : 'Provinsi' }}</p>
-                </div>
-            </div>
-
-            <!-- Kerja Sama Aktif -->
-            <div class="flex items-center gap-2 sm:gap-3 px-2 sm:px-3 py-2 sm:py-3">
-                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-green-50 text-green-700 flex items-center justify-center flex-shrink-0">
-                    <i class="fas fa-handshake text-base sm:text-xl"></i>
-                </div>
-                <div class="min-w-0">
-                    <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium truncate">{{ $statLabels['kerjasama'] }}</p>
-                    <p class="text-sm sm:text-base md:text-xl font-extrabold text-gray-900">{{ $totalKerjasama > 0 ? number_format($totalKerjasama) : '0' }}</p>
-                    <p class="text-[7px] sm:text-[8px] text-gray-400 truncate">{{ $isEnglish ? 'Strategic Partners' : 'Mitra Strategis' }}</p>
-                </div>
-            </div>
-
-            <!-- Nilai Aset -->
-            <div class="hidden sm:flex items-center gap-3 px-3 py-3 col-span-2 sm:col-span-1">
-                <div class="w-12 h-12 rounded-full bg-blue-50 text-blue-700 flex items-center justify-center flex-shrink-0">
-                    <i class="fas fa-chart-line text-xl"></i>
-                </div>
-                <div class="min-w-0">
-                    <p class="text-[10px] text-gray-500 font-medium truncate">{{ $statLabels['nilai_aset'] }}</p>
-                    <p class="text-base md:text-xl font-extrabold text-blue-700">Rp 68,45 T</p>
-                    <p class="text-[8px] text-gray-400 truncate">{{ $statLabels['estimasi'] }}</p>
-                </div>
-            </div>
-
-            <!-- Nilai Aset (Mobile) -->
-            <div class="sm:hidden col-span-2 flex items-center justify-center gap-3 px-3 py-2 border-t border-gray-100 pt-3 mt-1">
-                <div class="w-10 h-10 rounded-full bg-blue-50 text-blue-700 flex items-center justify-center flex-shrink-0">
-                    <i class="fas fa-chart-line text-base"></i>
-                </div>
-                <div>
-                    <p class="text-[8px] text-gray-500 font-medium">{{ $statLabels['nilai_aset'] }}</p>
-                    <p class="text-sm font-extrabold text-blue-700">Rp 68,45 T</p>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</div>
-
-<!-- ========================================================= -->
-<!-- ASET & PETA SECTION -->
-<!-- ========================================================= -->
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 lg:py-20">
-    <div class="grid grid-cols-1 lg:grid-cols-[1.35fr_0.85fr] gap-6 sm:gap-8 lg:gap-10">
-
-        <!-- ASET PERSEDIAAN TANAH -->
-        <div class="bg-white rounded-xl shadow-md p-4 sm:p-5">
-            <div class="flex items-end justify-between mb-4 sm:mb-5">
-                <div>
-                    <h2 class="text-base sm:text-lg font-bold text-gray-900">{{ $isEnglish ? 'Land Asset Inventory' : 'Aset Persediaan Tanah' }}</h2>
-                </div>
-                <a href="{{ route('assets') }}" class="text-[10px] font-semibold link-secondary">
-                    {{ $isEnglish ? 'View All →' : 'Lihat Semua' }}
+            <div class="flex flex-wrap items-center gap-3 sm:gap-4">
+                <a href="{{ $pengaturan->tombol_link ?? '/aset' }}"
+                    class="btn-primary px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-bold text-sm sm:text-base transition inline-block">
+                    {{ $pengaturan->tombol_text ?? ($isEnglish ? 'Learn More' : 'Selengkapnya') }}
                 </a>
             </div>
+        </div>
+    </div>
+    <!-- STATISTIK - DATA REAL DARI DATABASE -->
+    <!-- ========================================================= -->
+    @php
+        $totalLuas = \App\Models\AsetTanah::sum('luas_hektar');
+        $totalAset = \App\Models\AsetTanah::count();
+        $totalProvinsi = \App\Models\AsetTanah::distinct('provinsi')->count('provinsi');
+        $totalKerjasama = \App\Models\ProyekInvestasi::where('is_active', true)->count();
+        $nilaiAset = 68450000000000;
 
-            <!-- Asset Slider -->
-            <div class="relative overflow-hidden">
-                <div id="assetSlider" class="flex transition-transform duration-500 ease-in-out gap-3 sm:gap-4">
-                    @foreach ($asets as $aset)
-                    <div class="asset-card min-w-[85%] sm:min-w-[60%] md:min-w-[50%] lg:min-w-[33.33%] flex-shrink-0">
-                        <div class="bg-white rounded-xl sm:rounded-2xl overflow-hidden shadow-sm border border-gray-100">
-                            <div class="relative h-36 sm:h-40 md:h-48 bg-gray-200">
-                                <img src="{{ $aset->gambar ? asset('storage/' . $aset->gambar) : 'https://picsum.photos/600/400?random=' . $aset->id }}"
-                                    class="w-full h-full object-cover"
-                                    alt="{{ $aset->nama_lokasi }}"
-                                    loading="lazy">
-                                <span class="absolute top-2 sm:top-3 left-2 sm:left-3 text-white text-[8px] sm:text-[10px] px-2 sm:px-3 py-0.5 sm:py-1 rounded font-bold uppercase
-                                    {{ $aset->status == 'Tersedia' ? 'bg-green-700' : 'bg-blue-700' }}">
-                                    {{ $aset->status }}
-                                </span>
-                            </div>
-                            <div class="p-3 sm:p-4">
-                                <h3 class="text-xs sm:text-sm font-bold text-gray-900 leading-snug line-clamp-2">
-                                    @if($isEnglish && !empty($aset->nama_lokasi_en))
-                                        {{ $aset->nama_lokasi_en }}
-                                    @else
-                                        {{ $aset->nama_lokasi }}
-                                    @endif
-                                </h3>
-                                <p class="text-[10px] sm:text-xs text-gray-500 mt-0.5 sm:mt-1">
-                                    {{ $aset->provinsi }}, {{ $aset->kabupaten }}
-                                </p>
-                                <p class="text-xs sm:text-sm font-bold text-green-600 mt-1 sm:mt-2">
-                                    {{ number_format($aset->luas_hektar, 2, ',', '.') }} Ha
-                                </p>
-                            </div>
-                        </div>
+        // Translation labels
+        $statLabels = [
+            'total_luas' => $isEnglish ? 'Total Land Area' : 'Total Luas Aset',
+            'total_asets' => $isEnglish ? 'Total Assets' : 'Lokasi Aset',
+            'wilayah' => $isEnglish ? 'Regions' : 'Wilayah',
+            'kerjasama' => $isEnglish ? 'Active Partnerships' : 'Kerja Sama Aktif',
+            'nilai_aset' => $isEnglish ? 'Asset Value' : 'Nilai Aset',
+            'estimasi' => $isEnglish ? 'Estimated Value' : 'Estimasi Nilai',
+        ];
+    @endphp
+
+    <div class="w-full px-3 sm:px-4 -mt-10 sm:-mt-16 relative z-10">
+        <div class="max-w-7xl mx-auto bg-white rounded-2xl shadow-lg px-4 sm:px-6 md:px-10 py-4 sm:py-6">
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 md:gap-6">
+
+                <!-- Total Luas Aset -->
+                <div class="flex items-center gap-2 sm:gap-3 px-2 sm:px-3 py-2 sm:py-3">
+                    <div
+                        class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-blue-50 text-blue-700 flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-layer-group text-base sm:text-xl"></i>
                     </div>
+                    <div class="min-w-0">
+                        <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium truncate">
+                            {{ $statLabels['total_luas'] }}</p>
+                        <p class="text-sm sm:text-base md:text-xl font-extrabold text-gray-900">
+                            {{ number_format($totalLuas, 0, ',', '.') }} Ha</p>
+                        <p class="text-[7px] sm:text-[8px] text-green-600">
+                            {{ $isEnglish ? 'Real data' : 'Data real dari database' }}</p>
+                    </div>
+                </div>
+
+                <!-- Lokasi Aset -->
+                <div class="flex items-center gap-2 sm:gap-3 px-2 sm:px-3 py-2 sm:py-3">
+                    <div
+                        class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-blue-50 text-blue-700 flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-location-dot text-base sm:text-xl"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium truncate">
+                            {{ $statLabels['total_asets'] }}</p>
+                        <p class="text-sm sm:text-base md:text-xl font-extrabold text-gray-900">
+                            {{ number_format($totalAset) }}</p>
+                        <p class="text-[7px] sm:text-[8px] text-gray-400 truncate">
+                            {{ $isEnglish ? 'Land Plots' : 'Bidang Tanah' }}</p>
+                    </div>
+                </div>
+
+                <!-- Wilayah -->
+                <div class="flex items-center gap-2 sm:gap-3 px-2 sm:px-3 py-2 sm:py-3">
+                    <div
+                        class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-blue-50 text-blue-700 flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-building text-base sm:text-xl"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium truncate">
+                            {{ $statLabels['wilayah'] }}</p>
+                        <p class="text-sm sm:text-base md:text-xl font-extrabold text-gray-900">
+                            {{ number_format($totalProvinsi) }}</p>
+                        <p class="text-[7px] sm:text-[8px] text-gray-400 truncate">
+                            {{ $isEnglish ? 'Provinces' : 'Provinsi' }}</p>
+                    </div>
+                </div>
+
+                <!-- Kerja Sama Aktif -->
+                <div class="flex items-center gap-2 sm:gap-3 px-2 sm:px-3 py-2 sm:py-3">
+                    <div
+                        class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-green-50 text-green-700 flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-handshake text-base sm:text-xl"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium truncate">
+                            {{ $statLabels['kerjasama'] }}</p>
+                        <p class="text-sm sm:text-base md:text-xl font-extrabold text-gray-900">
+                            {{ $totalKerjasama > 0 ? number_format($totalKerjasama) : '0' }}</p>
+                        <p class="text-[7px] sm:text-[8px] text-gray-400 truncate">
+                            {{ $isEnglish ? 'Strategic Partners' : 'Mitra Strategis' }}</p>
+                    </div>
+                </div>
+
+                <!-- Nilai Aset -->
+                <div class="hidden sm:flex items-center gap-3 px-3 py-3 col-span-2 sm:col-span-1">
+                    <div
+                        class="w-12 h-12 rounded-full bg-blue-50 text-blue-700 flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-chart-line text-xl"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <p class="text-[10px] text-gray-500 font-medium truncate">{{ $statLabels['nilai_aset'] }}</p>
+                        <p class="text-base md:text-xl font-extrabold text-blue-700">Rp 68,45 T</p>
+                        <p class="text-[8px] text-gray-400 truncate">{{ $statLabels['estimasi'] }}</p>
+                    </div>
+                </div>
+
+                <!-- Nilai Aset (Mobile) -->
+                <div
+                    class="sm:hidden col-span-2 flex items-center justify-center gap-3 px-3 py-2 border-t border-gray-100 pt-3 mt-1">
+                    <div
+                        class="w-10 h-10 rounded-full bg-blue-50 text-blue-700 flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-chart-line text-base"></i>
+                    </div>
+                    <div>
+                        <p class="text-[8px] text-gray-500 font-medium">{{ $statLabels['nilai_aset'] }}</p>
+                        <p class="text-sm font-extrabold text-blue-700">Rp 68,45 T</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- ASET & PETA SECTION -->
+    <!-- ========================================================= -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 lg:py-20">
+        <div class="grid grid-cols-1 lg:grid-cols-[1.35fr_0.85fr] gap-6 sm:gap-8 lg:gap-10">
+
+            <!-- ASET PERSEDIAAN TANAH -->
+            <div class="bg-white rounded-xl shadow-md p-4 sm:p-5">
+                <div class="flex items-end justify-between mb-4 sm:mb-5">
+                    <div>
+                        <h2 class="text-base sm:text-lg font-bold text-gray-900">
+                            {{ $isEnglish ? 'Land Asset Inventory' : 'Aset Persediaan Tanah' }}</h2>
+                    </div>
+                    <a href="{{ route('assets') }}" class="text-[10px] font-semibold link-secondary">
+                        {{ $isEnglish ? 'View All →' : 'Lihat Semua' }}
+                    </a>
+                </div>
+
+                <!-- Asset Slider -->
+                <div class="relative overflow-hidden">
+                    <div id="assetSlider" class="flex transition-transform duration-500 ease-in-out gap-3 sm:gap-4">
+                        @foreach ($asets as $aset)
+                            <div
+                                class="asset-card min-w-[85%] sm:min-w-[60%] md:min-w-[50%] lg:min-w-[33.33%] flex-shrink-0">
+                                <div
+                                    class="bg-white rounded-xl sm:rounded-2xl overflow-hidden shadow-sm border border-gray-100">
+                                    <div class="relative h-36 sm:h-40 md:h-48 bg-gray-200">
+                                        <img src="{{ $aset->gambar ? asset('storage/' . $aset->gambar) : 'https://picsum.photos/600/400?random=' . $aset->id }}"
+                                            class="w-full h-full object-cover" alt="{{ $aset->nama_lokasi }}"
+                                            loading="lazy">
+                                        <span
+                                            class="absolute top-2 sm:top-3 left-2 sm:left-3 text-white text-[8px] sm:text-[10px] px-2 sm:px-3 py-0.5 sm:py-1 rounded font-bold uppercase
+                                    {{ $aset->status == 'Tersedia' ? 'bg-green-700' : 'bg-blue-700' }}">
+                                            {{ $aset->status }}
+                                        </span>
+                                    </div>
+                                    <div class="p-3 sm:p-4">
+                                        <h3 class="text-xs sm:text-sm font-bold text-gray-900 leading-snug line-clamp-2">
+                                            @if ($isEnglish && !empty($aset->nama_lokasi_en))
+                                                {{ $aset->nama_lokasi_en }}
+                                            @else
+                                                {{ $aset->nama_lokasi }}
+                                            @endif
+                                        </h3>
+                                        <p class="text-[10px] sm:text-xs text-gray-500 mt-0.5 sm:mt-1">
+                                            {{ $aset->provinsi }}, {{ $aset->kabupaten }}
+                                        </p>
+                                        <p class="text-xs sm:text-sm font-bold text-green-600 mt-1 sm:mt-2">
+                                            {{ number_format($aset->luas_hektar, 2, ',', '.') }} Ha
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+
+                <!-- Dots -->
+                <div id="assetDots" class="flex justify-center items-center gap-1.5 sm:gap-2 mt-3 sm:mt-4">
+                    @foreach ($asets as $index => $aset)
+                        <button type="button"
+                            class="asset-dot w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full transition-all duration-300
+                    {{ $index === 0 ? 'bg-blue-700' : 'bg-gray-300' }}"
+                            data-slide="{{ $index }}">
+                        </button>
                     @endforeach
                 </div>
             </div>
 
-            <!-- Dots -->
-            <div id="assetDots" class="flex justify-center items-center gap-1.5 sm:gap-2 mt-3 sm:mt-4">
-                @foreach ($asets as $index => $aset)
-                <button type="button"
-                    class="asset-dot w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full transition-all duration-300
-                    {{ $index === 0 ? 'bg-blue-700' : 'bg-gray-300' }}"
-                    data-slide="{{ $index }}">
-                </button>
-                @endforeach
+            <!-- PETA INTERAKTIF -->
+            <div class="bg-white rounded-xl shadow-md p-4 sm:p-5">
+                <div class="flex items-end justify-between mb-3 sm:mb-4">
+                    <div>
+                        <h2 class="text-base sm:text-lg font-bold text-gray-900">
+                            {{ $isEnglish ? 'Interactive Map' : 'Peta Interaktif' }}</h2>
+                    </div>
+                    <a href="{{ route('assets') }}" class="text-[10px] font-semibold link-secondary">
+                        {{ $isEnglish ? 'View Map →' : 'Lihat Peta' }}
+                    </a>
+                </div>
+
+                <div id="map"
+                    class="w-full h-[220px] sm:h-[280px] md:h-[320px] rounded-xl shadow-md border border-gray-200 bg-blue-50">
+                </div>
+
+                <div
+                    class="flex flex-wrap items-center gap-2 sm:gap-3 mt-3 sm:mt-4 text-[8px] sm:text-[10px] text-gray-600">
+                    <div class="flex items-center gap-1">
+                        <span class="w-2 h-2 rounded-full bg-green-700"></span>
+                        {{ $isEnglish ? 'Available' : 'Tersedia' }}
+                    </div>
+                    <div class="flex items-center gap-1">
+                        <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                        {{ $isEnglish ? 'In Development' : 'Dalam Pengembangan' }}
+                    </div>
+                    <div class="flex items-center gap-1">
+                        <span class="w-2 h-2 rounded-full bg-orange-500"></span>
+                        {{ $isEnglish ? 'In Process' : 'Dalam Proses' }}
+                    </div>
+                    <div class="flex items-center gap-1">
+                        <span class="w-2 h-2 rounded-full bg-gray-500"></span>
+                        {{ $isEnglish ? 'Committed' : 'Terikat' }}
+                    </div>
+                </div>
             </div>
+
         </div>
-
-        <!-- PETA INTERAKTIF -->
-        <div class="bg-white rounded-xl shadow-md p-4 sm:p-5">
-            <div class="flex items-end justify-between mb-3 sm:mb-4">
-                <div>
-                    <h2 class="text-base sm:text-lg font-bold text-gray-900">{{ $isEnglish ? 'Interactive Map' : 'Peta Interaktif' }}</h2>
-                </div>
-                <a href="{{ route('assets') }}" class="text-[10px] font-semibold link-secondary">
-                    {{ $isEnglish ? 'View Map →' : 'Lihat Peta' }}
-                </a>
-            </div>
-
-            <div id="map" class="w-full h-[220px] sm:h-[280px] md:h-[320px] rounded-xl shadow-md border border-gray-200 bg-blue-50">
-            </div>
-
-            <div class="flex flex-wrap items-center gap-2 sm:gap-3 mt-3 sm:mt-4 text-[8px] sm:text-[10px] text-gray-600">
-                <div class="flex items-center gap-1">
-                    <span class="w-2 h-2 rounded-full bg-green-700"></span>
-                    {{ $isEnglish ? 'Available' : 'Tersedia' }}
-                </div>
-                <div class="flex items-center gap-1">
-                    <span class="w-2 h-2 rounded-full bg-blue-500"></span>
-                    {{ $isEnglish ? 'In Development' : 'Dalam Pengembangan' }}
-                </div>
-                <div class="flex items-center gap-1">
-                    <span class="w-2 h-2 rounded-full bg-orange-500"></span>
-                    {{ $isEnglish ? 'In Process' : 'Dalam Proses' }}
-                </div>
-                <div class="flex items-center gap-1">
-                    <span class="w-2 h-2 rounded-full bg-gray-500"></span>
-                    {{ $isEnglish ? 'Committed' : 'Terikat' }}
-                </div>
-            </div>
-        </div>
-
     </div>
-</div>
 
-<!-- ========================================================= -->
-<!-- PEMANFAATAN & KERJA SAMA + PUBLIKASI -->
-<!-- ========================================================= -->
-<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
-    <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-10">
+    <!-- ========================================================= -->
+    <!-- PEMANFAATAN & KERJA SAMA + PUBLIKASI -->
+    <!-- ========================================================= -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
+        <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-10">
 
-        <!-- PEMANFAATAN & KERJA SAMA -->
-        <div class="lg:col-span-3">
-            <div class="flex items-end justify-between mb-5 sm:mb-7">
-                <h2 class="text-xl sm:text-2xl font-bold text-gray-900">{{ $isEnglish ? 'Utilization & Partnerships' : 'Pemanfaatan & Kerja Sama' }}</h2>
-                <a href="{{ route('partnership') }}" class="text-xs font-semibold link-secondary">
-                    {{ $isEnglish ? 'View All →' : 'Lihat Semua' }}
-                </a>
-            </div>
-
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
-
-                <!-- Investasi -->
-                <div class="text-center">
-                    <div class="w-12 h-12 sm:w-16 sm:h-16 mx-auto rounded-full bg-blue-50 flex items-center justify-center mb-2 sm:mb-3">
-                        <i class="fas fa-chart-line text-blue-600 text-lg sm:text-2xl"></i>
-                    </div>
-                    <h3 class="text-xs sm:text-sm font-bold text-gray-900">{{ $isEnglish ? 'Investment' : 'Investasi' }}</h3>
-                    <p class="text-[8px] sm:text-[10px] text-gray-500 leading-relaxed mt-0.5 sm:mt-1 hidden sm:block">
-                        {{ $isEnglish ? 'Productive land utilization' : 'Pemanfaatan tanah untuk investasi produktif.' }}
-                    </p>
-                    <a href="{{ route('partnership') }}" class="text-[9px] sm:text-xs link-secondary font-semibold">
-                        {{ $isEnglish ? 'Learn More →' : 'Selengkapnya' }}
+            <!-- PEMANFAATAN & KERJA SAMA -->
+            <div class="lg:col-span-3">
+                <div class="flex items-end justify-between mb-5 sm:mb-7">
+                    <h2 class="text-xl sm:text-2xl font-bold text-gray-900">
+                        {{ $isEnglish ? 'Utilization & Partnerships' : 'Pemanfaatan & Kerja Sama' }}</h2>
+                    <a href="{{ route('partnership') }}" class="text-xs font-semibold link-secondary">
+                        {{ $isEnglish ? 'View All →' : 'Lihat Semua' }}
                     </a>
                 </div>
 
-                <!-- Reforma Agraria -->
-                <div class="text-center">
-                    <div class="w-12 h-12 sm:w-16 sm:h-16 mx-auto rounded-full bg-green-50 flex items-center justify-center mb-2 sm:mb-3">
-                        <i class="fas fa-leaf text-green-600 text-lg sm:text-2xl"></i>
-                    </div>
-                    <h3 class="text-xs sm:text-sm font-bold text-gray-900">{{ $isEnglish ? 'Agrarian Reform' : 'Reforma Agraria' }}</h3>
-                    <p class="text-[8px] sm:text-[10px] text-gray-500 leading-relaxed mt-0.5 sm:mt-1 hidden sm:block">
-                        {{ $isEnglish ? 'Supporting equitable land access' : 'Mendukung pemerataan akses tanah.' }}
-                    </p>
-                    <a href="{{ route('partnership') }}" class="text-[9px] sm:text-xs link-secondary font-semibold">
-                        {{ $isEnglish ? 'Learn More →' : 'Selengkapnya' }}
-                    </a>
-                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
 
-                <!-- Kerja Sama -->
-                <div class="text-center">
-                    <div class="w-12 h-12 sm:w-16 sm:h-16 mx-auto rounded-full bg-yellow-50 flex items-center justify-center mb-2 sm:mb-3">
-                        <i class="fas fa-handshake text-yellow-600 text-lg sm:text-2xl"></i>
-                    </div>
-                    <h3 class="text-xs sm:text-sm font-bold text-gray-900">{{ $isEnglish ? 'Partnership' : 'Kerja Sama' }}</h3>
-                    <p class="text-[8px] sm:text-[10px] text-gray-500 leading-relaxed mt-0.5 sm:mt-1 hidden sm:block">
-                        {{ $isEnglish ? 'Strategic collaboration' : 'Kolaborasi strategis pengelolaan tanah.' }}
-                    </p>
-                    <a href="{{ route('partnership') }}" class="text-[9px] sm:text-xs link-secondary font-semibold">
-                        {{ $isEnglish ? 'Learn More →' : 'Selengkapnya' }}
-                    </a>
-                </div>
-
-                <!-- Dokumen -->
-                <div class="text-center">
-                    <div class="w-12 h-12 sm:w-16 sm:h-16 mx-auto rounded-full bg-purple-50 flex items-center justify-center mb-2 sm:mb-3">
-                        <i class="fas fa-file-lines text-purple-600 text-lg sm:text-2xl"></i>
-                    </div>
-                    <h3 class="text-xs sm:text-sm font-bold text-gray-900">{{ $isEnglish ? 'Documents' : 'Dokumen' }}</h3>
-                    <p class="text-[8px] sm:text-[10px] text-gray-500 leading-relaxed mt-0.5 sm:mt-1 hidden sm:block">
-                        {{ $isEnglish ? 'Related information and documents' : 'Informasi dan dokumen terkait.' }}
-                    </p>
-                    <a href="{{ route('publications') }}" class="text-[9px] sm:text-xs link-secondary font-semibold">
-                        {{ $isEnglish ? 'Learn More →' : 'Selengkapnya' }}
-                    </a>
-                </div>
-
-            </div>
-        </div>
-
-        <!-- PUBLIKASI TERBARU -->
-        <div class="lg:col-span-2">
-            <div class="flex items-end justify-between mb-5 sm:mb-7">
-                <h2 class="text-xl sm:text-2xl font-bold text-gray-900">{{ $isEnglish ? 'Latest Publications' : 'Publikasi Terbaru' }}</h2>
-                <a href="{{ route('publications') }}" class="text-xs font-semibold link-secondary">
-                    {{ $isEnglish ? 'View All →' : 'Lihat Semua' }}
-                </a>
-            </div>
-
-            <div class="space-y-2 sm:space-y-3">
-                @foreach ($berita->take(3) as $item)
-                <a href="{{ route('publications.show', $item->id) }}"
-                    class="group flex items-center gap-3 sm:gap-4 bg-white rounded-lg overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 p-2 sm:p-3">
-
-                    <div class="w-14 h-14 sm:w-20 sm:h-20 flex-shrink-0 overflow-hidden bg-gray-100 rounded-lg">
-                        @if ($item->gambar)
-                            <img src="{{ asset('storage/' . $item->gambar) }}" alt="{{ $item->judul }}"
-                                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                loading="lazy">
-                        @else
-                            <img src="https://picsum.photos/300/200?random={{ $item->id }}"
-                                alt="{{ $item->judul }}"
-                                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                loading="lazy">
-                        @endif
-                    </div>
-
-                    <div class="flex-1 min-w-0">
-                        <span class="text-[7px] sm:text-[8px] font-bold uppercase px-1.5 py-0.5 rounded-full
-                            {{ $item->kategori == 'Siaran Pers' ? 'bg-blue-50 text-blue-700' : 'bg-green-50 text-green-700' }}">
-                            {{ $item->kategori }}
-                        </span>
-                        <h3 class="text-[10px] sm:text-xs font-bold text-gray-900 leading-tight mt-0.5 line-clamp-2 group-hover:text-[var(--color-secondary)] transition-colors">
-                            @if($isEnglish && !empty($item->judul_en))
-                                {{ $item->judul_en }}
-                            @else
-                                {{ $item->judul }}
-                            @endif
-                        </h3>
-                        <p class="text-[8px] sm:text-[9px] text-gray-400 mt-0.5">
-                            {{ $item->tanggal_publikasi ? \Carbon\Carbon::parse($item->tanggal_publikasi)->format('d M Y') : $item->created_at?->format('d M Y') }}
+                    <!-- Investasi -->
+                    <div class="text-center">
+                        <div
+                            class="w-12 h-12 sm:w-16 sm:h-16 mx-auto rounded-full bg-blue-50 flex items-center justify-center mb-2 sm:mb-3">
+                            <i class="fas fa-chart-line text-blue-600 text-lg sm:text-2xl"></i>
+                        </div>
+                        <h3 class="text-xs sm:text-sm font-bold text-gray-900">
+                            {{ $isEnglish ? 'Investment' : 'Investasi' }}</h3>
+                        <p class="text-[8px] sm:text-[10px] text-gray-500 leading-relaxed mt-0.5 sm:mt-1 hidden sm:block">
+                            {{ $isEnglish ? 'Productive land utilization' : 'Pemanfaatan tanah untuk investasi produktif.' }}
                         </p>
+                        <a href="{{ route('partnership') }}" class="text-[9px] sm:text-xs link-secondary font-semibold">
+                            {{ $isEnglish ? 'Learn More →' : 'Selengkapnya' }}
+                        </a>
                     </div>
 
+                    <!-- Reforma Agraria -->
+                    <div class="text-center">
+                        <div
+                            class="w-12 h-12 sm:w-16 sm:h-16 mx-auto rounded-full bg-green-50 flex items-center justify-center mb-2 sm:mb-3">
+                            <i class="fas fa-leaf text-green-600 text-lg sm:text-2xl"></i>
+                        </div>
+                        <h3 class="text-xs sm:text-sm font-bold text-gray-900">
+                            {{ $isEnglish ? 'Agrarian Reform' : 'Reforma Agraria' }}</h3>
+                        <p class="text-[8px] sm:text-[10px] text-gray-500 leading-relaxed mt-0.5 sm:mt-1 hidden sm:block">
+                            {{ $isEnglish ? 'Supporting equitable land access' : 'Mendukung pemerataan akses tanah.' }}
+                        </p>
+                        <a href="{{ route('partnership') }}" class="text-[9px] sm:text-xs link-secondary font-semibold">
+                            {{ $isEnglish ? 'Learn More →' : 'Selengkapnya' }}
+                        </a>
+                    </div>
+
+                    <!-- Kerja Sama -->
+                    <div class="text-center">
+                        <div
+                            class="w-12 h-12 sm:w-16 sm:h-16 mx-auto rounded-full bg-yellow-50 flex items-center justify-center mb-2 sm:mb-3">
+                            <i class="fas fa-handshake text-yellow-600 text-lg sm:text-2xl"></i>
+                        </div>
+                        <h3 class="text-xs sm:text-sm font-bold text-gray-900">
+                            {{ $isEnglish ? 'Partnership' : 'Kerja Sama' }}</h3>
+                        <p class="text-[8px] sm:text-[10px] text-gray-500 leading-relaxed mt-0.5 sm:mt-1 hidden sm:block">
+                            {{ $isEnglish ? 'Strategic collaboration' : 'Kolaborasi strategis pengelolaan tanah.' }}
+                        </p>
+                        <a href="{{ route('partnership') }}" class="text-[9px] sm:text-xs link-secondary font-semibold">
+                            {{ $isEnglish ? 'Learn More →' : 'Selengkapnya' }}
+                        </a>
+                    </div>
+
+                    <!-- Dokumen -->
+                    <div class="text-center">
+                        <div
+                            class="w-12 h-12 sm:w-16 sm:h-16 mx-auto rounded-full bg-purple-50 flex items-center justify-center mb-2 sm:mb-3">
+                            <i class="fas fa-file-lines text-purple-600 text-lg sm:text-2xl"></i>
+                        </div>
+                        <h3 class="text-xs sm:text-sm font-bold text-gray-900">{{ $isEnglish ? 'Documents' : 'Dokumen' }}
+                        </h3>
+                        <p class="text-[8px] sm:text-[10px] text-gray-500 leading-relaxed mt-0.5 sm:mt-1 hidden sm:block">
+                            {{ $isEnglish ? 'Related information and documents' : 'Informasi dan dokumen terkait.' }}
+                        </p>
+                        <a href="{{ route('publications') }}" class="text-[9px] sm:text-xs link-secondary font-semibold">
+                            {{ $isEnglish ? 'Learn More →' : 'Selengkapnya' }}
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- PUBLIKASI TERBARU -->
+            <div class="lg:col-span-2">
+                <div class="flex items-end justify-between mb-5 sm:mb-7">
+                    <h2 class="text-xl sm:text-2xl font-bold text-gray-900">
+                        {{ $isEnglish ? 'Latest Publications' : 'Publikasi Terbaru' }}</h2>
+                    <a href="{{ route('publications') }}" class="text-xs font-semibold link-secondary">
+                        {{ $isEnglish ? 'View All →' : 'Lihat Semua' }}
+                    </a>
+                </div>
+
+                <div class="space-y-2 sm:space-y-3">
+                    @foreach ($berita->take(3) as $item)
+                        <a href="{{ route('publications.show', $item->id) }}"
+                            class="group flex items-center gap-3 sm:gap-4 bg-white rounded-lg overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 p-2 sm:p-3">
+
+                            <div class="w-14 h-14 sm:w-20 sm:h-20 flex-shrink-0 overflow-hidden bg-gray-100 rounded-lg">
+                                @if ($item->gambar)
+                                    <img src="{{ asset('storage/' . $item->gambar) }}" alt="{{ $item->judul }}"
+                                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                        loading="lazy">
+                                @else
+                                    <img src="https://picsum.photos/300/200?random={{ $item->id }}"
+                                        alt="{{ $item->judul }}"
+                                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                        loading="lazy">
+                                @endif
+                            </div>
+
+                            <div class="flex-1 min-w-0">
+                                <span
+                                    class="text-[7px] sm:text-[8px] font-bold uppercase px-1.5 py-0.5 rounded-full
+                            {{ $item->kategori == 'Siaran Pers' ? 'bg-blue-50 text-blue-700' : 'bg-green-50 text-green-700' }}">
+                                    {{ $item->kategori }}
+                                </span>
+                                <h3
+                                    class="text-[10px] sm:text-xs font-bold text-gray-900 leading-tight mt-0.5 line-clamp-2 group-hover:text-[var(--color-secondary)] transition-colors">
+                                    @if ($isEnglish && !empty($item->judul_en))
+                                        {{ $item->judul_en }}
+                                    @else
+                                        {{ $item->judul }}
+                                    @endif
+                                </h3>
+                                <p class="text-[8px] sm:text-[9px] text-gray-400 mt-0.5">
+                                    {{ $item->tanggal_publikasi ? \Carbon\Carbon::parse($item->tanggal_publikasi)->format('d M Y') : $item->created_at?->format('d M Y') }}
+                                </p>
+                            </div>
+
+                        </a>
+                    @endforeach
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- CTA SECTION -->
+    <!-- ========================================================= -->
+    <div class="relative overflow-hidden bg-[#0B2A4A] max-h-[260px] sm:max-h-[300px] lg:max-h-[340px]">
+        <!-- Background foto -->
+        <div class="absolute inset-0 bg-cover bg-no-repeat"
+            style="background-image: url('{{ asset('images/footer.png') }}');
+       background-position: right bottom -5px;">
+        </div>
+
+        <!-- Gradient overlay -->
+        <div class="absolute inset-0 bg-gradient-to-r from-[#0B2A4A] from-30% via-[#0B2A4A]/70 via-60% to-transparent">
+        </div>
+
+        <!-- Konten -->
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10">
+            <div class="max-w-xl text-left">
+
+                <div class="flex items-start gap-3 mb-2 sm:mb-3">
+                    <div class="flex-shrink-0 mt-0.5">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 sm:w-8 sm:h-8 text-yellow-400"
+                            fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M3 18v-6a9 9 0 0118 0v6M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z" />
+                        </svg>
+                    </div>
+                    <h2 class="text-lg sm:text-xl lg:text-2xl font-bold text-yellow-400 leading-tight">
+                        {{ $isEnglish ? 'Together Managing Land for a Better Future of Indonesia' : 'Bersama Mengelola Tanah untuk Masa Depan Indonesia' }}
+                    </h2>
+                </div>
+
+                <p class="text-xs sm:text-sm text-white/90 leading-relaxed mb-3 sm:mb-4">
+                    {{ $isEnglish
+                        ? 'Do you have questions or want to work together? Our team is ready to help.'
+                        : 'Anda memiliki pertanyaan atau ingin bekerja sama? Tim kami siap membantu.' }}
+                </p>
+
+                <a href="{{ route('partnership') }}"
+                    class="inline-flex items-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-[#0B2A4A] font-bold px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg transition text-xs sm:text-sm">
+                    {{ $isEnglish ? 'Contact Us' : 'Hubungi Kami' }}
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
                 </a>
-                @endforeach
+
             </div>
         </div>
-
-    </div>
-</section>
-
-<!-- ========================================================= -->
-<!-- CTA SECTION -->
-<!-- ========================================================= -->
-<div class="bg-[#0B2A4A] relative overflow-hidden">
-    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=1600&auto=format&fit=crop')] bg-cover bg-center opacity-20">
     </div>
 
-    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 flex flex-col sm:flex-row items-center justify-between gap-6 sm:gap-8">
-        <div class="text-center sm:text-left">
-            <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-2">
-                {{ $isEnglish ? 'Together Managing Land' : 'Bersama Mengelola Tanah' }}
-            </h2>
-            <p class="text-blue-200 text-sm sm:text-base lg:text-lg">
-                {{ $isEnglish ? 'for a better future of Indonesia.' : 'untuk Masa Depan Indonesia yang lebih baik.' }}
-            </p>
-        </div>
-        <a href="{{ route('partnership') }}"
-            class="btn-primary px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-bold text-sm sm:text-base transition shrink-0 inline-block">
-            {{ $isEnglish ? 'Learn More →' : 'Pelajari Lebih Lanjut' }}
-        </a>
-    </div>
-</div>
 
 @endsection
 
 @push('styles')
-<style>
-#heroSlider {
-    position: relative;
-    overflow: hidden;
-}
+    <style>
+        #heroSlider {
+            position: relative;
+            overflow: hidden;
+        }
 
-#heroSlider .hero-clouds {
-    position: absolute;
-    inset: -10%;
-    z-index: 10;
-    pointer-events: none;
-    opacity: 0.42;
-    background-image: url('/background_awan.png');
-    background-repeat: repeat-x;
-    background-position: 0 15%;
-    background-size: auto 48%;
+        #heroSlider .hero-clouds {
+                position: absolute;
+                inset: 0 -300px -200px 0;
+                z-index: 5;
+                pointer-events: none;
+                opacity: 1.8;
+                background-image: url('/backgroundawanbaru.png');
+                background-repeat: no-repeat;
+                background-position: right 5px top;
+                background-size: 90% auto;
+                transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+                will-change: transform;
+            
+        }
 
-    /* TIDAK ADA animation — awan diam secara default */
-    /* Transition untuk smoothing saat JS update transform */
-    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-    will-change: transform;
-}
+        @media (max-width: 640px) {
+            #heroSlider .hero-clouds {
+                background-size: 150% auto;
+                background-position: right -50px;
+                opacity: 0.4;
+            }
+        }
 
-@media (max-width: 640px) {
-    #heroSlider .hero-clouds {
-        background-size: auto 38%;
-        opacity: 0.32;
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    #heroSlider .hero-clouds {
-        transition: none;
-    }
-}
-</style>
+        @media (prefers-reduced-motion: reduce) {
+            #heroSlider .hero-clouds {
+                transition: none;
+            }
+        }
+    </style>
 @endpush
 
-@push("scripts")
-<script>
-/* ============================================================
-   PETA LEAFLET — tidak diubah
-   ============================================================ */
-document.addEventListener("DOMContentLoaded", function() {
-    if (typeof L === "undefined") {
-        console.error("❌ Leaflet tidak ditemukan!");
-        return;
-    }
+@push('scripts')
+    <script>
+        /* ============================================================
+                                           PETA LEAFLET — tidak diubah
+                                           ============================================================ */
+        document.addEventListener("DOMContentLoaded", function() {
+            if (typeof L === "undefined") {
+                console.error("❌ Leaflet tidak ditemukan!");
+                return;
+            }
 
-    var mapElement = document.getElementById("map");
-    if (!mapElement) return;
+            var mapElement = document.getElementById("map");
+            if (!mapElement) return;
 
-    try {
-        var map = L.map("map").setView([-2.5, 118.0], 5);
+            try {
+                var map = L.map("map").setView([-2.5, 118.0], 5);
 
-        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-            attribution: "&copy; OpenStreetMap contributors",
-            maxZoom: 19
-        }).addTo(map);
+                L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                    attribution: "&copy; OpenStreetMap contributors",
+                    maxZoom: 19
+                }).addTo(map);
 
-        var markers = @json($markers ?? []);
+                var markers = @json($markers ?? []);
 
-        if (markers.length > 0) {
-            markers.forEach(function(marker) {
-                if (marker.lat && marker.lng) {
-                    var color = marker.status === "Tersedia" ? "#16a34a" :
-                               (marker.status === "Dalam Pengembangan" ? "#3b82f6" :
-                               (marker.status === "Dalam Proses" ? "#f97316" : "#6b7280"));
+                if (markers.length > 0) {
+                    markers.forEach(function(marker) {
+                        if (marker.lat && marker.lng) {
+                            var color = marker.status === "Tersedia" ? "#16a34a" :
+                                (marker.status === "Dalam Pengembangan" ? "#3b82f6" :
+                                    (marker.status === "Dalam Proses" ? "#f97316" : "#6b7280"));
 
-                    var popupContent = `
+                            var popupContent = `
                         <div style="min-width:200px;font-family:Inter,sans-serif;padding:4px 0;">
                             <div style="font-weight:700;font-size:15px;color:#111827;margin-bottom:4px;">
                                 ${marker.nama_lokasi || "Aset Tanah"}
@@ -493,116 +556,123 @@ document.addEventListener("DOMContentLoaded", function() {
                         </div>
                     `;
 
-                    L.circleMarker([marker.lat, marker.lng], {
-                        color: color,
-                        fillColor: color,
-                        fillOpacity: 0.7,
-                        radius: 8,
-                        weight: 2,
-                        opacity: 1
-                    }).addTo(map).bindPopup(popupContent);
+                            L.circleMarker([marker.lat, marker.lng], {
+                                color: color,
+                                fillColor: color,
+                                fillOpacity: 0.7,
+                                radius: 8,
+                                weight: 2,
+                                opacity: 1
+                            }).addTo(map).bindPopup(popupContent);
+                        }
+                    });
+
+                    var bounds = markers.filter(m => m.lat && m.lng).map(m => [m.lat, m.lng]);
+                    if (bounds.length > 0) {
+                        map.fitBounds(bounds, {
+                            padding: [30, 30],
+                            maxZoom: 6
+                        });
+                    }
                 }
-            });
 
-            var bounds = markers.filter(m => m.lat && m.lng).map(m => [m.lat, m.lng]);
-            if (bounds.length > 0) {
-                map.fitBounds(bounds, { padding: [30, 30], maxZoom: 6 });
+                setTimeout(function() {
+                    map.invalidateSize();
+                }, 500);
+            } catch (e) {
+                console.error("❌ Error inisialisasi peta:", e);
             }
-        }
-
-        setTimeout(function() { map.invalidateSize(); }, 500);
-    } catch (e) {
-        console.error("❌ Error inisialisasi peta:", e);
-    }
-});
-</script>
+        });
+    </script>
 @endpush
 
 @push('scripts')
-<script>
-/* ============================================================
-   AWAN MENGIKUTI KURSOR — hanya aktif saat mouse di atas hero
-   ============================================================ */
-document.addEventListener('DOMContentLoaded', function () {
-    const hero   = document.getElementById('heroSlider');
-    const clouds = hero ? hero.querySelector('.hero-clouds') : null;
+    <script>
+        /* ============================================================
+                                           AWAN MENGIKUTI KURSOR — hanya aktif saat mouse di atas hero
+                                           ============================================================ */
+        document.addEventListener('DOMContentLoaded', function() {
+            const hero = document.getElementById('heroSlider');
+            const clouds = hero ? hero.querySelector('.hero-clouds') : null;
 
-    if (!hero || !clouds) return;
+            if (!hero || !clouds) return;
 
-    // Hormati setting aksesibilitas user
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            // Hormati setting aksesibilitas user
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-    // ===== Konfigurasi =====
-    const MAX_X    = 25;    // geser horizontal maksimal (px)
-    const MAX_Y    = 12;    // geser vertikal maksimal (px)
-    const EASE     = 0.10;  // 0..1 — makin kecil makin halus
-    const RETURN_TO_ORIGIN = true; // kembali ke posisi awal saat mouse keluar
+            // ===== Konfigurasi =====
+            const MAX_X = 25; // geser horizontal maksimal (px)
+            const MAX_Y = 12; // geser vertikal maksimal (px)
+            const EASE = 0.10; // 0..1 — makin kecil makin halus
+            const RETURN_TO_ORIGIN = true; // kembali ke posisi awal saat mouse keluar
 
-    // ===== State =====
-    let targetX = 0, targetY = 0;   // target posisi
-    let currentX = 0, currentY = 0; // posisi saat ini (interpolasi)
-    let rafId = null;
-    let isInside = false;
+            // ===== State =====
+            let targetX = 0,
+                targetY = 0; // target posisi
+            let currentX = 0,
+                currentY = 0; // posisi saat ini (interpolasi)
+            let rafId = null;
+            let isInside = false;
 
-    // ===== Loop animasi (pakai requestAnimationFrame) =====
-    function tick() {
-        // Interpolasi eksponensial — smooth tanpa hentakan
-        currentX += (targetX - currentX) * EASE;
-        currentY += (targetY - currentY) * EASE;
+            // ===== Loop animasi (pakai requestAnimationFrame) =====
+            function tick() {
+                // Interpolasi eksponensial — smooth tanpa hentakan
+                currentX += (targetX - currentX) * EASE;
+                currentY += (targetY - currentY) * EASE;
 
-        clouds.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
+                clouds.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
 
-        // Berhenti kalau sudah cukup dekat dengan target
-        const dx = Math.abs(targetX - currentX);
-        const dy = Math.abs(targetY - currentY);
+                // Berhenti kalau sudah cukup dekat dengan target
+                const dx = Math.abs(targetX - currentX);
+                const dy = Math.abs(targetY - currentY);
 
-        if (dx < 0.1 && dy < 0.1) {
-            currentX = targetX;
-            currentY = targetY;
-            clouds.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
-            rafId = null;
-            return;
-        }
+                if (dx < 0.1 && dy < 0.1) {
+                    currentX = targetX;
+                    currentY = targetY;
+                    clouds.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
+                    rafId = null;
+                    return;
+                }
 
-        rafId = requestAnimationFrame(tick);
-    }
+                rafId = requestAnimationFrame(tick);
+            }
 
-    function startLoop() {
-        if (!rafId) rafId = requestAnimationFrame(tick);
-    }
+            function startLoop() {
+                if (!rafId) rafId = requestAnimationFrame(tick);
+            }
 
-    // ===== Event: mouse masuk ke area hero =====
-    hero.addEventListener('mouseenter', function () {
-        isInside = true;
-    });
+            // ===== Event: mouse masuk ke area hero =====
+            hero.addEventListener('mouseenter', function() {
+                isInside = true;
+            });
 
-    // ===== Event: mouse bergerak di area hero =====
-    hero.addEventListener('mousemove', function (e) {
-        if (!isInside) return;
+            // ===== Event: mouse bergerak di area hero =====
+            hero.addEventListener('mousemove', function(e) {
+                if (!isInside) return;
 
-        const rect = hero.getBoundingClientRect();
+                const rect = hero.getBoundingClientRect();
 
-        // Posisi relatif kursor (-1 .. 1)
-        const relX = ((e.clientX - rect.left) / rect.width)  * 2 - 1;
-        const relY = ((e.clientY - rect.top)  / rect.height) * 2 - 1;
+                // Posisi relatif kursor (-1 .. 1)
+                const relX = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+                const relY = ((e.clientY - rect.top) / rect.height) * 2 - 1;
 
-        // Awan bergerak searah kursor (bukan berlawanan)
-        targetX =  relX * MAX_X;
-        targetY =  relY * MAX_Y;
+                // Awan bergerak searah kursor (bukan berlawanan)
+                targetX = relX * MAX_X;
+                targetY = relY * MAX_Y;
 
-        startLoop();
-    });
+                startLoop();
+            });
 
-    // ===== Event: mouse keluar dari area hero =====
-    hero.addEventListener('mouseleave', function () {
-        isInside = false;
+            // ===== Event: mouse keluar dari area hero =====
+            hero.addEventListener('mouseleave', function() {
+                isInside = false;
 
-        if (RETURN_TO_ORIGIN) {
-            targetX = 0;
-            targetY = 0;
-            startLoop();
-        }
-    });
-});
-</script>
+                if (RETURN_TO_ORIGIN) {
+                    targetX = 0;
+                    targetY = 0;
+                    startLoop();
+                }
+            });
+        });
+    </script>
 @endpush
