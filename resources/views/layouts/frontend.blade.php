@@ -623,7 +623,7 @@
 
 
 
-                /* =========================================================
+        /* =========================================================
            MEGA MENU TENTANG
         ========================================================= */
         #megaTentangWrapper {
@@ -651,17 +651,17 @@
                 display: none !important;
             }
         }
-
     </style>
 </head>
 
-    </style>
+</style>
 
-    @stack('styles')
+@stack('styles')
 
 </head>
+
 <body class="bg-white text-gray-800 antialiased">
-    
+
     @php
         // Ambil halaman yang aktif dari database
         $activePages = \App\Models\Halaman::where('is_active', true)->get();
@@ -730,7 +730,7 @@
             'accessibility' => $isEnglish ? 'Accessibility' : 'Aksesibilitas',
         ];
 
-                // Data mega menu "Tentang"
+        // Data mega menu "Tentang"
         $megaTentang = [
             'label' => $isEnglish ? 'ABOUT US' : 'TENTANG KAMI',
             'title' => $isEnglish ? 'Get to Know Badan Bank Tanah' : 'Mengenal Badan Bank Tanah',
@@ -738,16 +738,42 @@
                 ? 'Badan Bank Tanah is present as a strategic instrument of the state in managing land.'
                 : 'Badan Bank Tanah hadir sebagai instrumen strategis negara dalam menata dan mengelola tanah.',
             'submenus' => [
-                ['icon' => 'fa-building-columns', 'title' => $isEnglish ? 'Profile' : 'Profil', 'description' => $isEnglish ? 'General information' : 'Informasi umum tentang Badan Bank Tanah'],
-                ['icon' => 'fa-eye', 'title' => $isEnglish ? 'Vision & Mission' : 'Visi & Misi', 'description' => $isEnglish ? 'Vision and mission' : 'Visi, misi, dan nilai-nilai yang menjadi landasan'],
-                ['icon' => 'fa-sitemap', 'title' => $isEnglish ? 'Organizational Structure' : 'Struktur Organisasi', 'description' => $isEnglish ? 'Organizational structure' : 'Struktur organisasi dan pembagian peran'],
-                ['icon' => 'fa-clipboard-list', 'title' => $isEnglish ? 'Functions & Duties' : 'Fungsi & Tugas', 'description' => $isEnglish ? 'Duties and functions' : 'Tugas dan fungsi dalam pelaksanaan mandat'],
-                ['icon' => 'fa-users', 'title' => $isEnglish ? 'Leadership Profile' : 'Profil Pimpinan', 'description' => $isEnglish ? 'Leadership information' : 'Informasi pimpinan dan jajaran manajemen'],
+                [
+                    'icon' => 'fa-building-columns',
+                    'title' => $isEnglish ? 'Profile' : 'Profil',
+                    'description' => $isEnglish ? 'General information' : 'Informasi umum tentang Badan Bank Tanah',
+                ],
+                [
+                    'icon' => 'fa-eye',
+                    'title' => $isEnglish ? 'Vision & Mission' : 'Visi & Misi',
+                    'description' => $isEnglish
+                        ? 'Vision and mission'
+                        : 'Visi, misi, dan nilai-nilai yang menjadi landasan',
+                ],
+                [
+                    'icon' => 'fa-sitemap',
+                    'title' => $isEnglish ? 'Organizational Structure' : 'Struktur Organisasi',
+                    'description' => $isEnglish
+                        ? 'Organizational structure'
+                        : 'Struktur organisasi dan pembagian peran',
+                ],
+                [
+                    'icon' => 'fa-clipboard-list',
+                    'title' => $isEnglish ? 'Functions & Duties' : 'Fungsi & Tugas',
+                    'description' => $isEnglish ? 'Duties and functions' : 'Tugas dan fungsi dalam pelaksanaan mandat',
+                ],
+                [
+                    'icon' => 'fa-users',
+                    'title' => $isEnglish ? 'Leadership Profile' : 'Profil Pimpinan',
+                    'description' => $isEnglish ? 'Leadership information' : 'Informasi pimpinan dan jajaran manajemen',
+                ],
             ],
             'banner' => [
                 'label' => $isEnglish ? 'ABOUT US' : 'TENTANG KAMI',
                 'title' => $isEnglish ? 'Land Managed, Nation Empowered' : 'Tanah Dikelola, Negara Berdaya',
-                'description' => $isEnglish ? 'Together managing land.' : 'Bersama mengelola tanah untuk kesejahteraan masyarakat Indonesia.',
+                'description' => $isEnglish
+                    ? 'Together managing land.'
+                    : 'Bersama mengelola tanah untuk kesejahteraan masyarakat Indonesia.',
             ],
         ];
     @endphp
@@ -932,7 +958,8 @@
                             <a href="{{ route('about') }}"
                                 class="hover:text-[var(--color-secondary)] transition font-medium flex items-center gap-1.5 py-2">
                                 {{ $menuLabels['about'] }}
-                                <i class="fas fa-chevron-down text-[10px] transition-transform duration-200 group-hover:rotate-180"></i>
+                                <i
+                                    class="fas fa-chevron-down text-[10px] transition-transform duration-200 group-hover:rotate-180"></i>
                             </a>
 
                             <div id="megaTentangPanel"
@@ -945,7 +972,8 @@
 
                                         {{-- KIRI: Info Utama --}}
                                         <div class="col-span-3 p-6 border-r border-gray-100 bg-gray-50/50">
-                                            <span class="text-[10px] font-bold text-[var(--color-secondary)] uppercase tracking-widest">
+                                            <span
+                                                class="text-[10px] font-bold text-[var(--color-secondary)] uppercase tracking-widest">
                                                 {{ $megaTentang['label'] }}
                                             </span>
                                             <h3 class="text-lg font-bold text-gray-900 mt-2 mb-3 leading-snug">
@@ -954,26 +982,84 @@
                                             <p class="text-xs text-gray-600 leading-relaxed mb-4">
                                                 {{ $megaTentang['description'] }}
                                             </p>
-                                            <div class="rounded-lg overflow-hidden h-24 bg-gradient-to-b from-blue-50 via-white to-blue-50 relative">
-                                                <svg viewBox="0 0 200 100" class="w-full h-full" preserveAspectRatio="none">
-                                                    <path d="M0,80 Q50,60 100,75 T200,70 L200,100 L0,100 Z" fill="#dbeafe" opacity="0.6" />
-                                                    <path d="M0,90 Q50,75 100,85 T200,80 L200,100 L0,100 Z" fill="#bfdbfe" opacity="0.5" />
+                                            <div
+                                                class="rounded-lg overflow-hidden h-24 bg-gradient-to-b from-blue-50 via-white to-blue-50 relative">
+                                                <svg viewBox="0 0 200 100" class="w-full h-full"
+                                                    preserveAspectRatio="none">
+                                                    <path d="M0,80 Q50,60 100,75 T200,70 L200,100 L0,100 Z"
+                                                        fill="#dbeafe" opacity="0.6" />
+                                                    <path d="M0,90 Q50,75 100,85 T200,80 L200,100 L0,100 Z"
+                                                        fill="#bfdbfe" opacity="0.5" />
                                                 </svg>
                                             </div>
                                         </div>
 
                                         {{-- TENGAH: Submenu --}}
                                         <div class="col-span-5 p-4">
-                                            <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-3">SUBMENU</span>
+                                            <span
+                                                class="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-3">SUBMENU</span>
                                             <div class="space-y-0.5 mt-2">
-                                                @foreach ($megaTentang['submenus'] as $sub)
-                                                    <a href="#"
+                                                @php
+                                                    $submenuRoutes = [
+                                                        [
+                                                            'icon' => 'fa-building-columns',
+                                                            'title' => $isEnglish ? 'Profile' : 'Profil',
+                                                            'description' => $isEnglish
+                                                                ? 'General information'
+                                                                : 'Informasi umum tentang Badan Bank Tanah',
+                                                            'route' => 'about',
+                                                        ],
+                                                        [
+                                                            'icon' => 'fa-eye',
+                                                            'title' => $isEnglish ? 'Vision & Mission' : 'Visi & Misi',
+                                                            'description' => $isEnglish
+                                                                ? 'Vision and mission'
+                                                                : 'Visi, misi, dan nilai-nilai yang menjadi landasan',
+                                                            'route' => 'about.visi-misi',
+                                                        ],
+                                                        [
+                                                            'icon' => 'fa-sitemap',
+                                                            'title' => $isEnglish
+                                                                ? 'Organizational Structure'
+                                                                : 'Struktur Organisasi',
+                                                            'description' => $isEnglish
+                                                                ? 'Organizational structure'
+                                                                : 'Struktur organisasi dan pembagian peran',
+                                                            'route' => 'about.struktur',
+                                                        ],
+                                                        [
+                                                            'icon' => 'fa-clipboard-list',
+                                                            'title' => $isEnglish
+                                                                ? 'Functions & Duties'
+                                                                : 'Fungsi & Tugas',
+                                                            'description' => $isEnglish
+                                                                ? 'Duties and functions'
+                                                                : 'Tugas dan fungsi dalam pelaksanaan mandat',
+                                                            'route' => 'about.fungsi',
+                                                        ],
+                                                        [
+                                                            'icon' => 'fa-users',
+                                                            'title' => $isEnglish
+                                                                ? 'Leadership Profile'
+                                                                : 'Profil Pimpinan',
+                                                            'description' => $isEnglish
+                                                                ? 'Leadership information'
+                                                                : 'Informasi pimpinan dan jajaran manajemen',
+                                                            'route' => 'about.pimpinan',
+                                                        ],
+                                                    ];
+                                                @endphp
+
+                                                @foreach ($submenuRoutes as $sub)
+                                                    <a href="{{ route($sub['route']) }}"
                                                         class="flex items-start gap-3 p-3 rounded-lg hover:bg-blue-50 transition group/item">
-                                                        <div class="w-9 h-9 rounded-lg bg-blue-50 text-[var(--color-secondary)] flex items-center justify-center flex-shrink-0 group-hover/item:bg-[var(--color-secondary)] group-hover/item:text-white transition">
+                                                        <div
+                                                            class="w-9 h-9 rounded-lg bg-blue-50 text-[var(--color-secondary)] flex items-center justify-center flex-shrink-0 group-hover/item:bg-[var(--color-secondary)] group-hover/item:text-white transition">
                                                             <i class="fas {{ $sub['icon'] }} text-sm"></i>
                                                         </div>
                                                         <div class="min-w-0">
-                                                            <h4 class="font-semibold text-gray-900 text-sm leading-tight group-hover/item:text-[var(--color-secondary)] transition">
+                                                            <h4
+                                                                class="font-semibold text-gray-900 text-sm leading-tight group-hover/item:text-[var(--color-secondary)] transition">
                                                                 {{ $sub['title'] }}
                                                             </h4>
                                                             <p class="text-[11px] text-gray-500 leading-snug mt-0.5">
@@ -989,13 +1075,20 @@
                                         <div class="col-span-4 p-4">
                                             <div class="relative rounded-xl overflow-hidden h-full min-h-[280px]"
                                                 style="background: linear-gradient(160deg, #0B2A4A 0%, #1D4ED8 100%);">
-                                                <svg viewBox="0 0 400 400" class="absolute inset-0 w-full h-full opacity-30" preserveAspectRatio="xMidYMid slice">
-                                                    <path d="M0,300 Q100,250 200,280 T400,270 L400,400 L0,400 Z" fill="#22c55e" opacity="0.3" />
-                                                    <path d="M0,340 Q120,300 220,320 T400,310 L400,400 L0,400 Z" fill="#15803d" opacity="0.4" />
+                                                <svg viewBox="0 0 400 400"
+                                                    class="absolute inset-0 w-full h-full opacity-30"
+                                                    preserveAspectRatio="xMidYMid slice">
+                                                    <path d="M0,300 Q100,250 200,280 T400,270 L400,400 L0,400 Z"
+                                                        fill="#22c55e" opacity="0.3" />
+                                                    <path d="M0,340 Q120,300 220,320 T400,310 L400,400 L0,400 Z"
+                                                        fill="#15803d" opacity="0.4" />
                                                 </svg>
-                                                <div class="absolute inset-0 bg-gradient-to-t from-[#0B2A4A] via-[#0B2A4A]/60 to-transparent"></div>
+                                                <div
+                                                    class="absolute inset-0 bg-gradient-to-t from-[#0B2A4A] via-[#0B2A4A]/60 to-transparent">
+                                                </div>
                                                 <div class="relative p-5 h-full flex flex-col justify-end">
-                                                    <span class="text-[10px] font-bold text-yellow-400 uppercase tracking-widest">
+                                                    <span
+                                                        class="text-[10px] font-bold text-yellow-400 uppercase tracking-widest">
                                                         {{ $megaTentang['banner']['label'] }}
                                                     </span>
                                                     <h3 class="text-base font-bold text-white mt-1 mb-2 leading-snug">

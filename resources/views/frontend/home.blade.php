@@ -472,26 +472,64 @@
             overflow: hidden;
         }
 
+        /* =====================================================
+           AWAN - DESKTOP
+        ===================================================== */
         #heroSlider .hero-clouds {
-                position: absolute;
-                inset: 0 -300px -200px 0;
-                z-index: 5;
-                pointer-events: none;
-                opacity: 1;
-                background-image: url('/backgroundawanbaru.png');
-                background-repeat: no-repeat;
-                background-position: right 5px top;
-                background-size: 90% auto;
-                transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-                will-change: transform;
-            
+            position: absolute;
+            inset: 0;
+            z-index: 5;
+            pointer-events: none;
+            opacity: 1;
+            background-image: url('/backgroundawanbaru.png');
+            background-repeat: no-repeat;
+            background-position: right top;
+            background-size: 100% auto;
+            transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+            will-change: transform;
         }
 
+        /* =====================================================
+           AWAN - TABLET (max 1024px)
+        ===================================================== */
+        @media (max-width: 1024px) {
+            #heroSlider .hero-clouds {
+                background-size: 100% auto;
+                background-position: right bottom;
+                opacity: 0.9;
+            }
+        }
+
+        /* =====================================================
+           AWAN - MOBILE (max 768px)
+        ===================================================== */
+        @media (max-width: 768px) {
+            #heroSlider .hero-clouds {
+                background-size: 130% auto;
+                background-position: right bottom -20px;
+                opacity: 0.85;
+            }
+        }
+
+        /* =====================================================
+           AWAN - MOBILE KECIL (max 640px)
+        ===================================================== */
         @media (max-width: 640px) {
             #heroSlider .hero-clouds {
                 background-size: 150% auto;
-                background-position: right -50px;
-                opacity: 0.4;
+                background-position: right bottom -30px;
+                opacity: 0.8;
+            }
+        }
+
+        /* =====================================================
+           AWAN - MOBILE SANGAT KECIL (max 480px)
+        ===================================================== */
+        @media (max-width: 480px) {
+            #heroSlider .hero-clouds {
+                background-size: 170% auto;
+                background-position: right bottom -40px;
+                opacity: 0.75;
             }
         }
 
@@ -502,6 +540,7 @@
         }
     </style>
 @endpush
+
 
 @push('scripts')
     <script>
