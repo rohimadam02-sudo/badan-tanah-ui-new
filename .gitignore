@@ -24,3 +24,34 @@ Homestead.yaml
 Thumbs.db
 /vendor
 /node_modules
+# =========================================================
+# STORAGE & CACHE (JANGAN DI-COMMIT)
+# =========================================================
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+/storage/framework/testing/*
+/storage/logs/*
+/storage/app/public/*
+!/storage/app/public/.gitignore
+!/storage/framework/.gitignore
+!/storage/framework/cache/.gitignore
+!/storage/framework/sessions/.gitignore
+!/storage/framework/views/.gitignore
+
+# =========================================================
+# PUBLIC STORAGE (SYMLINK)
+# =========================================================
+/public/storage
+
+# =========================================================
+# BOOTSTRAP CACHE
+# =========================================================
+/bootstrap/cache/*
+!/bootstrap/cache/.gitignore
+
+# =========================================================
+# LARAVEL TELESCOPE / PAIL / OTHER
+# =========================================================
+/storage/pail
+.phpactor.json

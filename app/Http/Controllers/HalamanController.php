@@ -37,6 +37,98 @@ class HalamanController extends Controller
     }
 
     /**
+     * Frontend - Visi & Misi
+     */
+    public function visiMisi()
+    {
+        $halaman = Halaman::where('judul', 'like', '%Tentang%')
+            ->where('is_active', true)
+            ->first();
+
+        if (! $halaman) {
+            abort(404, 'Halaman tidak ditemukan.');
+        }
+
+        $menuNavigasi = MenuNavigasi::where('status', 'Aktif')->get();
+        $pengaturan = PengaturanWebsite::first();
+        $isEnglish = TranslationHelper::isEnglish();
+
+        return view(
+            'frontend.about_visi_misi',
+            compact('halaman', 'menuNavigasi', 'pengaturan', 'isEnglish')
+        );
+    }
+
+    /**
+     * Frontend - Struktur Organisasi
+     */
+    public function strukturOrganisasi()
+    {
+        $halaman = Halaman::where('judul', 'like', '%Tentang%')
+            ->where('is_active', true)
+            ->first();
+
+        if (! $halaman) {
+            abort(404, 'Halaman tidak ditemukan.');
+        }
+
+        $menuNavigasi = MenuNavigasi::where('status', 'Aktif')->get();
+        $pengaturan = PengaturanWebsite::first();
+        $isEnglish = TranslationHelper::isEnglish();
+
+        return view(
+            'frontend.about_struktur',
+            compact('halaman', 'menuNavigasi', 'pengaturan', 'isEnglish')
+        );
+    }
+
+    /**
+     * Frontend - Fungsi & Tugas
+     */
+    public function fungsiTugas()
+    {
+        $halaman = Halaman::where('judul', 'like', '%Tentang%')
+            ->where('is_active', true)
+            ->first();
+
+        if (! $halaman) {
+            abort(404, 'Halaman tidak ditemukan.');
+        }
+
+        $menuNavigasi = MenuNavigasi::where('status', 'Aktif')->get();
+        $pengaturan = PengaturanWebsite::first();
+        $isEnglish = TranslationHelper::isEnglish();
+
+        return view(
+            'frontend.about_fungsi_tugas',
+            compact('halaman', 'menuNavigasi', 'pengaturan', 'isEnglish')
+        );
+    }
+
+    /**
+     * Frontend - Profil Pimpinan
+     */
+    public function profilPimpinan()
+    {
+        $halaman = Halaman::where('judul', 'like', '%Tentang%')
+            ->where('is_active', true)
+            ->first();
+
+        if (! $halaman) {
+            abort(404, 'Halaman tidak ditemukan.');
+        }
+
+        $menuNavigasi = MenuNavigasi::where('status', 'Aktif')->get();
+        $pengaturan = PengaturanWebsite::first();
+        $isEnglish = TranslationHelper::isEnglish();
+
+        return view(
+            'frontend.about_pimpinan',
+            compact('halaman', 'menuNavigasi', 'pengaturan', 'isEnglish')
+        );
+    }
+
+    /**
      * Frontend - Pemanfaatan & Kerjasama Usaha
      */
     public function partnership()

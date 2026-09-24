@@ -40,8 +40,12 @@ use App\Http\Controllers\Admin\LokasiKantorController;
 // Halaman Beranda
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-// Halaman Tentang
+// Halaman Tentang & Submenu
 Route::get('/tentang', [HalamanController::class, 'index'])->name('about');
+Route::get('/tentang/visi-misi', [HalamanController::class, 'visiMisi'])->name('about.visi-misi');
+Route::get('/tentang/struktur-organisasi', [HalamanController::class, 'strukturOrganisasi'])->name('about.struktur');
+Route::get('/tentang/fungsi-tugas', [HalamanController::class, 'fungsiTugas'])->name('about.fungsi');
+Route::get('/tentang/profil-pimpinan', [HalamanController::class, 'profilPimpinan'])->name('about.pimpinan');
 
 // Halaman Aset Persediaan Tanah (List, Filter, dan Detail)
 Route::get('/aset', [AsetController::class, 'index'])->name('assets');
