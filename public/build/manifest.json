@@ -1,0 +1,26 @@
+{
+  "resources/css/admin-dark-mode.css": {
+    "file": "assets/admin-dark-mode-YWZTUxto.css",
+    "name": "admin-dark-mode",
+    "names": [
+      "admin-dark-mode.css"
+    ],
+    "src": "resources/css/admin-dark-mode.css",
+    "isEntry": true
+  },
+  "resources/css/app.css": {
+    "file": "assets/app-BK9gXGzD.css",
+    "name": "app",
+    "names": [
+      "app.css"
+    ],
+    "src": "resources/css/app.css",
+    "isEntry": true
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-C-e0tc9p.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true
+  }
+}
