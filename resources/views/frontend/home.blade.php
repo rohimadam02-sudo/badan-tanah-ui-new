@@ -163,294 +163,552 @@
         </div>
     </div>
 
+        <!-- ========================================================= -->
+    <!-- JELAJAHI PERSEBARAN ASET TANAH -->
     <!-- ========================================================= -->
-    <!-- ASET & PETA SECTION -->
-    <!-- ========================================================= -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 lg:py-20">
-        <div class="grid grid-cols-1 lg:grid-cols-[1.35fr_0.85fr] gap-6 sm:gap-8 lg:gap-10">
-
-            <!-- ASET PERSEDIAAN TANAH -->
-            <div class="bg-white rounded-xl shadow-md p-4 sm:p-5">
-                <div class="flex items-end justify-between mb-4 sm:mb-5">
-                    <div>
-                        <h2 class="text-base sm:text-lg font-bold text-gray-900">
-                            {{ $isEnglish ? 'Land Asset Inventory' : 'Aset Persediaan Tanah' }}</h2>
-                    </div>
-                    <a href="{{ route('assets') }}" class="text-[10px] font-semibold link-secondary">
-                        {{ $isEnglish ? 'View All →' : 'Lihat Semua' }}
-                    </a>
-                </div>
-
-                <!-- Asset Slider -->
-                <div class="relative overflow-hidden">
-                    <div id="assetSlider" class="flex transition-transform duration-500 ease-in-out gap-3 sm:gap-4">
-                        @foreach ($asets as $aset)
-                            <div
-                                class="asset-card min-w-[85%] sm:min-w-[60%] md:min-w-[50%] lg:min-w-[33.33%] flex-shrink-0">
-                                <div
-                                    class="bg-white rounded-xl sm:rounded-2xl overflow-hidden shadow-sm border border-gray-100">
-                                    <div class="relative h-36 sm:h-40 md:h-48 bg-gray-200">
-                                        <img src="{{ $aset->gambar ? asset('storage/' . $aset->gambar) : 'https://picsum.photos/600/400?random=' . $aset->id }}"
-                                            class="w-full h-full object-cover" alt="{{ $aset->nama_lokasi }}"
-                                            loading="lazy">
-                                        <span
-                                            class="absolute top-2 sm:top-3 left-2 sm:left-3 text-white text-[8px] sm:text-[10px] px-2 sm:px-3 py-0.5 sm:py-1 rounded font-bold uppercase
-                                    {{ $aset->status == 'Tersedia' ? 'bg-green-700' : 'bg-blue-700' }}">
-                                            {{ $aset->status }}
-                                        </span>
-                                    </div>
-                                    <div class="p-3 sm:p-4">
-                                        <h3 class="text-xs sm:text-sm font-bold text-gray-900 leading-snug line-clamp-2">
-                                            @if ($isEnglish && !empty($aset->nama_lokasi_en))
-                                                {{ $aset->nama_lokasi_en }}
-                                            @else
-                                                {{ $aset->nama_lokasi }}
-                                            @endif
-                                        </h3>
-                                        <p class="text-[10px] sm:text-xs text-gray-500 mt-0.5 sm:mt-1">
-                                            {{ $aset->provinsi }}, {{ $aset->kabupaten }}
-                                        </p>
-                                        <p class="text-xs sm:text-sm font-bold text-green-600 mt-1 sm:mt-2">
-                                            {{ number_format($aset->luas_hektar, 2, ',', '.') }} Ha
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-
-                <!-- Dots -->
-                <div id="assetDots" class="flex justify-center items-center gap-1.5 sm:gap-2 mt-3 sm:mt-4">
-                    @foreach ($asets as $index => $aset)
-                        <button type="button"
-                            class="asset-dot w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full transition-all duration-300
-                    {{ $index === 0 ? 'bg-blue-700' : 'bg-gray-300' }}"
-                            data-slide="{{ $index }}">
-                        </button>
-                    @endforeach
-                </div>
-            </div>
-
-            <!-- PETA INTERAKTIF -->
-            <div class="bg-white rounded-xl shadow-md p-4 sm:p-5">
-                <div class="flex items-end justify-between mb-3 sm:mb-4">
-                    <div>
-                        <h2 class="text-base sm:text-lg font-bold text-gray-900">
-                            {{ $isEnglish ? 'Interactive Map' : 'Peta Interaktif' }}</h2>
-                    </div>
-                    <a href="{{ route('assets') }}" class="text-[10px] font-semibold link-secondary">
-                        {{ $isEnglish ? 'View Map →' : 'Lihat Peta' }}
-                    </a>
-                </div>
-
-                <div id="map"
-                    class="w-full h-[220px] sm:h-[280px] md:h-[320px] rounded-xl shadow-md border border-gray-200 bg-blue-50">
-                </div>
-
-                <div
-                    class="flex flex-wrap items-center gap-2 sm:gap-3 mt-3 sm:mt-4 text-[8px] sm:text-[10px] text-gray-600">
-                    <div class="flex items-center gap-1">
-                        <span class="w-2 h-2 rounded-full bg-green-700"></span>
-                        {{ $isEnglish ? 'Available' : 'Tersedia' }}
-                    </div>
-                    <div class="flex items-center gap-1">
-                        <span class="w-2 h-2 rounded-full bg-blue-500"></span>
-                        {{ $isEnglish ? 'In Development' : 'Dalam Pengembangan' }}
-                    </div>
-                    <div class="flex items-center gap-1">
-                        <span class="w-2 h-2 rounded-full bg-orange-500"></span>
-                        {{ $isEnglish ? 'In Process' : 'Dalam Proses' }}
-                    </div>
-                    <div class="flex items-center gap-1">
-                        <span class="w-2 h-2 rounded-full bg-gray-500"></span>
-                        {{ $isEnglish ? 'Committed' : 'Terikat' }}
-                    </div>
-                </div>
-            </div>
-
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 lg:py-16">
+        <div class="max-w-3xl mb-6 sm:mb-8">
+            <span class="text-[11px] font-bold uppercase tracking-[0.2em] text-amber-600">
+                {{ $isEnglish ? 'LAND ASSET INVENTORY' : 'ASET PERSEDIAAN TANAH' }}
+            </span>
+            <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-gray-900 mt-2 leading-tight">
+                {{ $isEnglish ? 'Explore Land Asset Distribution in Indonesia' : 'Jelajahi Persebaran Aset Tanah di Indonesia' }}
+            </h2>
+            <p class="text-sm sm:text-base text-gray-500 leading-relaxed mt-3">
+                {{ $isEnglish
+                    ? 'Badan Bank Tanah is present across various provinces in Indonesia with various land asset statuses to support national development.'
+                    : 'Badan Bank Tanah hadir di berbagai provinsi di Indonesia dengan beragam status aset tanah untuk mendukung pembangunan nasional.' }}
+            </p>
         </div>
-    </div>
 
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-2 sm:p-3">
+            <div id="petaPersebaran" class="rounded-lg overflow-hidden"></div>
+        </div>
+
+        <div class="mt-6 sm:mt-8">
+            <a href="{{ route('assets') }}"
+                class="inline-flex items-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-[#0B2A4A] font-bold px-6 py-3 rounded-lg text-sm transition">
+                {{ $isEnglish ? 'Explore Assets' : 'Jelajahi Aset' }}
+                <i class="fas fa-arrow-right text-xs"></i>
+            </a>
+        </div>
+    </section>
+
+
+        <!-- ========================================================= -->
+    <!-- 4 PILAR — TANAH UNTUK KESEJAHTERAAN -->
     <!-- ========================================================= -->
-    <!-- PEMANFAATAN & KERJA SAMA + PUBLIKASI -->
-    <!-- ========================================================= -->
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
-        <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-10">
+    <section class="relative overflow-hidden bg-white">
+        {{-- Header --}}
+        <div class="max-w-4xl mx-auto text-center px-4 pt-14 sm:pt-20 pb-8 sm:pb-12">
+            <span class="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em] text-amber-600">
+                {{ $isEnglish ? 'THE ROLE OF LAND BANK FOR SUSTAINABLE ECONOMIC GROWTH' : 'PERAN BANK TANAH UNTUK PERTUMBUHAN EKONOMI BERKELANJUTAN' }}
+            </span>
+            <h2 class="text-xl sm:text-2xl lg:text-3xl font-extrabold text-gray-900 mt-3 leading-tight">
+                {{ $isEnglish
+                    ? 'Land for improvement, empowerment, and creation of economic welfare throughout the country'
+                    : 'Tanah untuk peningkatan, pemberdayaan, dan penciptaan kesejahteraan ekonomi di seluruh penjuru negeri' }}
+            </h2>
+        </div>
 
-            <!-- PEMANFAATAN & KERJA SAMA -->
-            <div class="lg:col-span-3">
-                <div class="flex items-end justify-between mb-5 sm:mb-7">
-                    <h2 class="text-xl sm:text-2xl font-bold text-gray-900">
-                        {{ $isEnglish ? 'Utilization & Partnerships' : 'Pemanfaatan & Kerja Sama' }}</h2>
-                    <a href="{{ route('partnership') }}" class="text-xs font-semibold link-secondary">
-                        {{ $isEnglish ? 'View All →' : 'Lihat Semua' }}
-                    </a>
-                </div>
+        {{-- 4 Kartu --}}
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-16">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
 
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
-
-                    <!-- Investasi -->
-                    <div class="text-center">
-                        <div
-                            class="w-12 h-12 sm:w-16 sm:h-16 mx-auto rounded-full bg-blue-50 flex items-center justify-center mb-2 sm:mb-3">
-                            <i class="fas fa-chart-line text-blue-600 text-lg sm:text-2xl"></i>
-                        </div>
-                        <h3 class="text-xs sm:text-sm font-bold text-gray-900">
-                            {{ $isEnglish ? 'Investment' : 'Investasi' }}</h3>
-                        <p class="text-[8px] sm:text-[10px] text-gray-500 leading-relaxed mt-0.5 sm:mt-1 hidden sm:block">
-                            {{ $isEnglish ? 'Productive land utilization' : 'Pemanfaatan tanah untuk investasi produktif.' }}
-                        </p>
-                        <a href="{{ route('partnership') }}" class="text-[9px] sm:text-xs link-secondary font-semibold">
-                            {{ $isEnglish ? 'Learn More →' : 'Selengkapnya' }}
-                        </a>
-                    </div>
-
-                    <!-- Reforma Agraria -->
-                    <div class="text-center">
-                        <div
-                            class="w-12 h-12 sm:w-16 sm:h-16 mx-auto rounded-full bg-green-50 flex items-center justify-center mb-2 sm:mb-3">
-                            <i class="fas fa-leaf text-green-600 text-lg sm:text-2xl"></i>
-                        </div>
-                        <h3 class="text-xs sm:text-sm font-bold text-gray-900">
-                            {{ $isEnglish ? 'Agrarian Reform' : 'Reforma Agraria' }}</h3>
-                        <p class="text-[8px] sm:text-[10px] text-gray-500 leading-relaxed mt-0.5 sm:mt-1 hidden sm:block">
-                            {{ $isEnglish ? 'Supporting equitable land access' : 'Mendukung pemerataan akses tanah.' }}
-                        </p>
-                        <a href="{{ route('partnership') }}" class="text-[9px] sm:text-xs link-secondary font-semibold">
-                            {{ $isEnglish ? 'Learn More →' : 'Selengkapnya' }}
-                        </a>
-                    </div>
-
-                    <!-- Kerja Sama -->
-                    <div class="text-center">
-                        <div
-                            class="w-12 h-12 sm:w-16 sm:h-16 mx-auto rounded-full bg-yellow-50 flex items-center justify-center mb-2 sm:mb-3">
-                            <i class="fas fa-handshake text-yellow-600 text-lg sm:text-2xl"></i>
-                        </div>
-                        <h3 class="text-xs sm:text-sm font-bold text-gray-900">
-                            {{ $isEnglish ? 'Partnership' : 'Kerja Sama' }}</h3>
-                        <p class="text-[8px] sm:text-[10px] text-gray-500 leading-relaxed mt-0.5 sm:mt-1 hidden sm:block">
-                            {{ $isEnglish ? 'Strategic collaboration' : 'Kolaborasi strategis pengelolaan tanah.' }}
-                        </p>
-                        <a href="{{ route('partnership') }}" class="text-[9px] sm:text-xs link-secondary font-semibold">
-                            {{ $isEnglish ? 'Learn More →' : 'Selengkapnya' }}
-                        </a>
-                    </div>
-
-                    <!-- Dokumen -->
-                    <div class="text-center">
-                        <div
-                            class="w-12 h-12 sm:w-16 sm:h-16 mx-auto rounded-full bg-purple-50 flex items-center justify-center mb-2 sm:mb-3">
-                            <i class="fas fa-file-lines text-purple-600 text-lg sm:text-2xl"></i>
-                        </div>
-                        <h3 class="text-xs sm:text-sm font-bold text-gray-900">{{ $isEnglish ? 'Documents' : 'Dokumen' }}
+                {{-- Kartu 1: Mendukung Pemerataan Ekonomi --}}
+                <div class="relative rounded-2xl overflow-hidden h-[380px] sm:h-[420px] group">
+                    <img src="https://picsum.photos/600/800?random=1"
+                        alt="Mendukung Pemerataan Ekonomi"
+                        class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#0B2A4A] via-[#0B2A4A]/70 to-transparent"></div>
+                    <div class="relative h-full flex flex-col justify-end p-5 sm:p-6 text-white">
+                        <h3 class="text-base sm:text-lg font-bold mb-2 leading-snug">
+                            {{ $isEnglish ? 'Supporting Economic Equality' : 'Mendukung Pemerataan Ekonomi' }}
                         </h3>
-                        <p class="text-[8px] sm:text-[10px] text-gray-500 leading-relaxed mt-0.5 sm:mt-1 hidden sm:block">
-                            {{ $isEnglish ? 'Related information and documents' : 'Informasi dan dokumen terkait.' }}
+                        <p class="text-[11px] sm:text-xs leading-relaxed opacity-90">
+                            {{ $isEnglish
+                                ? 'Badan Bank Tanah supports the agrarian reform program to promote economic equality and community welfare.'
+                                : 'Badan Bank Tanah hadir mendukung program reforma agraria untuk mendukung pemerataan ekonomi masyarakat.' }}
                         </p>
-                        <a href="{{ route('publications') }}" class="text-[9px] sm:text-xs link-secondary font-semibold">
-                            {{ $isEnglish ? 'Learn More →' : 'Selengkapnya' }}
-                        </a>
+                    </div>
+                </div>
+
+                {{-- Kartu 2: Solusi Untuk Kebutuhan Lahan --}}
+                <div class="relative rounded-2xl overflow-hidden h-[380px] sm:h-[420px] group">
+                    <img src="https://picsum.photos/600/800?random=2"
+                        alt="Solusi Untuk Kebutuhan Lahan"
+                        class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#166534] via-[#166534]/70 to-transparent"></div>
+                    <div class="relative h-full flex flex-col justify-end p-5 sm:p-6 text-white">
+                        <h3 class="text-base sm:text-lg font-bold mb-2 leading-snug">
+                            {{ $isEnglish ? 'Solution for Land Needs' : 'Solusi Untuk Kebutuhan Lahan' }}
+                        </h3>
+                        <p class="text-[11px] sm:text-xs leading-relaxed opacity-90">
+                            {{ $isEnglish
+                                ? 'Terutama bagi Badan Bank Tanah yang mengemban misi untuk menyediakan lahan bagi kepentingan umum.'
+                                : 'Terutama bagi Badan Bank Tanah yang mengemban misi untuk menyediakan lahan bagi kepentingan umum.' }}
+                        </p>
+                    </div>
+                </div>
+
+                {{-- Kartu 3: Memberikan Kepastian Hukum --}}
+                <div class="relative rounded-2xl overflow-hidden h-[380px] sm:h-[420px] group">
+                    <img src="https://picsum.photos/600/800?random=3"
+                        alt="Memberikan Kepastian Hukum"
+                        class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#0B2A4A] via-[#0B2A4A]/70 to-transparent"></div>
+                    <div class="relative h-full flex flex-col justify-end p-5 sm:p-6 text-white">
+                        <h3 class="text-base sm:text-lg font-bold mb-2 leading-snug">
+                            {{ $isEnglish ? 'Providing Legal Certainty' : 'Memberikan Kepastian Hukum' }}
+                        </h3>
+                        <p class="text-[11px] sm:text-xs leading-relaxed opacity-90">
+                            {{ $isEnglish
+                                ? 'Badan Bank Tanah berperan sebagai pemegang Hak Pengelolaan dalam penyediaan tanah untuk kepentingan umum.'
+                                : 'Badan Bank Tanah berperan sebagai pemegang Hak Pengelolaan dalam penyediaan tanah untuk kepentingan umum.' }}
+                        </p>
+                    </div>
+                </div>
+
+                {{-- Kartu 4: Transparan, Akuntabel dan Nonprofit --}}
+                <div class="relative rounded-2xl overflow-hidden h-[380px] sm:h-[420px] group">
+                    <img src="https://picsum.photos/600/800?random=4"
+                        alt="Transparan, Akuntabel dan Nonprofit"
+                        class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#166534] via-[#166534]/70 to-transparent"></div>
+                    <div class="relative h-full flex flex-col justify-end p-5 sm:p-6 text-white">
+                        <h3 class="text-base sm:text-lg font-bold mb-2 leading-snug">
+                            {{ $isEnglish ? 'Transparent, Accountable, and Nonprofit' : 'Transparan, Akuntabel dan Nonprofit' }}
+                        </h3>
+                        <p class="text-[11px] sm:text-xs leading-relaxed opacity-90">
+                            {{ $isEnglish
+                                ? 'Badan Bank Tanah mengedepankan tata kelola yang transparan, akuntabel, dan berorientasi pada kepentingan publik.'
+                                : 'Badan Bank Tanah mengedepankan tata kelola yang transparan, akuntabel, dan berorientasi pada kepentingan publik.' }}
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        {{-- Ornamen siluet gedung Indonesia --}}
+        <div class="relative w-full overflow-hidden leading-none -mt-8 sm:-mt-12 lg:-mt-16">
+            <img src="{{ asset('images/slinking.jpg') }}"
+                alt=""
+                class="w-full h-auto block select-none pointer-events-none relative z-0">
+        </div>
+    </section>
+
+
+       <!-- ========================================================= -->
+    <!-- KERJA SAMA PEMANFAATAN TANAH -->
+    <!-- ========================================================= -->
+    <section class="relative overflow-hidden py-14 sm:py-20">
+
+        {{-- Background foto pemandangan --}}
+        <div class="absolute inset-0 bg-cover bg-center"
+            style="background-image: url('https://picsum.photos/1920/800?random=99');">
+        </div>
+
+        {{-- Overlay gelap --}}
+        <div class="absolute inset-0 bg-gradient-to-r from-[#0B2A4A]/80 via-[#0B2A4A]/55 to-[#0B2A4A]/70"></div>
+
+        {{-- Konten --}}
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            {{-- Kartu putih transparan yang membungkus header + 6 kotak --}}
+            <div class="bg-white/12 backdrop-blur-md border border-white/25 rounded-2xl p-5 sm:p-7 lg:p-9 shadow-2xl">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center">
+
+                    {{-- KIRI: Header --}}
+                    <div class="lg:col-span-4">
+                        <span class="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em] text-amber-400">
+                            {{ $isEnglish ? 'UTILIZATION & PARTNERSHIP' : 'PEMANFAATAN & KERJA SAMA' }}
+                        </span>
+                        <h2 class="text-xl sm:text-2xl lg:text-3xl font-extrabold text-white mt-2 leading-tight">
+                            {{ $isEnglish ? 'Land Utilization Partnership' : 'Kerja Sama Pemanfaatan Tanah' }}
+                        </h2>
+                        <p class="text-[11px] sm:text-xs text-white/85 leading-relaxed mt-3">
+                            {{ $isEnglish
+                                ? 'Badan Bank Tanah offers various partnership schemes in land utilization. Choose the scheme that best suits your needs.'
+                                : 'Badan Bank Tanah menawarkan berbagai skema kerja sama dalam pemanfaatan tanah. Pilih skema yang paling sesuai dengan kebutuhan Anda.' }}
+                        </p>
                     </div>
 
-                </div>
-            </div>
+                    {{-- KANAN: 6 Kotak (2 baris × 3 kolom) --}}
+                    <div class="lg:col-span-8">
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
 
-            <!-- PUBLIKASI TERBARU -->
-            <div class="lg:col-span-2">
-                <div class="flex items-end justify-between mb-5 sm:mb-7">
-                    <h2 class="text-xl sm:text-2xl font-bold text-gray-900">
-                        {{ $isEnglish ? 'Latest Publications' : 'Publikasi Terbaru' }}</h2>
-                    <a href="{{ route('publications') }}" class="text-xs font-semibold link-secondary">
-                        {{ $isEnglish ? 'View All →' : 'Lihat Semua' }}
-                    </a>
-                </div>
-
-                <div class="space-y-2 sm:space-y-3">
-                    @foreach ($berita->take(3) as $item)
-                        <a href="{{ route('publications.show', $item->id) }}"
-                            class="group flex items-center gap-3 sm:gap-4 bg-white rounded-lg overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 p-2 sm:p-3">
-
-                            <div class="w-14 h-14 sm:w-20 sm:h-20 flex-shrink-0 overflow-hidden bg-gray-100 rounded-lg">
-                                @if ($item->gambar)
-                                    <img src="{{ asset('storage/' . $item->gambar) }}" alt="{{ $item->judul }}"
-                                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                        loading="lazy">
-                                @else
-                                    <img src="https://picsum.photos/300/200?random={{ $item->id }}"
-                                        alt="{{ $item->judul }}"
-                                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                        loading="lazy">
-                                @endif
-                            </div>
-
-                            <div class="flex-1 min-w-0">
-                                <span
-                                    class="text-[7px] sm:text-[8px] font-bold uppercase px-1.5 py-0.5 rounded-full
-                            {{ $item->kategori == 'Siaran Pers' ? 'bg-blue-50 text-blue-700' : 'bg-green-50 text-green-700' }}">
-                                    {{ $item->kategori }}
-                                </span>
-                                <h3
-                                    class="text-[10px] sm:text-xs font-bold text-gray-900 leading-tight mt-0.5 line-clamp-2 group-hover:text-[var(--color-secondary)] transition-colors">
-                                    @if ($isEnglish && !empty($item->judul_en))
-                                        {{ $item->judul_en }}
-                                    @else
-                                        {{ $item->judul }}
-                                    @endif
+                            {{-- 1. Jual Beli --}}
+                            <div class="group bg-[#0B2A4A]/85 hover:bg-[#1D4ED8] border border-white/15 rounded-xl p-3 sm:p-4 text-center transition-all duration-300 cursor-pointer">
+                                <div class="w-9 h-9 sm:w-11 sm:h-11 mx-auto rounded-lg bg-white/10 flex items-center justify-center mb-2 sm:mb-3 group-hover:bg-white/20 transition">
+                                    <i class="fas fa-dollar-sign text-white text-sm sm:text-base"></i>
+                                </div>
+                                <h3 class="text-[10px] sm:text-xs font-bold text-white leading-tight">
+                                    {{ $isEnglish ? 'Buy & Sell' : 'Jual Beli' }}
                                 </h3>
-                                <p class="text-[8px] sm:text-[9px] text-gray-400 mt-0.5">
-                                    {{ $item->tanggal_publikasi ? \Carbon\Carbon::parse($item->tanggal_publikasi)->format('d M Y') : $item->created_at?->format('d M Y') }}
-                                </p>
                             </div>
 
-                        </a>
-                    @endforeach
+                            {{-- 2. Sewa --}}
+                            <div class="group bg-[#0B2A4A]/85 hover:bg-[#1D4ED8] border border-white/15 rounded-xl p-3 sm:p-4 text-center transition-all duration-300 cursor-pointer">
+                                <div class="w-9 h-9 sm:w-11 sm:h-11 mx-auto rounded-lg bg-white/10 flex items-center justify-center mb-2 sm:mb-3 group-hover:bg-white/20 transition">
+                                    <i class="fas fa-couch text-white text-sm sm:text-base"></i>
+                                </div>
+                                <h3 class="text-[10px] sm:text-xs font-bold text-white leading-tight">
+                                    {{ $isEnglish ? 'Rent' : 'Sewa' }}
+                                </h3>
+                            </div>
+
+                            {{-- 3. Ventura Bersama --}}
+                            <div class="group bg-[#0B2A4A]/85 hover:bg-[#1D4ED8] border border-white/15 rounded-xl p-3 sm:p-4 text-center transition-all duration-300 cursor-pointer">
+                                <div class="w-9 h-9 sm:w-11 sm:h-11 mx-auto rounded-lg bg-white/10 flex items-center justify-center mb-2 sm:mb-3 group-hover:bg-white/20 transition">
+                                    <i class="fas fa-handshake text-white text-sm sm:text-base"></i>
+                                </div>
+                                <h3 class="text-[10px] sm:text-xs font-bold text-white leading-tight">
+                                    {{ $isEnglish ? 'Joint Venture' : 'Ventura Bersama' }}
+                                </h3>
+                            </div>
+
+                            {{-- 4. Kerja Sama Operasi --}}
+                            <div class="group bg-[#0B2A4A]/85 hover:bg-[#1D4ED8] border border-white/15 rounded-xl p-3 sm:p-4 text-center transition-all duration-300 cursor-pointer">
+                                <div class="w-9 h-9 sm:w-11 sm:h-11 mx-auto rounded-lg bg-white/10 flex items-center justify-center mb-2 sm:mb-3 group-hover:bg-white/20 transition">
+                                    <i class="fas fa-people-group text-white text-sm sm:text-base"></i>
+                                </div>
+                                <h3 class="text-[10px] sm:text-xs font-bold text-white leading-tight">
+                                    {{ $isEnglish ? 'Operation Cooperation' : 'Kerja Sama Operasi' }}
+                                </h3>
+                            </div>
+
+                            {{-- 5. Hibah --}}
+                            <div class="group bg-[#0B2A4A]/85 hover:bg-[#1D4ED8] border border-white/15 rounded-xl p-3 sm:p-4 text-center transition-all duration-300 cursor-pointer">
+                                <div class="w-9 h-9 sm:w-11 sm:h-11 mx-auto rounded-lg bg-white/10 flex items-center justify-center mb-2 sm:mb-3 group-hover:bg-white/20 transition">
+                                    <i class="fas fa-gift text-white text-sm sm:text-base"></i>
+                                </div>
+                                <h3 class="text-[10px] sm:text-xs font-bold text-white leading-tight">
+                                    {{ $isEnglish ? 'Grant' : 'Hibah' }}
+                                </h3>
+                            </div>
+
+                            {{-- 6. Tukar Menukar --}}
+                            <div class="group bg-[#0B2A4A]/85 hover:bg-[#1D4ED8] border border-white/15 rounded-xl p-3 sm:p-4 text-center transition-all duration-300 cursor-pointer">
+                                <div class="w-9 h-9 sm:w-11 sm:h-11 mx-auto rounded-lg bg-white/10 flex items-center justify-center mb-2 sm:mb-3 group-hover:bg-white/20 transition">
+                                    <i class="fas fa-right-left text-white text-sm sm:text-base"></i>
+                                </div>
+                                <h3 class="text-[10px] sm:text-xs font-bold text-white leading-tight">
+                                    {{ $isEnglish ? 'Land Swap' : 'Tukar Menukar' }}
+                                </h3>
+                            </div>
+
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
         </div>
     </section>
 
+        <!-- ========================================================= -->
+    <!-- INFORMASI TERKINI + GALERI TERKINI -->
     <!-- ========================================================= -->
-    <!-- CTA SECTION -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10">
+
+                        {{-- ===================================================== --}}
+            {{-- KOLOM KIRI: INFORMASI TERKINI                        --}}
+            {{-- ===================================================== --}}
+            <div class="flex flex-col h-full">
+                {{-- Header --}}
+                <div class="flex items-end justify-between mb-4 sm:mb-5">
+                    <div>
+                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--color-secondary)] block">
+                            {{ $isEnglish ? 'PUBLICATION' : 'PUBLIKASI' }}
+                        </span>
+                        <h2 class="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 mt-0.5">
+                            {{ $isEnglish ? 'Latest Information' : 'Informasi Terkini' }}
+                        </h2>
+                    </div>
+                    <a href="{{ route('publications') }}"
+                        class="text-[10px] sm:text-xs font-semibold text-[var(--color-secondary)] hover:underline">
+                        {{ $isEnglish ? 'More News →' : 'Lihat Berita Lainnya →' }}
+                    </a>
+                </div>
+
+                {{-- Grid: 1 kartu besar kiri + 3 kartu kecil kanan --}}
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 flex-1">
+
+                    {{-- Kartu berita utama (BIRU SOLID) --}}
+                    @php $beritaUtama = $berita->first(); @endphp
+                    @if ($beritaUtama)
+                        <a href="{{ route('publications.show', $beritaUtama->id) }}"
+                            class="relative rounded-xl overflow-hidden group block min-h-[320px] sm:min-h-0 shadow-md">
+
+                            {{-- Bagian atas: Foto --}}
+                            <div class="absolute top-0 left-0 right-0 h-[55%] overflow-hidden bg-gray-100">
+                                @if ($beritaUtama->gambar)
+                                    <img src="{{ asset('storage/' . $beritaUtama->gambar) }}"
+                                        alt="{{ $beritaUtama->judul }}"
+                                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                @else
+                                    <img src="https://picsum.photos/800/600?random={{ $beritaUtama->id }}"
+                                        alt="{{ $beritaUtama->judul }}"
+                                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                @endif
+                            </div>
+
+                            {{-- Label "BERITA UTAMA" --}}
+                            <span class="absolute top-3 left-3 z-10 text-[9px] font-bold uppercase tracking-wider bg-amber-400 text-[#0B2A4A] px-2 py-1 rounded">
+                                {{ $isEnglish ? 'HEADLINE' : 'BERITA UTAMA' }}
+                            </span>
+
+                            {{-- Bagian bawah: Biru solid --}}
+                            <div class="absolute bottom-0 left-0 right-0 h-[45%] bg-[#1D4ED8] p-4 sm:p-5 flex flex-col justify-between text-white">
+                                <div>
+                                    <p class="text-[10px] opacity-80 mb-2">
+                                        {{ $beritaUtama->tanggal_publikasi ? \Carbon\Carbon::parse($beritaUtama->tanggal_publikasi)->format('d M Y') : $beritaUtama->created_at?->format('d M Y') }}
+                                    </p>
+                                    <h3 class="text-sm sm:text-base font-bold leading-snug line-clamp-3">
+                                        @if ($isEnglish && !empty($beritaUtama->judul_en))
+                                            {{ $beritaUtama->judul_en }}
+                                        @else
+                                            {{ $beritaUtama->judul }}
+                                        @endif
+                                    </h3>
+                                </div>
+                                <span class="inline-flex items-center gap-1 text-[10px] font-bold text-amber-400">
+                                    {{ $isEnglish ? 'Read More' : 'Baca Selengkapnya' }} →
+                                </span>
+                            </div>
+                        </a>
+                    @endif
+
+                    {{-- 3 kartu kecil (kanan, stack vertikal, bagi rata) --}}
+                    <div class="flex flex-col gap-2.5 sm:gap-3">
+                        @foreach ($berita->skip(1)->take(3) as $item)
+                            <a href="{{ route('publications.show', $item->id) }}"
+                                class="flex gap-2.5 rounded-xl overflow-hidden bg-white border border-gray-100 shadow-sm hover:shadow-md transition group flex-1 min-h-0">
+
+                                {{-- Thumbnail kiri --}}
+                                <div class="w-20 sm:w-24 flex-shrink-0 overflow-hidden bg-gray-100">
+                                    @if ($item->gambar)
+                                        <img src="{{ asset('storage/' . $item->gambar) }}"
+                                            alt="{{ $item->judul }}"
+                                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                    @else
+                                        <img src="https://picsum.photos/200/200?random={{ $item->id }}"
+                                            alt="{{ $item->judul }}"
+                                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                    @endif
+                                </div>
+
+                                {{-- Teks kanan --}}
+                                <div class="flex-1 min-w-0 py-2 pr-2.5 flex flex-col justify-center">
+                                    <span class="inline-block self-start text-[8px] font-bold uppercase tracking-wider bg-amber-400 text-[#0B2A4A] px-1.5 py-0.5 rounded mb-1">
+                                        {{ $item->kategori ?? 'Berita' }}
+                                    </span>
+                                    <h3 class="text-[10px] sm:text-[11px] font-bold text-gray-900 leading-snug line-clamp-3 group-hover:text-[var(--color-secondary)] transition-colors">
+                                        @if ($isEnglish && !empty($item->judul_en))
+                                            {{ $item->judul_en }}
+                                        @else
+                                            {{ $item->judul }}
+                                        @endif
+                                    </h3>
+                                    <p class="text-[9px] text-gray-400 mt-1">
+                                        {{ $item->tanggal_publikasi ? \Carbon\Carbon::parse($item->tanggal_publikasi)->format('d M Y') : $item->created_at?->format('d M Y') }}
+                                    </p>
+                                </div>
+                            </a>
+                        @endforeach
+
+                        {{-- Placeholder kalau berita < 4 (biar tetap 3 kartu kecil) --}}
+                        @for ($i = $berita->skip(1)->take(3)->count(); $i < 3; $i++)
+                            <div class="flex-1 rounded-xl bg-gray-50 border border-dashed border-gray-200 flex items-center justify-center min-h-[80px]">
+                                <i class="fas fa-newspaper text-gray-300"></i>
+                            </div>
+                        @endfor
+                    </div>
+                </div>
+            </div>
+
+                       {{-- ===================================================== --}}
+            {{-- KOLOM KANAN: GALERI TERKINI                          --}}
+            {{-- ===================================================== --}}
+            <div class="flex flex-col h-full">
+                {{-- Header --}}
+                <div class="flex items-end justify-between mb-4 sm:mb-5">
+                    <div>
+                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--color-secondary)] block">
+                            {{ $isEnglish ? 'PUBLICATION' : 'PUBLIKASI' }}
+                        </span>
+                        <h2 class="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 mt-0.5">
+                            {{ $isEnglish ? 'Latest Gallery' : 'Galeri Terkini' }}
+                        </h2>
+                    </div>
+                    <a href="{{ route('halaman.publikasi') }}"
+                        class="text-[10px] sm:text-xs font-semibold text-[var(--color-secondary)] hover:underline">
+                        {{ $isEnglish ? 'View All Gallery →' : 'Lihat Semua Galeri →' }}
+                    </a>
+                </div>
+
+                {{-- Grid galeri: 2 kolom × 3 baris, ikut tinggi kolom kiri --}}
+                @php
+                    $galeriItems = $berita->take(6);
+                    $galeriCount = $galeriItems->count();
+                @endphp
+
+                <div class="grid grid-cols-2 gap-2 sm:gap-2.5 flex-1">
+                    @foreach ($galeriItems as $item)
+                        <a href="{{ route('publications.show', $item->id) }}"
+                            class="relative rounded-lg overflow-hidden group block bg-gray-100 aspect-[4/3]">
+                            @if ($item->gambar)
+                                <img src="{{ asset('storage/' . $item->gambar) }}"
+                                    alt="{{ $item->judul }}"
+                                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            @else
+                                <img src="https://picsum.photos/400/300?random={{ $item->id + 100 }}"
+                                    alt="{{ $item->judul }}"
+                                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            @endif
+                        </a>
+                    @endforeach
+
+                    {{-- Placeholder kalau data kurang dari 6 --}}
+                    @for ($i = $galeriCount; $i < 6; $i++)
+                        <div class="relative rounded-lg overflow-hidden bg-gray-100 aspect-[4/3] flex items-center justify-center">
+                            <i class="fas fa-image text-gray-300 text-xl"></i>
+                        </div>
+                    @endfor
+                </div>
+            </div>
+        </div>
+    </section>
+    
+
+
+        <!-- ========================================================= -->
+    <!-- SOCIAL MEDIA (FULL WIDTH) -->
     <!-- ========================================================= -->
-    <div class="relative overflow-hidden bg-[#0B2A4A] max-h-[260px] sm:max-h-[300px] lg:max-h-[340px]">
-        <!-- Background foto -->
-        <div class="absolute inset-0 bg-cover bg-no-repeat"
-            style="background-image: url('{{ asset('images/footer.png') }}');
-       background-position: right bottom -5px;">
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+        {{-- Header --}}
+        <div class="mb-5 sm:mb-6">
+            <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--color-secondary)] block">
+                {{ $isEnglish ? 'PUBLICATION' : 'PUBLIKASI' }}
+            </span>
+            <h2 class="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 mt-0.5">
+                Social Media
+            </h2>
         </div>
 
-        <!-- Gradient overlay -->
-        <div class="absolute inset-0 bg-gradient-to-r from-[#0B2A4A] from-30% via-[#0B2A4A]/70 via-60% to-transparent">
+        {{-- 4 Card Social Media sejajar --}}
+        @php
+            $socials = [
+                [
+                    'icon'  => 'fa-instagram',
+                    'color' => 'text-pink-500',
+                    'name'  => 'Instagram',
+                    'desc'  => $isEnglish ? 'Official profile updates of Badan Bank Tanah.' : 'Pembaruan profil resmi Badan Bank Tanah.',
+                    'url'   => '#',
+                    'thumb' => 'https://picsum.photos/100/100?random=201',
+                ],
+                [
+                    'icon'  => 'fa-x-twitter',
+                    'color' => 'text-gray-800',
+                    'name'  => 'Twitter',
+                    'desc'  => $isEnglish ? 'Strategic assets for sustainable development.' : 'Aset Strategis untuk Pembangunan Berkelanjutan.',
+                    'url'   => '#',
+                    'thumb' => 'https://picsum.photos/100/100?random=202',
+                ],
+                [
+                    'icon'  => 'fa-facebook',
+                    'color' => 'text-blue-600',
+                    'name'  => 'Facebook',
+                    'desc'  => $isEnglish ? 'Strategic assets for sustainable development.' : 'Aset Strategis untuk Pembangunan Berkelanjutan.',
+                    'url'   => '#',
+                    'thumb' => 'https://picsum.photos/100/100?random=203',
+                ],
+                [
+                    'icon'  => 'fa-youtube',
+                    'color' => 'text-red-600',
+                    'name'  => 'YouTube',
+                    'desc'  => $isEnglish ? 'Strategic assets for sustainable development.' : 'Aset Strategis untuk Pembangunan Berkelanjutan.',
+                    'url'   => '#',
+                    'thumb' => 'https://picsum.photos/100/100?random=204',
+                ],
+            ];
+        @endphp
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+            @foreach ($socials as $social)
+                <a href="{{ $social['url'] }}" target="_blank" rel="noopener noreferrer"
+                    class="group flex items-center gap-3 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 p-3">
+
+                    {{-- Thumbnail kiri --}}
+                    <div class="w-12 h-12 sm:w-14 sm:h-14 flex-shrink-0 rounded-lg overflow-hidden bg-gray-100">
+                        <img src="{{ $social['thumb'] }}"
+                            alt="{{ $social['name'] }}"
+                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    </div>
+
+                    {{-- Teks kanan --}}
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-1.5 mb-1">
+                            <i class="fab {{ $social['icon'] }} {{ $social['color'] }} text-[12px]"></i>
+                            <span class="text-[10px] sm:text-[11px] font-semibold text-gray-700">
+                                {{ $social['name'] }}
+                            </span>
+                        </div>
+                        <p class="text-[10px] sm:text-[11px] text-gray-500 leading-snug line-clamp-2">
+                            {{ $social['desc'] }}
+                        </p>
+                    </div>
+                </a>
+            @endforeach
         </div>
+    </section>
 
-        <!-- Konten -->
-        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10">
-            <div class="max-w-xl text-left">
 
-                <div class="flex items-start gap-3 mb-2 sm:mb-3">
+        <!-- ========================================================= -->
+    <!-- CTA SECTION (FULL WIDTH) -->
+    <!-- ========================================================= -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-16">
+        <div class="relative rounded-2xl overflow-hidden shadow-lg">
+
+            {{-- Background foto daun --}}
+            <div class="absolute inset-0 bg-cover bg-no-repeat"
+                style="background-image: url('{{ asset('images/footer.png') }}');
+                       background-position: right bottom;">
+            </div>
+
+            {{-- Overlay biru gradient --}}
+            <div class="absolute inset-0 bg-gradient-to-r from-[#0B2A4A] from-30% via-[#0B2A4A]/75 via-60% to-transparent">
+            </div>
+
+            {{-- Konten --}}
+            <div class="relative z-10 max-w-2xl px-5 sm:px-8 lg:px-10 py-8 sm:py-10 lg:py-12">
+
+                {{-- Ikon + judul --}}
+                <div class="flex items-start gap-3 mb-3 sm:mb-4">
                     <div class="flex-shrink-0 mt-0.5">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 sm:w-8 sm:h-8 text-yellow-400"
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 sm:w-9 sm:h-9 text-amber-400"
                             fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M3 18v-6a9 9 0 0118 0v6M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z" />
                         </svg>
                     </div>
-                    <h2 class="text-lg sm:text-xl lg:text-2xl font-bold text-yellow-400 leading-tight">
+                    <h2 class="text-lg sm:text-xl lg:text-2xl font-bold text-amber-400 leading-tight">
                         {{ $isEnglish ? 'Together Managing Land for a Better Future of Indonesia' : 'Bersama Mengelola Tanah untuk Masa Depan Indonesia' }}
                     </h2>
                 </div>
 
-                <p class="text-xs sm:text-sm text-white/90 leading-relaxed mb-3 sm:mb-4">
+                {{-- Deskripsi --}}
+                <p class="text-xs sm:text-sm text-white/90 leading-relaxed mb-5 sm:mb-6">
                     {{ $isEnglish
                         ? 'Do you have questions or want to work together? Our team is ready to help.'
                         : 'Anda memiliki pertanyaan atau ingin bekerja sama? Tim kami siap membantu.' }}
                 </p>
 
+                {{-- Tombol --}}
                 <a href="{{ route('partnership') }}"
-                    class="inline-flex items-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-[#0B2A4A] font-bold px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg transition text-xs sm:text-sm">
+                    class="inline-flex items-center gap-2 bg-amber-400 hover:bg-amber-500 text-[#0B2A4A] font-bold px-5 sm:px-6 py-2.5 sm:py-3 rounded-lg transition text-xs sm:text-sm">
                     {{ $isEnglish ? 'Contact Us' : 'Hubungi Kami' }}
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor" stroke-width="2.5">
@@ -460,8 +718,7 @@
 
             </div>
         </div>
-    </div>
-
+    </section>
 
 @endsection
 
@@ -538,6 +795,81 @@
                 transition: none;
             }
         }
+
+                /* =====================================================
+           PETA PERSEBARAN ASET
+        ===================================================== */
+        #petaPersebaran {
+            width: 100%;
+            height: 380px;
+            background: #ffffff;
+            border-radius: 12px;
+            z-index: 0;
+        }
+
+        @media (min-width: 640px) {
+            #petaPersebaran { height: 460px; }
+        }
+
+        @media (min-width: 1024px) {
+            #petaPersebaran { height: 520px; }
+        }
+
+        #petaPersebaran .leaflet-container {
+            background: #ffffff !important;
+            font-family: 'Inter', sans-serif !important;
+        }
+
+        #petaPersebaran .leaflet-control-attribution {
+            font-size: 9px;
+            background: rgba(255, 255, 255, 0.75);
+            color: #9ca3af;
+            padding: 1px 6px;
+            border-radius: 4px;
+        }
+
+        #petaPersebaran .leaflet-control-zoom a {
+            color: #4b5563;
+            border-color: #e5e7eb;
+            width: 30px;
+            height: 30px;
+            line-height: 28px;
+            font-size: 16px;
+        }
+
+        #petaPersebaran .leaflet-control-zoom a:hover {
+            background: #f3f4f6;
+            color: #111827;
+        }
+
+        .aset-marker {
+            width: 12px;
+            height: 12px;
+            background: #16a34a;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+            transition: transform 0.18s ease, background 0.18s ease;
+            cursor: pointer;
+        }
+
+        .aset-marker:hover {
+            transform: scale(1.5);
+            background: #15803d;
+        }
+
+        #petaPersebaran .leaflet-popup-content-wrapper {
+            border-radius: 10px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            padding: 2px;
+        }
+
+        #petaPersebaran .leaflet-popup-content {
+            margin: 10px 12px;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.4;
+        }
+
     </style>
 @endpush
 
@@ -714,4 +1046,173 @@
             });
         });
     </script>
+@endpush
+
+@push('scripts')
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        if (typeof L === "undefined") {
+            console.error("❌ Leaflet tidak ditemukan!");
+            return;
+        }
+
+        const mapEl = document.getElementById("petaPersebaran");
+        if (!mapEl) {
+            console.warn("⚠️ #petaPersebaran tidak ditemukan di DOM.");
+            return;
+        }
+
+        // Inisialisasi peta
+        const map = L.map("petaPersebaran", {
+            zoomControl: true,
+            scrollWheelZoom: false,
+            minZoom: 4,
+            maxZoom: 9,
+            zoomSnap: 0.25,
+            maxBounds: [
+                [-15, 88],
+                [10, 148]
+            ],
+            maxBoundsViscosity: 0.8,
+        }).setView([-2.2, 118.0], 5);
+
+        map.getContainer().style.background = "#ffffff";
+
+        // Load GeoJSON Indonesia
+        fetch("{{ asset('geojson/indonesia.geojson') }}")
+            .then(res => {
+                if (!res.ok) throw new Error("HTTP " + res.status);
+                return res.json();
+            })
+            .then(geojson => {
+                L.geoJSON(geojson, {
+                    style: function () {
+                        return {
+                            color: "#9ca3af",
+                            weight: 0.7,
+                            opacity: 1,
+                            fillColor: "#e5e7eb",
+                            fillOpacity: 1,
+                        };
+                    },
+                    onEachFeature: function (feature, layer) {
+                        layer.options.interactive = false;
+                    }
+                }).addTo(map);
+            })
+            .catch(err => {
+                console.error("❌ Gagal load GeoJSON:", err);
+            });
+
+        // Marker dari data
+        const markers = @json($markers ?? []);
+        console.log("📍 Marker count:", markers.length);
+
+        markers.forEach(function (m) {
+            if (!m.lat || !m.lng) return;
+
+            const greenIcon = L.divIcon({
+                className: "",
+                html: '<div class="aset-marker"></div>',
+                iconSize: [12, 12],
+                iconAnchor: [6, 6],
+                popupAnchor: [0, -8],
+            });
+
+            const popupContent = `
+                <div style="min-width:180px;">
+                    <div style="font-weight:700;font-size:14px;color:#111827;margin-bottom:3px;">
+                        ${m.nama_lokasi || "Aset Tanah"}
+                    </div>
+                    <div style="font-size:11px;color:#6B7280;margin-bottom:6px;">
+                        📍 ${m.provinsi || ""}${m.kabupaten ? ", " + m.kabupaten : ""}
+                    </div>
+                    <div style="background:#f0fdf4;padding:8px 10px;border-radius:6px;">
+                        <div style="font-size:9px;color:#6B7280;text-transform:uppercase;letter-spacing:0.5px;">Luas</div>
+                        <div style="font-size:14px;font-weight:700;color:#15803d;">
+                            ${Number(m.luas_hektar || 0).toLocaleString("id-ID")} Ha
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            L.marker([m.lat, m.lng], { icon: greenIcon })
+                .addTo(map)
+                .bindPopup(popupContent);
+        });
+
+        setTimeout(() => map.invalidateSize(), 250);
+        window.addEventListener("resize", () => map.invalidateSize());
+    });
+</script>
+@endpush
+
+@push('scripts')
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    console.log("✅ [PETA] Script jalan");
+
+    if (typeof L === "undefined") {
+        console.error("❌ [PETA] Leaflet tidak ditemukan!");
+        return;
+    }
+
+    const mapEl = document.getElementById("petaPersebaran");
+    if (!mapEl) {
+        console.warn("⚠️ [PETA] #petaPersebaran tidak ada di DOM");
+        return;
+    }
+    console.log("✅ [PETA] #petaPersebaran ditemukan");
+
+    const map = L.map("petaPersebaran", {
+        zoomControl: true,
+        scrollWheelZoom: false,
+        minZoom: 4,
+        maxZoom: 9,
+        zoomSnap: 0.25,
+        maxBounds: [[-15, 88], [10, 148]],
+        maxBoundsViscosity: 0.8,
+    }).setView([-2.2, 118.0], 5);
+
+    map.getContainer().style.background = "#ffffff";
+    console.log("✅ [PETA] Leaflet map dibuat");
+
+    fetch("{{ asset('geojson/indonesia.geojson') }}")
+        .then(res => {
+            if (!res.ok) throw new Error("HTTP " + res.status);
+            return res.json();
+        })
+        .then(geojson => {
+            console.log("✅ [PETA] GeoJSON loaded");
+            L.geoJSON(geojson, {
+                style: () => ({
+                    color: "#9ca3af",
+                    weight: 0.7,
+                    opacity: 1,
+                    fillColor: "#e5e7eb",
+                    fillOpacity: 1,
+                }),
+                onEachFeature: (f, layer) => { layer.options.interactive = false; }
+            }).addTo(map);
+        })
+        .catch(err => console.error("❌ [PETA] Gagal load GeoJSON:", err));
+
+    const markers = @json($markers ?? []);
+    console.log("📍 [PETA] Marker count:", markers.length);
+    markers.forEach(function (m) {
+        if (!m.lat || !m.lng) return;
+        const greenIcon = L.divIcon({
+            className: "",
+            html: '<div class="aset-marker"></div>',
+            iconSize: [12, 12],
+            iconAnchor: [6, 6],
+            popupAnchor: [0, -8],
+        });
+        L.marker([m.lat, m.lng], { icon: greenIcon }).addTo(map);
+    });
+
+    setTimeout(() => map.invalidateSize(), 250);
+    window.addEventListener("resize", () => map.invalidateSize());
+});
+</script>
 @endpush

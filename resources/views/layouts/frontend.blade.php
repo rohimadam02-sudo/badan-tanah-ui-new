@@ -730,44 +730,218 @@
             'accessibility' => $isEnglish ? 'Accessibility' : 'Aksesibilitas',
         ];
 
-        // Data mega menu "Tentang"
-        $megaTentang = [
-            'label' => $isEnglish ? 'ABOUT US' : 'TENTANG KAMI',
-            'title' => $isEnglish ? 'Get to Know Badan Bank Tanah' : 'Mengenal Badan Bank Tanah',
-            'description' => $isEnglish
-                ? 'Badan Bank Tanah is present as a strategic instrument of the state in managing land.'
-                : 'Badan Bank Tanah hadir sebagai instrumen strategis negara dalam menata dan mengelola tanah.',
-            'submenus' => [
-                [
-                    'icon' => 'fa-building-columns',
-                    'title' => $isEnglish ? 'Profile' : 'Profil',
-                    'description' => $isEnglish ? 'General information' : 'Informasi umum tentang Badan Bank Tanah',
-                ],
-                [
-                    'icon' => 'fa-eye',
-                    'title' => $isEnglish ? 'Vision & Mission' : 'Visi & Misi',
-                    'description' => $isEnglish
-                        ? 'Vision and mission'
-                        : 'Visi, misi, dan nilai-nilai yang menjadi landasan',
-                ],
-                [
-                    'icon' => 'fa-sitemap',
-                    'title' => $isEnglish ? 'Organizational Structure' : 'Struktur Organisasi',
-                    'description' => $isEnglish
-                        ? 'Organizational structure'
-                        : 'Struktur organisasi dan pembagian peran',
-                ],
-                [
-                    'icon' => 'fa-clipboard-list',
-                    'title' => $isEnglish ? 'Functions & Duties' : 'Fungsi & Tugas',
-                    'description' => $isEnglish ? 'Duties and functions' : 'Tugas dan fungsi dalam pelaksanaan mandat',
-                ],
-                [
-                    'icon' => 'fa-users',
-                    'title' => $isEnglish ? 'Leadership Profile' : 'Profil Pimpinan',
-                    'description' => $isEnglish ? 'Leadership information' : 'Informasi pimpinan dan jajaran manajemen',
+        // =========================================================
+        // DATA MEGA MENU (semua menu)
+        // =========================================================
+        $megaMenus = [
+            'tentang' => [
+                'label' => $isEnglish ? 'ABOUT US' : 'TENTANG KAMI',
+                'title' => $isEnglish ? 'Get to Know Badan Bank Tanah' : 'Mengenal Badan Bank Tanah',
+                'description' => $isEnglish
+                    ? 'Badan Bank Tanah is present as a strategic instrument of the state in managing land for broader and sustainable interests.'
+                    : 'Badan Bank Tanah hadir sebagai instrumen strategis negara dalam menata dan mengelola tanah untuk kepentingan yang lebih luas dan berkelanjutan.',
+                'submenus' => [
+                    [
+                        'icon' => 'fa-building-columns',
+                        'title' => $isEnglish ? 'Profile' : 'Profil',
+                        'description' => $isEnglish
+                            ? 'General information about Badan Bank Tanah'
+                            : 'Informasi umum tentang Badan Bank Tanah',
+                        'route' => 'about',
+                    ],
+                    [
+                        'icon' => 'fa-bullseye',
+                        'title' => $isEnglish ? 'Vision & Mission' : 'Visi & Misi',
+                        'description' => $isEnglish
+                            ? 'Vision, mission, and values that guide us'
+                            : 'Visi, misi dan nilai-nilai yang menjadi landasan kami.',
+                        'route' => 'about.visi-misi',
+                    ],
+                    [
+                        'icon' => 'fa-sitemap',
+                        'title' => $isEnglish ? 'Organizational Structure' : 'Struktur Organisasi',
+                        'description' => $isEnglish
+                            ? 'Organizational structure and role distribution'
+                            : 'Struktur organisasi dan pembagian peran di lingkungan Badan Bank Tanah.',
+                        'route' => 'about.struktur',
+                    ],
+                    [
+                        'icon' => 'fa-list-check',
+                        'title' => $isEnglish ? 'Functions & Duties' : 'Fungsi & Tugas',
+                        'description' => $isEnglish
+                            ? 'Duties and functions in carrying out the mandate'
+                            : 'Tugas dan fungsi dalam pelaksanaan mandat dan pengelolaan tanah.',
+                        'route' => 'about.fungsi',
+                    ],
+                    [
+                        'icon' => 'fa-users',
+                        'title' => $isEnglish ? 'Leadership Profile' : 'Profil Pimpinan',
+                        'description' => $isEnglish
+                            ? 'Leadership and management information'
+                            : 'Informasi pimpinan dan jajaran manajemen Badan Bank Tanah.',
+                        'route' => 'about.pimpinan',
+                    ],
                 ],
             ],
+
+            'pemanfaatan' => [
+                'label' => $isEnglish ? 'UTILIZATION & PARTNERSHIP' : 'PEMANFAATAN & KERJA SAMA',
+                'title' => $isEnglish
+                    ? 'Towards Collaboration and Sustainability'
+                    : 'Menuju Kolaborasi dan Keberlanjutan',
+                'description' => $isEnglish
+                    ? 'Land utilization is carried out through utilization cooperation with other parties; Badan Bank Tanah still considers the principles of benefit and priority.'
+                    : 'Pemanfaatan tanah dilakukan melalui kerja sama pemanfaatan dengan pihak lain, dalam melaksanakan pemanfaatan tanah, Bank Tanah tetap memperhatikan asas kemanfaatan dan asas prioritas.',
+                'submenus' => [
+                    [
+                        'icon' => 'fa-briefcase',
+                        'title' => $isEnglish ? 'Portfolio' : 'Portofolio',
+                        'description' => $isEnglish
+                            ? 'Utilization and distribution of land already partnered'
+                            : 'Pemanfaatan dan pendistribusian tanah yang sudah dikerjasamakan oleh Badan Bank Tanah dengan mitra',
+                        'route' => 'partnership',
+                    ],
+                    [
+                        'icon' => 'fa-file-signature',
+                        'title' => $isEnglish ? 'Land Rights' : 'Hak Atas Tanah',
+                        'description' => $isEnglish
+                            ? 'Badan Bank Tanah as the holder of Management Rights'
+                            : 'Badan Bank Tanah sebagai pemegang Hak Pengelolaan dalam hal kerja sama pemanfaatan dapat memberikan Hak Atas Tanah',
+                        'route' => 'partnership',
+                    ],
+                    [
+                        'icon' => 'fa-diagram-project',
+                        'title' => $isEnglish ? 'Utilization Scheme' : 'Skema Pemanfaatan',
+                        'description' => $isEnglish
+                            ? 'Considering the principles of benefit and priority'
+                            : 'dalam melaksanakan pemanfaatan tanah, Bank Tanah tetap memperhatikan asas kemanfaatan dan asas prioritas',
+                        'route' => 'partnership',
+                    ],
+                ],
+            ],
+
+            'aset' => [
+                'label' => $isEnglish ? 'LAND ASSET INVENTORY' : 'ASET PERSEDIAAN TANAH',
+                'title' => $isEnglish
+                    ? 'Managing Land for Sustainable Growth'
+                    : 'Mengelola Tanah Untuk Pertumbuhan Berkelanjutan',
+                'description' => $isEnglish
+                    ? 'The purpose of Badan Bank Tanah is to support agrarian reform, ensure land availability for public interest, and encourage economic equity and national development.'
+                    : 'Tujuan Badan Bank Tanah adalah mendukung reforma agraria, menjamin ketersediaan tanah untuk kepentingan umum, serta mendorong pemerataan ekonomi dan pembangunan nasional.',
+                'submenus' => [
+                    [
+                        'icon' => 'fa-layer-group',
+                        'title' => $isEnglish ? 'Land Inventory' : 'Aset Persediaan',
+                        'description' => $isEnglish
+                            ? 'Utilization and distribution of land already partnered'
+                            : 'Pemanfaatan dan pendistribusian tanah yang sudah dikerjasamakan oleh Badan Bank Tanah dengan mitra',
+                        'route' => 'assets',
+                    ],
+                    [
+                        'icon' => 'fa-book',
+                        'title' => $isEnglish ? 'Booklet' : 'Booklet',
+                        'description' => $isEnglish
+                            ? 'Badan Bank Tanah as the holder of Management Rights'
+                            : 'Badan Bank Tanah sebagai pemegang Hak Pengelolaan dalam hal kerja sama pemanfaatan dapat memberikan Hak Atas Tanah',
+                        'route' => 'assets',
+                    ],
+                ],
+            ],
+
+            'publikasi' => [
+                'label' => $isEnglish ? 'PUBLICATION' : 'PUBLIKASI',
+                'title' => $isEnglish
+                    ? 'Open Information for Transparency and Accountability'
+                    : 'Informasi Terbuka Untuk Transparansi dan Akuntabilitas',
+                'description' => $isEnglish
+                    ? 'Find various official information and publications of Badan Bank Tanah as our commitment to transparency and public information disclosure.'
+                    : 'Temukan berbagai informasi dan publikasi resmi Badan Bank Tanah sebagai komitmen kami terhadap transparansi dan keterbukaan informasi publik.',
+                'submenus' => [
+                    [
+                        'icon' => 'fa-images',
+                        'title' => $isEnglish ? 'Gallery' : 'Galeri',
+                        'description' => $isEnglish
+                            ? 'Utilization and distribution of land already partnered'
+                            : 'Pemanfaatan dan pendistribusian tanah yang sudah dikerjasamakan oleh Badan Bank Tanah dengan mitra',
+                        'route' => 'halaman.publikasi',
+                    ],
+                    [
+                        'icon' => 'fa-newspaper',
+                        'title' => $isEnglish ? 'Press Release' : 'Siaran Pers',
+                        'description' => $isEnglish
+                            ? 'Badan Bank Tanah as the holder of Management Rights'
+                            : 'Badan Bank Tanah sebagai pemegang Hak Pengelolaan dalam hal kerja sama pemanfaatan dapat memberikan Hak Atas Tanah',
+                        'route' => 'halaman.publikasi',
+                    ],
+                    [
+                        'icon' => 'fa-file-lines',
+                        'title' => $isEnglish ? 'Latest Articles' : 'Artikel Terkini',
+                        'description' => $isEnglish
+                            ? 'Badan Bank Tanah as the holder of Management Rights'
+                            : 'Badan Bank Tanah sebagai pemegang Hak Pengelolaan dalam hal kerja sama pemanfaatan dapat memberikan Hak Atas Tanah',
+                        'route' => 'halaman.publikasi',
+                    ],
+                ],
+            ],
+
+            'lainnya' => [
+                'label' => $isEnglish ? 'OTHERS' : 'LAINNYA',
+                'title' => $isEnglish
+                    ? 'Other Information from Badan Bank Tanah'
+                    : 'Informasi Lainnya Dari Badan Bank Tanah',
+                'description' => $isEnglish
+                    ? 'Find various other information ranging from job vacancies, procurement, official announcements, frequently asked questions, and how to contact us.'
+                    : 'Temukan berbagai informasi lainnya mulai dari informasi lowongan pekerjaan, pengadaan, pengumuman resmi, pertanyaan yang sering ditanyakan, dan cara menghubungi kami.',
+                'submenus' => [
+                    [
+                        'icon' => 'fa-briefcase',
+                        'title' => $isEnglish ? 'Career' : 'Karir',
+                        'description' => $isEnglish
+                            ? 'Utilization and distribution of land already partnered'
+                            : 'Pemanfaatan dan pendistribusian tanah yang sudah dikerjasamakan oleh Badan Bank Tanah dengan mitra',
+                        'route' => 'karier',
+                    ],
+                    [
+                        'icon' => 'fa-bullhorn',
+                        'title' => $isEnglish ? 'Announcement' : 'Pengumuman',
+                        'description' => $isEnglish
+                            ? 'Badan Bank Tanah as the holder of Management Rights'
+                            : 'Badan Bank Tanah sebagai pemegang Hak Pengelolaan dalam hal kerja sama pemanfaatan dapat memberikan Hak Atas Tanah',
+                        'route' => 'kontak',
+                    ],
+                    [
+                        'icon' => 'fa-circle-question',
+                        'title' => 'FAQ',
+                        'description' => $isEnglish
+                            ? 'Badan Bank Tanah as the holder of Management Rights'
+                            : 'Badan Bank Tanah sebagai pemegang Hak Pengelolaan dalam hal kerja sama pemanfaatan dapat memberikan Hak Atas Tanah',
+                        'route' => 'faq',
+                    ],
+                    [
+                        'icon' => 'fa-cart-shopping',
+                        'title' => $isEnglish ? 'Procurement' : 'Pengadaan',
+                        'description' => $isEnglish
+                            ? 'Badan Bank Tanah as the holder of Management Rights'
+                            : 'Badan Bank Tanah sebagai pemegang Hak Pengelolaan dalam hal kerja sama pemanfaatan dapat memberikan Hak Atas Tanah',
+                        'route' => 'kontak',
+                    ],
+                    [
+                        'icon' => 'fa-shield-halved',
+                        'title' => $isEnglish ? 'Corporate Governance' : 'Tata Kelola Perusahaan',
+                        'description' => $isEnglish
+                            ? 'Badan Bank Tanah as the holder of Management Rights'
+                            : 'Badan Bank Tanah sebagai pemegang Hak Pengelolaan dalam hal kerja sama pemanfaatan dapat memberikan Hak Atas Tanah',
+                        'route' => 'kontak',
+                    ],
+                ],
+            ],
+        ];
+
+        // biar kode lama tetap jalan
+        $megaTentang = [
+            'label' => $megaMenus['tentang']['label'],
+            'title' => $megaMenus['tentang']['title'],
+            'description' => $megaMenus['tentang']['description'],
             'banner' => [
                 'label' => $isEnglish ? 'ABOUT US' : 'TENTANG KAMI',
                 'title' => $isEnglish ? 'Land Managed, Nation Empowered' : 'Tanah Dikelola, Negara Berdaya',
@@ -776,6 +950,7 @@
                     : 'Bersama mengelola tanah untuk kesejahteraan masyarakat Indonesia.',
             ],
         ];
+
     @endphp
 
     <!-- ========================================================= -->
@@ -925,7 +1100,7 @@
                     </div>
                 </a>
 
-                <!-- ========================================================= -->
+                              <!-- ========================================================= -->
                 <!-- DESKTOP NAVIGATION -->
                 <!-- ========================================================= -->
                 <nav class="hidden lg:flex items-center space-x-8 xl:space-x-10 text-gray-700"
@@ -933,176 +1108,94 @@
 
                     @php
                         $navItems = [
-                            ['route' => 'about', 'label' => $menuLabels['about'], 'check' => 'tentang'],
-                            ['route' => 'assets', 'label' => $menuLabels['assets'], 'check' => 'aset'],
-                            ['route' => 'partnership', 'label' => $menuLabels['partnership'], 'check' => 'pemanfaatan'],
-                            [
-                                'route' => 'halaman.publikasi',
-                                'label' => $menuLabels['publications'],
-                                'check' => 'publikasi',
-                            ],
+                            ['key' => 'tentang', 'route' => 'about', 'label' => $menuLabels['about']],
+                            ['key' => 'pemanfaatan', 'route' => 'partnership', 'label' => $menuLabels['partnership']],
+                            ['key' => 'aset', 'route' => 'assets', 'label' => $menuLabels['assets']],
+                            ['key' => 'publikasi', 'route' => 'halaman.publikasi', 'label' => $menuLabels['publications']],
                         ];
                     @endphp
 
-                    {{-- ============================================ --}}
-                    {{-- MENU TENTANG + MEGA MENU --}}
-                    {{-- ============================================ --}}
-                    @php
-                        $aboutActive = \App\Models\Halaman::where('judul', 'like', '%Tentang%')
-                            ->where('is_active', true)
-                            ->exists();
-                    @endphp
+                    @foreach ($navItems as $item)
+                        @php
+                            $mega = $megaMenus[$item['key']];
+                            $isActive = request()->routeIs($item['route']);
+                        @endphp
 
-                    @if ($aboutActive)
-                        <div class="relative group" id="megaTentangWrapper">
-                            <a href="{{ route('about') }}"
-                                class="hover:text-[var(--color-secondary)] transition font-medium flex items-center gap-1.5 py-2">
-                                {{ $menuLabels['about'] }}
+                        <div class="relative group">
+                            <a href="{{ route($item['route']) }}"
+                                class="hover:text-[var(--color-secondary)] transition font-medium flex items-center gap-1.5 py-2
+                                {{ $isActive ? 'text-[var(--color-secondary)] font-semibold active-nav' : '' }}">
+                                {{ $item['label'] }}
                                 <i
                                     class="fas fa-chevron-down text-[10px] transition-transform duration-200 group-hover:rotate-180"></i>
                             </a>
 
-                            <div id="megaTentangPanel"
-                                class="absolute left-0 top-full pt-3 w-[1100px] max-w-[95vw]
-                                       opacity-0 invisible translate-y-2
-                                       group-hover:opacity-100 group-hover:visible group-hover:translate-y-0
-                                       transition-all duration-300 ease-out z-[9999]">
+                            {{-- PANEL MEGA MENU --}}
+                            <div
+                                class="absolute left-0 top-full pt-3 w-[900px] max-w-[95vw]
+                                    opacity-0 invisible translate-y-2
+                                    group-hover:opacity-100 group-hover:visible group-hover:translate-y-0
+                                    transition-all duration-300 ease-out z-[9999]">
                                 <div class="bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden">
                                     <div class="grid grid-cols-12 gap-0">
 
                                         {{-- KIRI: Info Utama --}}
-                                        <div class="col-span-3 p-6 border-r border-gray-100 bg-gray-50/50">
+                                        <div class="col-span-5 p-6 border-r border-gray-100 bg-white">
                                             <span
-                                                class="text-[10px] font-bold text-[var(--color-secondary)] uppercase tracking-widest">
-                                                {{ $megaTentang['label'] }}
+                                                class="text-[11px] font-bold uppercase tracking-[0.18em] text-amber-600">
+                                                {{ $mega['label'] }}
                                             </span>
-                                            <h3 class="text-lg font-bold text-gray-900 mt-2 mb-3 leading-snug">
-                                                {{ $megaTentang['title'] }}
+                                            <h3
+                                                class="text-2xl font-extrabold text-gray-900 mt-2 mb-3 leading-snug">
+                                                {{ $mega['title'] }}
                                             </h3>
-                                            <p class="text-xs text-gray-600 leading-relaxed mb-4">
-                                                {{ $megaTentang['description'] }}
+                                            <p class="text-[12.5px] text-gray-500 leading-relaxed">
+                                                {{ $mega['description'] }}
                                             </p>
-                                            <div
-                                                class="rounded-lg overflow-hidden h-24 bg-gradient-to-b from-blue-50 via-white to-blue-50 relative">
-                                                <svg viewBox="0 0 200 100" class="w-full h-full"
+
+                                            {{-- Gambar gelombang biru --}}
+                                            <div class="mt-6 rounded-lg overflow-hidden h-[100px] relative">
+                                                <div
+                                                    class="absolute inset-0 bg-gradient-to-br from-blue-50 via-blue-100 to-blue-200">
+                                                </div>
+                                                <svg class="absolute bottom-0 left-0 w-full" viewBox="0 0 400 100"
                                                     preserveAspectRatio="none">
-                                                    <path d="M0,80 Q50,60 100,75 T200,70 L200,100 L0,100 Z"
-                                                        fill="#dbeafe" opacity="0.6" />
-                                                    <path d="M0,90 Q50,75 100,85 T200,80 L200,100 L0,100 Z"
-                                                        fill="#bfdbfe" opacity="0.5" />
+                                                    <path
+                                                        d="M0,60 C80,90 160,30 240,55 C320,80 380,40 400,50 L400,100 L0,100 Z"
+                                                        fill="#93c5fd" opacity="0.55" />
+                                                    <path
+                                                        d="M0,75 C100,95 180,55 260,72 C330,88 380,65 400,72 L400,100 L0,100 Z"
+                                                        fill="#3b82f6" opacity="0.45" />
+                                                    <path
+                                                        d="M0,88 C90,100 200,78 300,88 C360,94 390,86 400,88 L400,100 L0,100 Z"
+                                                        fill="#1d4ed8" opacity="0.35" />
                                                 </svg>
                                             </div>
                                         </div>
 
-                                        {{-- TENGAH: Submenu --}}
-                                        <div class="col-span-5 p-4">
-                                            <span
-                                                class="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-3">SUBMENU</span>
-                                            <div class="space-y-0.5 mt-2">
-                                                @php
-                                                    $submenuRoutes = [
-                                                        [
-                                                            'icon' => 'fa-building-columns',
-                                                            'title' => $isEnglish ? 'Profile' : 'Profil',
-                                                            'description' => $isEnglish
-                                                                ? 'General information'
-                                                                : 'Informasi umum tentang Badan Bank Tanah',
-                                                            'route' => 'about',
-                                                        ],
-                                                        [
-                                                            'icon' => 'fa-eye',
-                                                            'title' => $isEnglish ? 'Vision & Mission' : 'Visi & Misi',
-                                                            'description' => $isEnglish
-                                                                ? 'Vision and mission'
-                                                                : 'Visi, misi, dan nilai-nilai yang menjadi landasan',
-                                                            'route' => 'about.visi-misi',
-                                                        ],
-                                                        [
-                                                            'icon' => 'fa-sitemap',
-                                                            'title' => $isEnglish
-                                                                ? 'Organizational Structure'
-                                                                : 'Struktur Organisasi',
-                                                            'description' => $isEnglish
-                                                                ? 'Organizational structure'
-                                                                : 'Struktur organisasi dan pembagian peran',
-                                                            'route' => 'about.struktur',
-                                                        ],
-                                                        [
-                                                            'icon' => 'fa-clipboard-list',
-                                                            'title' => $isEnglish
-                                                                ? 'Functions & Duties'
-                                                                : 'Fungsi & Tugas',
-                                                            'description' => $isEnglish
-                                                                ? 'Duties and functions'
-                                                                : 'Tugas dan fungsi dalam pelaksanaan mandat',
-                                                            'route' => 'about.fungsi',
-                                                        ],
-                                                        [
-                                                            'icon' => 'fa-users',
-                                                            'title' => $isEnglish
-                                                                ? 'Leadership Profile'
-                                                                : 'Profil Pimpinan',
-                                                            'description' => $isEnglish
-                                                                ? 'Leadership information'
-                                                                : 'Informasi pimpinan dan jajaran manajemen',
-                                                            'route' => 'about.pimpinan',
-                                                        ],
-                                                    ];
-                                                @endphp
-
-                                                @foreach ($submenuRoutes as $sub)
+                                        {{-- KANAN: Submenu --}}
+                                        <div class="col-span-7 p-4 sm:p-5">
+                                            <div class="space-y-0.5">
+                                                @foreach ($mega['submenus'] as $sub)
                                                     <a href="{{ route($sub['route']) }}"
-                                                        class="flex items-start gap-3 p-3 rounded-lg hover:bg-blue-50 transition group/item">
-                                                        <div
-                                                            class="w-9 h-9 rounded-lg bg-blue-50 text-[var(--color-secondary)] flex items-center justify-center flex-shrink-0 group-hover/item:bg-[var(--color-secondary)] group-hover/item:text-white transition">
-                                                            <i class="fas {{ $sub['icon'] }} text-sm"></i>
-                                                        </div>
-                                                        <div class="min-w-0">
-                                                            <h4
-                                                                class="font-semibold text-gray-900 text-sm leading-tight group-hover/item:text-[var(--color-secondary)] transition">
+                                                        class="group/item flex items-start gap-3 rounded-xl p-3 hover:bg-blue-50/70 transition-colors">
+                                                        <span
+                                                            class="flex-shrink-0 w-11 h-11 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center
+                                                                group-hover/item:bg-blue-100 transition-colors">
+                                                            <i class="fas {{ $sub['icon'] }} text-[15px]"></i>
+                                                        </span>
+                                                        <span class="min-w-0 pt-0.5">
+                                                            <span
+                                                                class="block text-[13.5px] font-bold text-gray-900 leading-snug group-hover/item:text-[var(--color-secondary)] transition">
                                                                 {{ $sub['title'] }}
-                                                            </h4>
-                                                            <p class="text-[11px] text-gray-500 leading-snug mt-0.5">
+                                                            </span>
+                                                            <span
+                                                                class="block text-[11.5px] text-gray-500 leading-relaxed mt-0.5">
                                                                 {{ $sub['description'] }}
-                                                            </p>
-                                                        </div>
+                                                            </span>
+                                                        </span>
                                                     </a>
                                                 @endforeach
-                                            </div>
-                                        </div>
-
-                                        {{-- KANAN: Banner --}}
-                                        <div class="col-span-4 p-4">
-                                            <div class="relative rounded-xl overflow-hidden h-full min-h-[280px]"
-                                                style="background: linear-gradient(160deg, #0B2A4A 0%, #1D4ED8 100%);">
-                                                <svg viewBox="0 0 400 400"
-                                                    class="absolute inset-0 w-full h-full opacity-30"
-                                                    preserveAspectRatio="xMidYMid slice">
-                                                    <path d="M0,300 Q100,250 200,280 T400,270 L400,400 L0,400 Z"
-                                                        fill="#22c55e" opacity="0.3" />
-                                                    <path d="M0,340 Q120,300 220,320 T400,310 L400,400 L0,400 Z"
-                                                        fill="#15803d" opacity="0.4" />
-                                                </svg>
-                                                <div
-                                                    class="absolute inset-0 bg-gradient-to-t from-[#0B2A4A] via-[#0B2A4A]/60 to-transparent">
-                                                </div>
-                                                <div class="relative p-5 h-full flex flex-col justify-end">
-                                                    <span
-                                                        class="text-[10px] font-bold text-yellow-400 uppercase tracking-widest">
-                                                        {{ $megaTentang['banner']['label'] }}
-                                                    </span>
-                                                    <h3 class="text-base font-bold text-white mt-1 mb-2 leading-snug">
-                                                        {{ $megaTentang['banner']['title'] }}
-                                                    </h3>
-                                                    <p class="text-[11px] text-white/80 leading-snug mb-3">
-                                                        {{ $megaTentang['banner']['description'] }}
-                                                    </p>
-                                                    <a href="#"
-                                                        class="inline-flex items-center gap-1.5 bg-yellow-400 hover:bg-yellow-500 text-[#0B2A4A] font-bold px-4 py-2 rounded-lg text-xs transition w-fit">
-                                                        {{ $isEnglish ? 'Learn More' : 'Selengkapnya' }}
-                                                        <i class="fas fa-arrow-right text-[10px]"></i>
-                                                    </a>
-                                                </div>
                                             </div>
                                         </div>
 
@@ -1110,86 +1203,95 @@
                                 </div>
                             </div>
                         </div>
-                    @endif
+                    @endforeach
 
-                    {{-- MENU LAIN (Aset, Pemanfaatan, Publikasi) --}}
-                    <a href="{{ route('assets') }}"
-                        class="hover:text-[var(--color-secondary)] transition font-medium {{ request()->routeIs('assets') ? 'text-[var(--color-secondary)] font-semibold active-nav' : '' }}">
-                        {{ $menuLabels['assets'] }}
-                    </a>
-                    <a href="{{ route('partnership') }}"
-                        class="hover:text-[var(--color-secondary)] transition font-medium {{ request()->routeIs('partnership') ? 'text-[var(--color-secondary)] font-semibold active-nav' : '' }}">
-                        {{ $menuLabels['partnership'] }}
-                    </a>
-                    <a href="{{ route('halaman.publikasi') }}"
-                        class="hover:text-[var(--color-secondary)] transition font-medium {{ request()->routeIs('halaman.publikasi') ? 'text-[var(--color-secondary)] font-semibold active-nav' : '' }}">
-                        {{ $menuLabels['publications'] }}
-                    </a>
+                    {{-- Dropdown Lainnya --}}
+                    <div class="relative group">
+                        <a href="#"
+                            class="hover:text-[var(--color-secondary)] transition font-medium flex items-center gap-1.5 py-2
+                            {{ request()->routeIs('faq') || request()->routeIs('karier') || request()->routeIs('kontak') ? 'text-[var(--color-secondary)] font-semibold active-nav' : '' }}">
+                            {{ $menuLabels['others'] ?? 'Lainnya' }}
+                            <i
+                                class="fas fa-chevron-down text-[10px] transition-transform duration-200 group-hover:rotate-180"></i>
+                        </a>
 
-                    <!-- Dropdown Lainnya (Desktop) - FIXED -->
-                    @if ($otherMenus->count() > 0)
-                        <div class="relative inline-block">
-                            <!-- Tombol Dropdown -->
-                            <button id="dropdownLainnyaBtn"
-                                class="flex items-center gap-1.5 py-2 px-1 text-sm font-medium text-gray-700 hover:text-[var(--color-secondary)] transition 
-        {{ request()->routeIs('faq') || request()->routeIs('karier') || request()->routeIs('kontak') ? 'text-[var(--color-secondary)] font-semibold' : '' }}"
-                                onclick="toggleDropdownLainnya()" aria-expanded="false">
-                                {{ $menuLabels['others'] ?? 'Lainnya' }}
-                                <i id="dropdownLainnyaIcon"
-                                    class="fas fa-chevron-down text-[10px] transition-transform duration-200"
-                                    aria-hidden="true"></i>
-                            </button>
+                        @php $mega = $megaMenus['lainnya']; @endphp
+                        <div
+                            class="absolute right-0 top-full pt-3 w-[900px] max-w-[95vw]
+                                opacity-0 invisible translate-y-2
+                                group-hover:opacity-100 group-hover:visible group-hover:translate-y-0
+                                transition-all duration-300 ease-out z-[9999]">
+                            <div class="bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden">
+                                <div class="grid grid-cols-12 gap-0">
 
-                            <!-- Dropdown Menu -->
-                            <div id="dropdownLainnyaMenu"
-                                class="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50 hidden
-               transition-all duration-200 ease-out"
-                                role="menu" style="min-width: 200px;">
+                                    {{-- KIRI --}}
+                                    <div class="col-span-5 p-6 border-r border-gray-100 bg-white">
+                                        <span
+                                            class="text-[11px] font-bold uppercase tracking-[0.18em] text-amber-600">
+                                            {{ $mega['label'] }}
+                                        </span>
+                                        <h3 class="text-2xl font-extrabold text-gray-900 mt-2 mb-3 leading-snug">
+                                            {{ $mega['title'] }}
+                                        </h3>
+                                        <p class="text-[12.5px] text-gray-500 leading-relaxed">
+                                            {{ $mega['description'] }}
+                                        </p>
+                                        <div class="mt-6 rounded-lg overflow-hidden h-[100px] relative">
+                                            <div
+                                                class="absolute inset-0 bg-gradient-to-br from-blue-50 via-blue-100 to-blue-200">
+                                            </div>
+                                            <svg class="absolute bottom-0 left-0 w-full" viewBox="0 0 400 100"
+                                                preserveAspectRatio="none">
+                                                <path
+                                                    d="M0,60 C80,90 160,30 240,55 C320,80 380,40 400,50 L400,100 L0,100 Z"
+                                                    fill="#93c5fd" opacity="0.55" />
+                                                <path
+                                                    d="M0,75 C100,95 180,55 260,72 C330,88 380,65 400,72 L400,100 L0,100 Z"
+                                                    fill="#3b82f6" opacity="0.45" />
+                                                <path
+                                                    d="M0,88 C90,100 200,78 300,88 C360,94 390,86 400,88 L400,100 L0,100 Z"
+                                                    fill="#1d4ed8" opacity="0.35" />
+                                            </svg>
+                                        </div>
+                                    </div>
 
-                                @foreach ($otherMenus as $menu)
-                                    @php
-                                        $icon = match (strtolower($menu->nama)) {
-                                            'faq' => 'fa-circle-question',
-                                            'karier' => 'fa-briefcase',
-                                            'kontak' => 'fa-envelope',
-                                            default => 'fa-circle',
-                                        };
-                                        $routeName = match (strtolower($menu->nama)) {
-                                            'faq' => 'faq',
-                                            'karier' => 'karier',
-                                            'kontak' => 'kontak',
-                                            default => '',
-                                        };
-                                        $label = match (strtolower($menu->nama)) {
-                                            'faq' => $menuLabels['faq'] ?? 'FAQ',
-                                            'karier' => $menuLabels['career'] ?? 'Karier',
-                                            'kontak' => $menuLabels['contact'] ?? 'Kontak',
-                                            default => $menu->nama,
-                                        };
-                                        $isActive = request()->routeIs($routeName);
-                                    @endphp
-                                    <a href="{{ route($routeName) }}"
-                                        class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-[var(--color-secondary)] transition
-                                        {{ $isActive ? 'bg-gray-50 text-[var(--color-secondary)] font-semibold' : '' }}"
-                                        role="menuitem">
-                                        <i class="fas {{ $icon }} w-5 text-center text-gray-400"
-                                            aria-hidden="true"></i>
-                                        {{ $label }}
-                                        @if ($isActive)
-                                            <span
-                                                class="ml-auto w-1.5 h-1.5 rounded-full bg-[var(--color-secondary)]"></span>
-                                        @endif
-                                    </a>
-                                @endforeach
+                                    {{-- KANAN --}}
+                                    <div class="col-span-7 p-4 sm:p-5">
+                                        <div class="space-y-0.5">
+                                            @foreach ($mega['submenus'] as $sub)
+                                                <a href="{{ route($sub['route']) }}"
+                                                    class="group/item flex items-start gap-3 rounded-xl p-3 hover:bg-blue-50/70 transition-colors">
+                                                    <span
+                                                        class="flex-shrink-0 w-11 h-11 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center
+                                                            group-hover/item:bg-blue-100 transition-colors">
+                                                        <i class="fas {{ $sub['icon'] }} text-[15px]"></i>
+                                                    </span>
+                                                    <span class="min-w-0 pt-0.5">
+                                                        <span
+                                                            class="block text-[13.5px] font-bold text-gray-900 leading-snug group-hover/item:text-[var(--color-secondary)] transition">
+                                                            {{ $sub['title'] }}
+                                                        </span>
+                                                        <span
+                                                            class="block text-[11.5px] text-gray-500 leading-relaxed mt-0.5">
+                                                            {{ $sub['description'] }}
+                                                        </span>
+                                                    </span>
+                                                </a>
+                                            @endforeach
+                                        </div>
+                                    </div>
+
+                                </div>
                             </div>
                         </div>
-                    @endif
+                    </div>
                 </nav>
 
                 <!-- ========================================================= -->
                 <!-- RIGHT SIDE -->
                 <!-- ========================================================= -->
                 <div class="flex items-center gap-2 md:gap-3">
+                    
 
                     <!-- Language Toggle -->
                     <button onclick="toggleLanguage()"
