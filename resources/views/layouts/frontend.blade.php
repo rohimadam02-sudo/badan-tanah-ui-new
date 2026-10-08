@@ -27,11 +27,7 @@
         rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
-    {{-- ========================================================= --}}
-    {{-- GOOGLE ANALYTICS --}}
-    {{-- ========================================================= --}}
     @if (isset($pengaturan) && $pengaturan->google_analytics)
-        <!-- Google tag (gtag.js) -->
         <script async src="https://www.googletagmanager.com/gtag/js?id={{ $pengaturan->google_analytics }}"></script>
         <script>
             window.dataLayer = window.dataLayer || [];
@@ -54,16 +50,20 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
+            overflow-x: clip;
+        }
+
+        @supports not (overflow: clip) {
+            body {
+                overflow-x: hidden;
+            }
         }
 
         .leaflet-container {
             z-index: 0;
         }
 
-        /* =========================================================
-           SCROLLBAR
-        ========================================================= */
+        /* SCROLLBAR */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
@@ -83,7 +83,7 @@
         }
 
         /* =========================================================
-           DINAMIC COLORS - DARI PENGATURAN
+           DINAMIC COLORS
         ========================================================= */
         :root {
             --color-primary: {{ $pengaturan->warna_utama ?? '#0B2A4A' }};
@@ -91,7 +91,6 @@
             --color-secondary-hover: {{ $pengaturan->warna_utama ?? '#0B2A4A' }};
         }
 
-        /* NAVBAR - Active link menggunakan warna sekunder */
         .active-nav {
             color: var(--color-secondary) !important;
         }
@@ -107,12 +106,10 @@
             border-radius: 10px;
         }
 
-        /* Link hover menggunakan warna sekunder */
         nav a:not(.active-nav):hover {
             color: var(--color-secondary) !important;
         }
 
-        /* Tombol utama menggunakan warna sekunder */
         .btn-primary {
             background-color: var(--color-secondary) !important;
             color: white !important;
@@ -122,7 +119,6 @@
             background-color: var(--color-secondary-hover) !important;
         }
 
-        /* Link warna sekunder */
         .link-secondary {
             color: var(--color-secondary) !important;
         }
@@ -132,26 +128,230 @@
             text-decoration: underline;
         }
 
-        /* Border warna sekunder */
         .border-secondary {
             border-color: var(--color-secondary) !important;
         }
 
         /* =========================================================
-           NAVBAR IMPROVEMENTS
+           ✅ MEGA MENU — POSITIONING PER MENU
         ========================================================= */
-        nav a {
-            position: relative;
-            padding: 6px 4px;
-            letter-spacing: 0.5px;
-            font-size: 0.95rem;
+        header[role="banner"] {
+            overflow: visible !important;
+            z-index: 9999 !important;
         }
 
-        /* Dropdown menu items spacing */
-        .dropdown-desktop .dropdown-menu a {
-            padding: 12px 20px;
-            font-size: 0.9rem;
-            letter-spacing: 0.3px;
+        .dropdown-wrapper {
+            position: relative;
+        }
+
+        .dropdown-wrapper > .dropdown-panel {
+            z-index: 99999 !important;
+            pointer-events: none;
+        }
+
+        .dropdown-wrapper:hover > .dropdown-panel {
+            pointer-events: auto;
+        }
+
+        /* PANEL DEFAULT (fallback) */
+        .dropdown-panel {
+            width: 720px;
+            max-width: calc(100vw - 40px);
+            left: 50%;
+            transform: translateX(-50%) translateY(8px);
+        }
+
+        .dropdown-wrapper:hover > .dropdown-panel {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* ✅ MENU 1 & 2 (Tentang, Pemanfaatan) — geser ke kanan */
+        .dropdown-wrapper:nth-child(1) > .dropdown-panel,
+        .dropdown-wrapper:nth-child(2) > .dropdown-panel {
+            left: 0;
+            right: auto;
+            transform: translateX(80px) translateY(8px);
+        }
+
+        .dropdown-wrapper:nth-child(1):hover > .dropdown-panel,
+        .dropdown-wrapper:nth-child(2):hover > .dropdown-panel {
+            transform: translateX(80px) translateY(0);
+        }
+
+        /* ✅ MENU 3 & 4 (Aset, Publikasi) — center */
+        .dropdown-wrapper:nth-child(3) > .dropdown-panel,
+        .dropdown-wrapper:nth-child(4) > .dropdown-panel {
+            left: 50%;
+            right: auto;
+            transform: translateX(-50%) translateY(8px);
+        }
+
+        .dropdown-wrapper:nth-child(3):hover > .dropdown-panel,
+        .dropdown-wrapper:nth-child(4):hover > .dropdown-panel {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* ✅ MENU 5 (Lainnya) — rata kanan */
+        .dropdown-wrapper:last-child > .dropdown-panel {
+            left: auto;
+            right: 0;
+            transform: translateY(8px);
+        }
+
+        .dropdown-wrapper:last-child:hover > .dropdown-panel {
+            transform: translateY(0);
+        }
+
+        /* TABLET / VIEWPORT 1024-1400px */
+        @media (min-width: 1024px) and (max-width: 1400px) {
+
+            /* Menu 1 & 2 tetap geser kanan */
+            .dropdown-wrapper:nth-child(1) > .dropdown-panel,
+            .dropdown-wrapper:nth-child(2) > .dropdown-panel {
+                left: 0 !important;
+                right: auto !important;
+                transform: translateX(60px) translateY(8px) !important;
+            }
+
+            .dropdown-wrapper:nth-child(1):hover > .dropdown-panel,
+            .dropdown-wrapper:nth-child(2):hover > .dropdown-panel {
+                transform: translateX(60px) translateY(0) !important;
+            }
+
+            /* Menu 3 & 4 jadi rata kanan */
+            .dropdown-wrapper:nth-child(3) > .dropdown-panel,
+            .dropdown-wrapper:nth-child(4) > .dropdown-panel {
+                left: auto !important;
+                right: 0 !important;
+                transform: translateY(8px) !important;
+            }
+
+            .dropdown-wrapper:nth-child(3):hover > .dropdown-panel,
+            .dropdown-wrapper:nth-child(4):hover > .dropdown-panel {
+                transform: translateY(0) !important;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .dropdown-wrapper > .dropdown-panel {
+                display: none !important;
+            }
+        }
+
+        /* Panel content wrapper */
+        .mega-panel-inner {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            min-height: 260px;
+        }
+
+        .mega-panel-left {
+            background: linear-gradient(160deg, #f8fafc 0%, #eff6ff 100%);
+            padding: 24px 22px;
+            border-right: 1px solid #e5e7eb;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mega-panel-left .mega-label {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.18em;
+            color: #d97706;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .mega-panel-left .mega-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: #0f172a;
+            line-height: 1.25;
+            margin-bottom: 10px;
+        }
+
+        .mega-panel-left .mega-desc {
+            font-size: 12px;
+            color: #64748b;
+            line-height: 1.55;
+            flex-grow: 1;
+        }
+
+        .mega-panel-left .mega-wave {
+            margin-top: 16px;
+            height: 60px;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .mega-panel-right {
+            padding: 16px;
+            background: #ffffff;
+        }
+
+        .mega-panel-right .submenu-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2px;
+        }
+
+        .submenu-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            transition: background 0.15s ease;
+            text-decoration: none;
+        }
+
+        .submenu-item:hover {
+            background: #eff6ff;
+        }
+
+        .submenu-item .submenu-icon {
+            flex-shrink: 0;
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: #eff6ff;
+            color: #1d4ed8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            transition: background 0.15s ease;
+        }
+
+        .submenu-item:hover .submenu-icon {
+            background: #dbeafe;
+        }
+
+        .submenu-item .submenu-text {
+            min-width: 0;
+            padding-top: 2px;
+        }
+
+        .submenu-item .submenu-title {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            color: #0f172a;
+            line-height: 1.3;
+            margin-bottom: 2px;
+            transition: color 0.15s ease;
+        }
+
+        .submenu-item:hover .submenu-title {
+            color: var(--color-secondary);
+        }
+
+        .submenu-item .submenu-desc {
+            display: block;
+            font-size: 11.5px;
+            color: #64748b;
+            line-height: 1.45;
         }
 
         /* =========================================================
@@ -300,47 +500,6 @@
             border-radius: 0 4px 4px 0;
         }
 
-        .mobile-nav-footer {
-            border-top: 1px solid #f3f4f6;
-            padding-top: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .mobile-nav-footer .btn-nav {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 12px;
-            border-radius: 10px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            transition: all 0.2s ease;
-            text-decoration: none;
-            border: none;
-            cursor: pointer;
-        }
-
-        .mobile-nav-footer .btn-nav-login {
-            background: #f3f4f6;
-            color: #374151;
-        }
-
-        .mobile-nav-footer .btn-nav-login:active {
-            background: #e5e7eb;
-        }
-
-        .mobile-nav-footer .btn-nav-register {
-            background: var(--color-secondary) !important;
-            color: white;
-        }
-
-        .mobile-nav-footer .btn-nav-register:active {
-            background: var(--color-primary) !important;
-        }
-
         .mobile-overlay {
             position: fixed;
             inset: 0;
@@ -356,9 +515,7 @@
             pointer-events: all;
         }
 
-        /* =========================================================
-           HAMBURGER MENU BUTTON
-        ========================================================= */
+        /* HAMBURGER */
         .hamburger {
             width: 28px;
             height: 20px;
@@ -410,9 +567,7 @@
             }
         }
 
-        /* =========================================================
-           LOGO RESPONSIVE
-        ========================================================= */
+        /* LOGO */
         .logo-container {
             display: flex;
             align-items: center;
@@ -475,9 +630,7 @@
             }
         }
 
-        /* =========================================================
-           SCROLL REVEAL ANIMATION
-        ========================================================= */
+        /* SCROLL REVEAL */
         .reveal {
             opacity: 0;
             transform: translateY(30px);
@@ -522,79 +675,43 @@
             transform: scale(1);
         }
 
-        /* Delay classes */
-        .delay-1 {
-            transition-delay: 0.1s;
-        }
+        .delay-1 { transition-delay: 0.1s; }
+        .delay-2 { transition-delay: 0.2s; }
+        .delay-3 { transition-delay: 0.3s; }
+        .delay-4 { transition-delay: 0.4s; }
+        .delay-5 { transition-delay: 0.5s; }
 
-        .delay-2 {
-            transition-delay: 0.2s;
-        }
-
-        .delay-3 {
-            transition-delay: 0.3s;
-        }
-
-        .delay-4 {
-            transition-delay: 0.4s;
-        }
-
-        .delay-5 {
-            transition-delay: 0.5s;
-        }
-
-        /* =========================================================
-   FRONTEND DARK MODE
-========================================================= */
+        /* DARK MODE */
         body.dark {
             background-color: #111827 !important;
             color: #e5e7eb !important;
         }
 
-        body.dark .bg-white {
-            background-color: #1f2937 !important;
-            color: #e5e7eb !important;
-        }
-
-        body.dark .bg-gray-50 {
-            background-color: #111827 !important;
-        }
-
-        body.dark .bg-gray-100 {
-            background-color: #1f2937 !important;
-        }
-
-        body.dark .text-gray-900 {
-            color: #f9fafb !important;
-        }
-
-        body.dark .text-gray-700 {
-            color: #e5e7eb !important;
-        }
-
-        body.dark .text-gray-600 {
-            color: #d1d5db !important;
-        }
-
-        body.dark .text-gray-500 {
-            color: #9ca3af !important;
-        }
-
-        body.dark .border-gray-200 {
-            border-color: #374151 !important;
-        }
-
-        body.dark .border-gray-100 {
-            border-color: #374151 !important;
-        }
-
-        body.dark .shadow-sm,
-        body.dark .shadow-md,
-        body.dark .shadow-lg {
+        body.dark .bg-white { background-color: #1f2937 !important; color: #e5e7eb !important; }
+        body.dark .bg-gray-50 { background-color: #111827 !important; }
+        body.dark .bg-gray-100 { background-color: #1f2937 !important; }
+        body.dark .text-gray-900 { color: #f9fafb !important; }
+        body.dark .text-gray-700 { color: #e5e7eb !important; }
+        body.dark .text-gray-600 { color: #d1d5db !important; }
+        body.dark .text-gray-500 { color: #9ca3af !important; }
+        body.dark .border-gray-200 { border-color: #374151 !important; }
+        body.dark .border-gray-100 { border-color: #374151 !important; }
+        body.dark .shadow-sm, body.dark .shadow-md, body.dark .shadow-lg {
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
         }
 
-        /* Dark Mode Toggle Button */
+        body.dark .mega-panel-left {
+            background: linear-gradient(160deg, #1f2937 0%, #111827 100%) !important;
+            border-color: #374151 !important;
+        }
+        body.dark .mega-panel-left .mega-title { color: #f9fafb !important; }
+        body.dark .mega-panel-left .mega-desc { color: #9ca3af !important; }
+        body.dark .mega-panel-right { background: #1f2937 !important; }
+        body.dark .submenu-item:hover { background: #374151 !important; }
+        body.dark .submenu-item .submenu-title { color: #f9fafb !important; }
+        body.dark .submenu-item .submenu-desc { color: #9ca3af !important; }
+        body.dark .submenu-item .submenu-icon { background: #374151 !important; color: #93c5fd !important; }
+
         #darkModeToggle {
             width: 36px;
             height: 36px;
@@ -609,61 +726,18 @@
             color: #4b5563;
         }
 
-        #darkModeToggle:hover {
-            background: #f3f4f6;
-        }
-
-        body.dark #darkModeToggle {
-            color: #facc15;
-        }
-
-        body.dark #darkModeToggle:hover {
-            background: #374151;
-        }
-
-
-
-        /* =========================================================
-           MEGA MENU TENTANG
-        ========================================================= */
-        #megaTentangWrapper {
-            position: relative;
-        }
-
-        #megaTentangWrapper::after {
-            content: '';
-            position: absolute;
-            top: 100%;
-            left: -50%;
-            right: -50%;
-            height: 20px;
-            pointer-events: auto;
-        }
-
-        @media (max-width: 1200px) {
-            #megaTentangPanel {
-                width: 95vw;
-            }
-        }
-
-        @media (max-width: 1024px) {
-            #megaTentangPanel {
-                display: none !important;
-            }
-        }
+        #darkModeToggle:hover { background: #f3f4f6; }
+        body.dark #darkModeToggle { color: #facc15; }
+        body.dark #darkModeToggle:hover { background: #374151; }
     </style>
-</head>
 
-</style>
-
-@stack('styles')
+    @stack('styles')
 
 </head>
 
 <body class="bg-white text-gray-800 antialiased">
 
     @php
-        // Ambil halaman yang aktif dari database
         $activePages = \App\Models\Halaman::where('is_active', true)->get();
         $activePageTitles = $activePages
             ->pluck('judul')
@@ -672,44 +746,33 @@
             })
             ->toArray();
 
-        // Filter menu navigasi - hanya tampilkan menu yang terkait dengan halaman aktif
         $mainMenus = $menuNavigasi->filter(function ($menu) use ($activePageTitles) {
             if ($menu->status != 'Aktif') {
                 return false;
             }
-
             $menuName = strtolower($menu->nama);
-
-            // Mapping menu ke halaman
             $pageMapping = [
                 'tentang' => 'tentang',
                 'pemanfaatan & kerjasama' => 'pemanfaatan',
                 'publikasi' => 'publikasi',
             ];
-
             foreach ($pageMapping as $key => $value) {
                 if (str_contains($menuName, $key)) {
-                    // Cek apakah ada halaman dengan judul yang sesuai dan aktif
                     $exists = \App\Models\Halaman::where('judul', 'like', '%' . $value . '%')
                         ->where('is_active', true)
                         ->exists();
                     return $exists;
                 }
             }
-
-            // Menu non-halaman (FAQ, Karier, Kontak) tetap ditampilkan
             return in_array($menuName, ['faq', 'karier', 'kontak', 'beranda', 'aset persediaan tanah']);
         });
 
-        // Menu untuk dropdown "Lainnya"
         $otherMenus = $menuNavigasi->filter(function ($menu) {
             return $menu->status == 'Aktif' && in_array(strtolower($menu->nama), ['faq', 'karier', 'kontak']);
         });
 
-        // Ambil footer settings
         $footer = \App\Models\FooterSetting::getSettings();
 
-        // Menu labels bilingual
         $menuLabels = [
             'home' => $isEnglish ? 'Home' : 'Beranda',
             'about' => $isEnglish ? 'About' : 'Tentang',
@@ -730,9 +793,6 @@
             'accessibility' => $isEnglish ? 'Accessibility' : 'Aksesibilitas',
         ];
 
-        // =========================================================
-        // DATA MEGA MENU (semua menu)
-        // =========================================================
         $megaMenus = [
             'tentang' => [
                 'label' => $isEnglish ? 'ABOUT US' : 'TENTANG KAMI',
@@ -741,226 +801,69 @@
                     ? 'Badan Bank Tanah is present as a strategic instrument of the state in managing land for broader and sustainable interests.'
                     : 'Badan Bank Tanah hadir sebagai instrumen strategis negara dalam menata dan mengelola tanah untuk kepentingan yang lebih luas dan berkelanjutan.',
                 'submenus' => [
-                    [
-                        'icon' => 'fa-building-columns',
-                        'title' => $isEnglish ? 'Profile' : 'Profil',
-                        'description' => $isEnglish
-                            ? 'General information about Badan Bank Tanah'
-                            : 'Informasi umum tentang Badan Bank Tanah',
-                        'route' => 'about',
-                    ],
-                    [
-                        'icon' => 'fa-bullseye',
-                        'title' => $isEnglish ? 'Vision & Mission' : 'Visi & Misi',
-                        'description' => $isEnglish
-                            ? 'Vision, mission, and values that guide us'
-                            : 'Visi, misi dan nilai-nilai yang menjadi landasan kami.',
-                        'route' => 'about.visi-misi',
-                    ],
-                    [
-                        'icon' => 'fa-sitemap',
-                        'title' => $isEnglish ? 'Organizational Structure' : 'Struktur Organisasi',
-                        'description' => $isEnglish
-                            ? 'Organizational structure and role distribution'
-                            : 'Struktur organisasi dan pembagian peran di lingkungan Badan Bank Tanah.',
-                        'route' => 'about.struktur',
-                    ],
-                    [
-                        'icon' => 'fa-list-check',
-                        'title' => $isEnglish ? 'Functions & Duties' : 'Fungsi & Tugas',
-                        'description' => $isEnglish
-                            ? 'Duties and functions in carrying out the mandate'
-                            : 'Tugas dan fungsi dalam pelaksanaan mandat dan pengelolaan tanah.',
-                        'route' => 'about.fungsi',
-                    ],
-                    [
-                        'icon' => 'fa-users',
-                        'title' => $isEnglish ? 'Leadership Profile' : 'Profil Pimpinan',
-                        'description' => $isEnglish
-                            ? 'Leadership and management information'
-                            : 'Informasi pimpinan dan jajaran manajemen Badan Bank Tanah.',
-                        'route' => 'about.pimpinan',
-                    ],
+                    ['icon' => 'fa-building-columns', 'title' => $isEnglish ? 'Profile' : 'Profil', 'description' => $isEnglish ? 'General information about Badan Bank Tanah' : 'Informasi umum tentang Badan Bank Tanah', 'route' => 'about'],
+                    ['icon' => 'fa-bullseye', 'title' => $isEnglish ? 'Vision & Mission' : 'Visi & Misi', 'description' => $isEnglish ? 'Vision, mission, and values that guide us' : 'Visi, misi dan nilai-nilai yang menjadi landasan kami.', 'route' => 'about.visi-misi'],
+                    ['icon' => 'fa-sitemap', 'title' => $isEnglish ? 'Organizational Structure' : 'Struktur Organisasi', 'description' => $isEnglish ? 'Organizational structure and role distribution' : 'Struktur organisasi dan pembagian peran di lingkungan Badan Bank Tanah.', 'route' => 'about.struktur'],
+                    ['icon' => 'fa-list-check', 'title' => $isEnglish ? 'Functions & Duties' : 'Fungsi & Tugas', 'description' => $isEnglish ? 'Duties and functions in carrying out the mandate' : 'Tugas dan fungsi dalam pelaksanaan mandat dan pengelolaan tanah.', 'route' => 'about.fungsi'],
+                    ['icon' => 'fa-users', 'title' => $isEnglish ? 'Leadership Profile' : 'Profil Pimpinan', 'description' => $isEnglish ? 'Leadership and management information' : 'Informasi pimpinan dan jajaran manajemen Badan Bank Tanah.', 'route' => 'about.pimpinan'],
                 ],
             ],
-
             'pemanfaatan' => [
                 'label' => $isEnglish ? 'UTILIZATION & PARTNERSHIP' : 'PEMANFAATAN & KERJA SAMA',
-                'title' => $isEnglish
-                    ? 'Towards Collaboration and Sustainability'
-                    : 'Menuju Kolaborasi dan Keberlanjutan',
+                'title' => $isEnglish ? 'Towards Collaboration and Sustainability' : 'Menuju Kolaborasi dan Keberlanjutan',
                 'description' => $isEnglish
                     ? 'Land utilization is carried out through utilization cooperation with other parties; Badan Bank Tanah still considers the principles of benefit and priority.'
                     : 'Pemanfaatan tanah dilakukan melalui kerja sama pemanfaatan dengan pihak lain, dalam melaksanakan pemanfaatan tanah, Bank Tanah tetap memperhatikan asas kemanfaatan dan asas prioritas.',
                 'submenus' => [
-                    [
-                        'icon' => 'fa-briefcase',
-                        'title' => $isEnglish ? 'Portfolio' : 'Portofolio',
-                        'description' => $isEnglish
-                            ? 'Utilization and distribution of land already partnered'
-                            : 'Pemanfaatan dan pendistribusian tanah yang sudah dikerjasamakan oleh Badan Bank Tanah dengan mitra',
-                        'route' => 'partnership',
-                    ],
-                    [
-                        'icon' => 'fa-file-signature',
-                        'title' => $isEnglish ? 'Land Rights' : 'Hak Atas Tanah',
-                        'description' => $isEnglish
-                            ? 'Badan Bank Tanah as the holder of Management Rights'
-                            : 'Badan Bank Tanah sebagai pemegang Hak Pengelolaan dalam hal kerja sama pemanfaatan dapat memberikan Hak Atas Tanah',
-                        'route' => 'partnership',
-                    ],
-                    [
-                        'icon' => 'fa-diagram-project',
-                        'title' => $isEnglish ? 'Utilization Scheme' : 'Skema Pemanfaatan',
-                        'description' => $isEnglish
-                            ? 'Considering the principles of benefit and priority'
-                            : 'dalam melaksanakan pemanfaatan tanah, Bank Tanah tetap memperhatikan asas kemanfaatan dan asas prioritas',
-                        'route' => 'partnership',
-                    ],
+                    ['icon' => 'fa-briefcase', 'title' => $isEnglish ? 'Portfolio' : 'Portofolio', 'description' => $isEnglish ? 'Utilization and distribution of land already partnered' : 'Pemanfaatan dan pendistribusian tanah yang sudah dikerjasamakan oleh Badan Bank Tanah dengan mitra', 'route' => 'partnership'],
+                    ['icon' => 'fa-file-signature', 'title' => $isEnglish ? 'Land Rights' : 'Hak Atas Tanah', 'description' => $isEnglish ? 'Badan Bank Tanah as the holder of Management Rights' : 'Badan Bank Tanah sebagai pemegang Hak Pengelolaan dalam hal kerja sama pemanfaatan dapat memberikan Hak Atas Tanah', 'route' => 'partnership'],
+                    ['icon' => 'fa-diagram-project', 'title' => $isEnglish ? 'Utilization Scheme' : 'Skema Pemanfaatan', 'description' => $isEnglish ? 'Considering the principles of benefit and priority' : 'dalam melaksanakan pemanfaatan tanah, Bank Tanah tetap memperhatikan asas kemanfaatan dan asas prioritas', 'route' => 'partnership'],
                 ],
             ],
-
             'aset' => [
                 'label' => $isEnglish ? 'LAND ASSET INVENTORY' : 'ASET PERSEDIAAN TANAH',
-                'title' => $isEnglish
-                    ? 'Managing Land for Sustainable Growth'
-                    : 'Mengelola Tanah Untuk Pertumbuhan Berkelanjutan',
+                'title' => $isEnglish ? 'Managing Land for Sustainable Growth' : 'Mengelola Tanah Untuk Pertumbuhan Berkelanjutan',
                 'description' => $isEnglish
                     ? 'The purpose of Badan Bank Tanah is to support agrarian reform, ensure land availability for public interest, and encourage economic equity and national development.'
                     : 'Tujuan Badan Bank Tanah adalah mendukung reforma agraria, menjamin ketersediaan tanah untuk kepentingan umum, serta mendorong pemerataan ekonomi dan pembangunan nasional.',
                 'submenus' => [
-                    [
-                        'icon' => 'fa-layer-group',
-                        'title' => $isEnglish ? 'Land Inventory' : 'Aset Persediaan',
-                        'description' => $isEnglish
-                            ? 'Utilization and distribution of land already partnered'
-                            : 'Pemanfaatan dan pendistribusian tanah yang sudah dikerjasamakan oleh Badan Bank Tanah dengan mitra',
-                        'route' => 'assets',
-                    ],
-                    [
-                        'icon' => 'fa-book',
-                        'title' => $isEnglish ? 'Booklet' : 'Booklet',
-                        'description' => $isEnglish
-                            ? 'Badan Bank Tanah as the holder of Management Rights'
-                            : 'Badan Bank Tanah sebagai pemegang Hak Pengelolaan dalam hal kerja sama pemanfaatan dapat memberikan Hak Atas Tanah',
-                        'route' => 'assets',
-                    ],
+                    ['icon' => 'fa-layer-group', 'title' => $isEnglish ? 'Land Inventory' : 'Aset Persediaan', 'description' => $isEnglish ? 'Utilization and distribution of land already partnered' : 'Pemanfaatan dan pendistribusian tanah yang sudah dikerjasamakan oleh Badan Bank Tanah dengan mitra', 'route' => 'assets'],
+                    ['icon' => 'fa-book', 'title' => $isEnglish ? 'Booklet' : 'Booklet', 'description' => $isEnglish ? 'Badan Bank Tanah as the holder of Management Rights' : 'Badan Bank Tanah sebagai pemegang Hak Pengelolaan dalam hal kerja sama pemanfaatan dapat memberikan Hak Atas Tanah', 'route' => 'assets'],
                 ],
             ],
-
             'publikasi' => [
                 'label' => $isEnglish ? 'PUBLICATION' : 'PUBLIKASI',
-                'title' => $isEnglish
-                    ? 'Open Information for Transparency and Accountability'
-                    : 'Informasi Terbuka Untuk Transparansi dan Akuntabilitas',
+                'title' => $isEnglish ? 'Open Information for Transparency and Accountability' : 'Informasi Terbuka Untuk Transparansi dan Akuntabilitas',
                 'description' => $isEnglish
                     ? 'Find various official information and publications of Badan Bank Tanah as our commitment to transparency and public information disclosure.'
                     : 'Temukan berbagai informasi dan publikasi resmi Badan Bank Tanah sebagai komitmen kami terhadap transparansi dan keterbukaan informasi publik.',
                 'submenus' => [
-                    [
-                        'icon' => 'fa-images',
-                        'title' => $isEnglish ? 'Gallery' : 'Galeri',
-                        'description' => $isEnglish
-                            ? 'Utilization and distribution of land already partnered'
-                            : 'Pemanfaatan dan pendistribusian tanah yang sudah dikerjasamakan oleh Badan Bank Tanah dengan mitra',
-                        'route' => 'halaman.publikasi',
-                    ],
-                    [
-                        'icon' => 'fa-newspaper',
-                        'title' => $isEnglish ? 'Press Release' : 'Siaran Pers',
-                        'description' => $isEnglish
-                            ? 'Badan Bank Tanah as the holder of Management Rights'
-                            : 'Badan Bank Tanah sebagai pemegang Hak Pengelolaan dalam hal kerja sama pemanfaatan dapat memberikan Hak Atas Tanah',
-                        'route' => 'halaman.publikasi',
-                    ],
-                    [
-                        'icon' => 'fa-file-lines',
-                        'title' => $isEnglish ? 'Latest Articles' : 'Artikel Terkini',
-                        'description' => $isEnglish
-                            ? 'Badan Bank Tanah as the holder of Management Rights'
-                            : 'Badan Bank Tanah sebagai pemegang Hak Pengelolaan dalam hal kerja sama pemanfaatan dapat memberikan Hak Atas Tanah',
-                        'route' => 'halaman.publikasi',
-                    ],
+                    ['icon' => 'fa-images', 'title' => $isEnglish ? 'Gallery' : 'Galeri', 'description' => $isEnglish ? 'Utilization and distribution of land already partnered' : 'Pemanfaatan dan pendistribusian tanah yang sudah dikerjasamakan oleh Badan Bank Tanah dengan mitra', 'route' => 'halaman.publikasi'],
+                    ['icon' => 'fa-newspaper', 'title' => $isEnglish ? 'Press Release' : 'Siaran Pers', 'description' => $isEnglish ? 'Badan Bank Tanah as the holder of Management Rights' : 'Badan Bank Tanah sebagai pemegang Hak Pengelolaan dalam hal kerja sama pemanfaatan dapat memberikan Hak Atas Tanah', 'route' => 'halaman.publikasi'],
+                    ['icon' => 'fa-file-lines', 'title' => $isEnglish ? 'Latest Articles' : 'Artikel Terkini', 'description' => $isEnglish ? 'Badan Bank Tanah as the holder of Management Rights' : 'Badan Bank Tanah sebagai pemegang Hak Pengelolaan dalam hal kerja sama pemanfaatan dapat memberikan Hak Atas Tanah', 'route' => 'halaman.publikasi'],
                 ],
             ],
-
             'lainnya' => [
                 'label' => $isEnglish ? 'OTHERS' : 'LAINNYA',
-                'title' => $isEnglish
-                    ? 'Other Information from Badan Bank Tanah'
-                    : 'Informasi Lainnya Dari Badan Bank Tanah',
+                'title' => $isEnglish ? 'Other Information from Badan Bank Tanah' : 'Informasi Lainnya Dari Badan Bank Tanah',
                 'description' => $isEnglish
                     ? 'Find various other information ranging from job vacancies, procurement, official announcements, frequently asked questions, and how to contact us.'
                     : 'Temukan berbagai informasi lainnya mulai dari informasi lowongan pekerjaan, pengadaan, pengumuman resmi, pertanyaan yang sering ditanyakan, dan cara menghubungi kami.',
                 'submenus' => [
-                    [
-                        'icon' => 'fa-briefcase',
-                        'title' => $isEnglish ? 'Career' : 'Karir',
-                        'description' => $isEnglish
-                            ? 'Utilization and distribution of land already partnered'
-                            : 'Pemanfaatan dan pendistribusian tanah yang sudah dikerjasamakan oleh Badan Bank Tanah dengan mitra',
-                        'route' => 'karier',
-                    ],
-                    [
-                        'icon' => 'fa-bullhorn',
-                        'title' => $isEnglish ? 'Announcement' : 'Pengumuman',
-                        'description' => $isEnglish
-                            ? 'Badan Bank Tanah as the holder of Management Rights'
-                            : 'Badan Bank Tanah sebagai pemegang Hak Pengelolaan dalam hal kerja sama pemanfaatan dapat memberikan Hak Atas Tanah',
-                        'route' => 'kontak',
-                    ],
-                    [
-                        'icon' => 'fa-circle-question',
-                        'title' => 'FAQ',
-                        'description' => $isEnglish
-                            ? 'Badan Bank Tanah as the holder of Management Rights'
-                            : 'Badan Bank Tanah sebagai pemegang Hak Pengelolaan dalam hal kerja sama pemanfaatan dapat memberikan Hak Atas Tanah',
-                        'route' => 'faq',
-                    ],
-                    [
-                        'icon' => 'fa-cart-shopping',
-                        'title' => $isEnglish ? 'Procurement' : 'Pengadaan',
-                        'description' => $isEnglish
-                            ? 'Badan Bank Tanah as the holder of Management Rights'
-                            : 'Badan Bank Tanah sebagai pemegang Hak Pengelolaan dalam hal kerja sama pemanfaatan dapat memberikan Hak Atas Tanah',
-                        'route' => 'kontak',
-                    ],
-                    [
-                        'icon' => 'fa-shield-halved',
-                        'title' => $isEnglish ? 'Corporate Governance' : 'Tata Kelola Perusahaan',
-                        'description' => $isEnglish
-                            ? 'Badan Bank Tanah as the holder of Management Rights'
-                            : 'Badan Bank Tanah sebagai pemegang Hak Pengelolaan dalam hal kerja sama pemanfaatan dapat memberikan Hak Atas Tanah',
-                        'route' => 'kontak',
-                    ],
+                    ['icon' => 'fa-briefcase', 'title' => $isEnglish ? 'Career' : 'Karir', 'description' => $isEnglish ? 'Utilization and distribution of land already partnered' : 'Pemanfaatan dan pendistribusian tanah yang sudah dikerjasamakan oleh Badan Bank Tanah dengan mitra', 'route' => 'karier'],
+                    ['icon' => 'fa-bullhorn', 'title' => $isEnglish ? 'Announcement' : 'Pengumuman', 'description' => $isEnglish ? 'Badan Bank Tanah as the holder of Management Rights' : 'Badan Bank Tanah sebagai pemegang Hak Pengelolaan dalam hal kerja sama pemanfaatan dapat memberikan Hak Atas Tanah', 'route' => 'kontak'],
+                    ['icon' => 'fa-circle-question', 'title' => 'FAQ', 'description' => $isEnglish ? 'Badan Bank Tanah as the holder of Management Rights' : 'Badan Bank Tanah sebagai pemegang Hak Pengelolaan dalam hal kerja sama pemanfaatan dapat memberikan Hak Atas Tanah', 'route' => 'faq'],
+                    ['icon' => 'fa-cart-shopping', 'title' => $isEnglish ? 'Procurement' : 'Pengadaan', 'description' => $isEnglish ? 'Badan Bank Tanah as the holder of Management Rights' : 'Badan Bank Tanah sebagai pemegang Hak Pengelolaan dalam hal kerja sama pemanfaatan dapat memberikan Hak Atas Tanah', 'route' => 'kontak'],
+                    ['icon' => 'fa-shield-halved', 'title' => $isEnglish ? 'Corporate Governance' : 'Tata Kelola Perusahaan', 'description' => $isEnglish ? 'Badan Bank Tanah as the holder of Management Rights' : 'Badan Bank Tanah sebagai pemegang Hak Pengelolaan dalam hal kerja sama pemanfaatan dapat memberikan Hak Atas Tanah', 'route' => 'kontak'],
                 ],
             ],
         ];
-
-        // biar kode lama tetap jalan
-        $megaTentang = [
-            'label' => $megaMenus['tentang']['label'],
-            'title' => $megaMenus['tentang']['title'],
-            'description' => $megaMenus['tentang']['description'],
-            'banner' => [
-                'label' => $isEnglish ? 'ABOUT US' : 'TENTANG KAMI',
-                'title' => $isEnglish ? 'Land Managed, Nation Empowered' : 'Tanah Dikelola, Negara Berdaya',
-                'description' => $isEnglish
-                    ? 'Together managing land.'
-                    : 'Bersama mengelola tanah untuk kesejahteraan masyarakat Indonesia.',
-            ],
-        ];
-
     @endphp
 
-    <!-- ========================================================= -->
     <!-- MOBILE OVERLAY -->
-    <!-- ========================================================= -->
     <div class="mobile-overlay" id="mobileOverlay" aria-hidden="true"></div>
 
-    <!-- ========================================================= -->
     <!-- MOBILE NAV -->
-    <!-- ========================================================= -->
     <nav class="mobile-nav" id="mobileNav" role="navigation" aria-label="Mobile Navigation">
         <div class="mobile-nav-header">
             <span class="logo-text">Badan <span>Bank Tanah</span></span>
@@ -972,127 +875,75 @@
         <div class="nav-list">
             <div class="nav-section-title">{{ $menuLabels['home'] }}</div>
 
-            <a href="{{ route('home') }}" class="nav-item {{ request()->routeIs('home') ? 'active' : '' }}"
-                aria-current="{{ request()->routeIs('home') ? 'page' : 'false' }}">
+            <a href="{{ route('home') }}" class="nav-item {{ request()->routeIs('home') ? 'active' : '' }}">
                 <i class="fas fa-house" aria-hidden="true"></i>
                 {{ $menuLabels['home'] }}
             </a>
 
             @php
                 $menuItems = [
-                    [
-                        'route' => 'about',
-                        'icon' => 'fa-circle-info',
-                        'label' => $menuLabels['about'],
-                        'check' => 'tentang',
-                    ],
-                    ['route' => 'assets', 'icon' => 'fa-map-pin', 'label' => $menuLabels['assets'], 'check' => 'aset'],
-                    [
-                        'route' => 'partnership',
-                        'icon' => 'fa-handshake',
-                        'label' => $menuLabels['partnership'],
-                        'check' => 'pemanfaatan',
-                    ],
-                    [
-                        'route' => 'halaman.publikasi',
-                        'icon' => 'fa-newspaper',
-                        'label' => $menuLabels['publications'],
-                        'check' => 'publikasi',
-                    ],
+                    ['route' => 'about', 'icon' => 'fa-circle-info', 'label' => $menuLabels['about']],
+                    ['route' => 'assets', 'icon' => 'fa-map-pin', 'label' => $menuLabels['assets']],
+                    ['route' => 'partnership', 'icon' => 'fa-handshake', 'label' => $menuLabels['partnership']],
+                    ['route' => 'halaman.publikasi', 'icon' => 'fa-newspaper', 'label' => $menuLabels['publications']],
                 ];
             @endphp
 
             @foreach ($menuItems as $item)
-                @php
-                    // Cek apakah menu ini aktif berdasarkan halaman aktif
-                    $isActive = false;
-                    if ($item['check'] == 'tentang') {
-                        $isActive = \App\Models\Halaman::where('judul', 'like', '%Tentang%')
-                            ->where('is_active', true)
-                            ->exists();
-                    } elseif ($item['check'] == 'pemanfaatan') {
-                        $isActive = \App\Models\Halaman::where('judul', 'like', '%Pemanfaatan%')
-                            ->where('is_active', true)
-                            ->exists();
-                    } elseif ($item['check'] == 'publikasi') {
-                        $isActive = \App\Models\Halaman::where('judul', 'like', '%Publikasi%')
-                            ->where('is_active', true)
-                            ->exists();
-                    } else {
-                        $isActive = true;
-                    }
-                @endphp
-                @if ($isActive)
-                    <a href="{{ route($item['route']) }}"
-                        class="nav-item {{ request()->routeIs($item['route']) ? 'active' : '' }}"
-                        aria-current="{{ request()->routeIs($item['route']) ? 'page' : 'false' }}">
-                        <i class="fas {{ $item['icon'] }}" aria-hidden="true"></i>
-                        {{ $item['label'] }}
-                    </a>
-                @endif
+                <a href="{{ route($item['route']) }}"
+                    class="nav-item {{ request()->routeIs($item['route']) ? 'active' : '' }}">
+                    <i class="fas {{ $item['icon'] }}" aria-hidden="true"></i>
+                    {{ $item['label'] }}
+                </a>
             @endforeach
 
             <div class="nav-divider"></div>
 
             <div class="nav-section-title">{{ $menuLabels['others'] }}</div>
 
-            <a href="{{ route('faq') }}" class="nav-item {{ request()->routeIs('faq') ? 'active' : '' }}"
-                aria-current="{{ request()->routeIs('faq') ? 'page' : 'false' }}">
+            <a href="{{ route('faq') }}" class="nav-item {{ request()->routeIs('faq') ? 'active' : '' }}">
                 <i class="fas fa-circle-question" aria-hidden="true"></i>
                 {{ $menuLabels['faq'] }}
                 <span class="nav-badge">FAQ</span>
             </a>
 
-            <a href="{{ route('karier') }}" class="nav-item {{ request()->routeIs('karier') ? 'active' : '' }}"
-                aria-current="{{ request()->routeIs('karier') ? 'page' : 'false' }}">
+            <a href="{{ route('karier') }}" class="nav-item {{ request()->routeIs('karier') ? 'active' : '' }}">
                 <i class="fas fa-briefcase" aria-hidden="true"></i>
                 {{ $menuLabels['career'] }}
                 <span class="nav-badge">{{ $isEnglish ? 'Career' : 'Karir' }}</span>
             </a>
 
-            <a href="{{ route('kontak') }}" class="nav-item {{ request()->routeIs('kontak') ? 'active' : '' }}"
-                aria-current="{{ request()->routeIs('kontak') ? 'page' : 'false' }}">
+            <a href="{{ route('kontak') }}" class="nav-item {{ request()->routeIs('kontak') ? 'active' : '' }}">
                 <i class="fas fa-envelope" aria-hidden="true"></i>
                 {{ $menuLabels['contact'] }}
                 <span class="nav-badge">{{ $isEnglish ? 'Contact' : 'Hubungi' }}</span>
             </a>
         </div>
-
-
     </nav>
 
-    <!-- ========================================================= -->
     <!-- TOP BAR -->
-    <!-- ========================================================= -->
     <div class="text-white text-xs hidden sm:block"
         style="background-color: {{ $pengaturan->warna_utama ?? '#0B2A4A' }};">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center py-2">
             <div class="flex items-center gap-2">
                 <i class="fas fa-globe text-blue-300" aria-hidden="true"></i>
-                <span
-                    class="truncate">{{ $isEnglish ? 'Advancing Productive, Transparent, and Sustainable Land Management' : 'Memajukan Pengelolaan Tanah yang Produktif, Transparan, dan Berkelanjutan' }}</span>
+                <span class="truncate">{{ $isEnglish ? 'Advancing Productive, Transparent, and Sustainable Land Management' : 'Memajukan Pengelolaan Tanah yang Produktif, Transparan, dan Berkelanjutan' }}</span>
             </div>
             <div class="flex items-center gap-4">
-                <a href="{{ route('kontak') }}"
-                    class="hover:text-blue-300 transition">{{ $menuLabels['contact'] }}</a>
+                <a href="{{ route('kontak') }}" class="hover:text-blue-300 transition">{{ $menuLabels['contact'] }}</a>
                 <a href="{{ route('search') }}" class="hover:text-blue-300 transition">{{ $menuLabels['search'] }}</a>
                 <i class="fas fa-search cursor-pointer hover:text-blue-300 transition" aria-hidden="true"></i>
             </div>
         </div>
     </div>
 
-    <!-- ========================================================= -->
-    <!-- NAVBAR UTAMA -->
-    <!-- ========================================================= -->
+    <!-- HEADER -->
     <header class="bg-white sticky top-0 z-[9999] shadow-sm" role="banner">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16 md:h-20">
 
-                <!-- ========================================================= -->
                 <!-- LOGO -->
-                <!-- ========================================================= -->
-                <a href="{{ route('home') }}" class="flex items-center flex-shrink-0"
-                    aria-label="Badan Bank Tanah - Home">
+                <a href="{{ route('home') }}" class="flex items-center flex-shrink-0" aria-label="Badan Bank Tanah - Home">
                     <div class="logo-container">
                         <img src="{{ asset('images/Logo-badan-bank-tanah.png') }}" alt="Logo Badan Bank Tanah"
                             class="w-full h-full object-contain"
@@ -1100,11 +951,8 @@
                     </div>
                 </a>
 
-                              <!-- ========================================================= -->
                 <!-- DESKTOP NAVIGATION -->
-                <!-- ========================================================= -->
-                <nav class="hidden lg:flex items-center space-x-8 xl:space-x-10 text-gray-700"
-                    aria-label="Main Navigation">
+                <nav class="hidden lg:flex items-center gap-6 xl:gap-10 text-gray-700" aria-label="Main Navigation">
 
                     @php
                         $navItems = [
@@ -1121,84 +969,49 @@
                             $isActive = request()->routeIs($item['route']);
                         @endphp
 
-                        <div class="relative group">
+                        <div class="relative group dropdown-wrapper">
                             <a href="{{ route($item['route']) }}"
                                 class="hover:text-[var(--color-secondary)] transition font-medium flex items-center gap-1.5 py-2
                                 {{ $isActive ? 'text-[var(--color-secondary)] font-semibold active-nav' : '' }}">
                                 {{ $item['label'] }}
-                                <i
-                                    class="fas fa-chevron-down text-[10px] transition-transform duration-200 group-hover:rotate-180"></i>
+                                <i class="fas fa-chevron-down text-[10px] transition-transform duration-200 group-hover:rotate-180"></i>
                             </a>
 
                             {{-- PANEL MEGA MENU --}}
-                            <div
-                                class="absolute left-0 top-full pt-3 w-[900px] max-w-[95vw]
-                                    opacity-0 invisible translate-y-2
-                                    group-hover:opacity-100 group-hover:visible group-hover:translate-y-0
-                                    transition-all duration-300 ease-out z-[9999]">
+                            <div class="dropdown-panel absolute top-full pt-3 opacity-0 invisible
+                                group-hover:opacity-100 group-hover:visible
+                                transition-all duration-300 ease-out">
                                 <div class="bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden">
-                                    <div class="grid grid-cols-12 gap-0">
-
-                                        {{-- KIRI: Info Utama --}}
-                                        <div class="col-span-5 p-6 border-r border-gray-100 bg-white">
-                                            <span
-                                                class="text-[11px] font-bold uppercase tracking-[0.18em] text-amber-600">
-                                                {{ $mega['label'] }}
-                                            </span>
-                                            <h3
-                                                class="text-2xl font-extrabold text-gray-900 mt-2 mb-3 leading-snug">
-                                                {{ $mega['title'] }}
-                                            </h3>
-                                            <p class="text-[12.5px] text-gray-500 leading-relaxed">
-                                                {{ $mega['description'] }}
-                                            </p>
-
-                                            {{-- Gambar gelombang biru --}}
-                                            <div class="mt-6 rounded-lg overflow-hidden h-[100px] relative">
-                                                <div
-                                                    class="absolute inset-0 bg-gradient-to-br from-blue-50 via-blue-100 to-blue-200">
-                                                </div>
-                                                <svg class="absolute bottom-0 left-0 w-full" viewBox="0 0 400 100"
-                                                    preserveAspectRatio="none">
-                                                    <path
-                                                        d="M0,60 C80,90 160,30 240,55 C320,80 380,40 400,50 L400,100 L0,100 Z"
-                                                        fill="#93c5fd" opacity="0.55" />
-                                                    <path
-                                                        d="M0,75 C100,95 180,55 260,72 C330,88 380,65 400,72 L400,100 L0,100 Z"
-                                                        fill="#3b82f6" opacity="0.45" />
-                                                    <path
-                                                        d="M0,88 C90,100 200,78 300,88 C360,94 390,86 400,88 L400,100 L0,100 Z"
-                                                        fill="#1d4ed8" opacity="0.35" />
+                                    <div class="mega-panel-inner">
+                                        <div class="mega-panel-left">
+                                            <div class="mega-label">{{ $mega['label'] }}</div>
+                                            <div class="mega-title">{{ $mega['title'] }}</div>
+                                            <div class="mega-desc">{{ $mega['description'] }}</div>
+                                            <div class="mega-wave">
+                                                <div class="absolute inset-0 bg-gradient-to-br from-blue-50 via-blue-100 to-blue-200"></div>
+                                                <svg class="absolute bottom-0 left-0 w-full" viewBox="0 0 400 100" preserveAspectRatio="none">
+                                                    <path d="M0,60 C80,90 160,30 240,55 C320,80 380,40 400,50 L400,100 L0,100 Z" fill="#93c5fd" opacity="0.55" />
+                                                    <path d="M0,75 C100,95 180,55 260,72 C330,88 380,65 400,72 L400,100 L0,100 Z" fill="#3b82f6" opacity="0.45" />
+                                                    <path d="M0,88 C90,100 200,78 300,88 C360,94 390,86 400,88 L400,100 L0,100 Z" fill="#1d4ed8" opacity="0.35" />
                                                 </svg>
                                             </div>
                                         </div>
 
-                                        {{-- KANAN: Submenu --}}
-                                        <div class="col-span-7 p-4 sm:p-5">
-                                            <div class="space-y-0.5">
+                                        <div class="mega-panel-right">
+                                            <div class="submenu-grid">
                                                 @foreach ($mega['submenus'] as $sub)
-                                                    <a href="{{ route($sub['route']) }}"
-                                                        class="group/item flex items-start gap-3 rounded-xl p-3 hover:bg-blue-50/70 transition-colors">
-                                                        <span
-                                                            class="flex-shrink-0 w-11 h-11 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center
-                                                                group-hover/item:bg-blue-100 transition-colors">
-                                                            <i class="fas {{ $sub['icon'] }} text-[15px]"></i>
+                                                    <a href="{{ route($sub['route']) }}" class="submenu-item">
+                                                        <span class="submenu-icon">
+                                                            <i class="fas {{ $sub['icon'] }}"></i>
                                                         </span>
-                                                        <span class="min-w-0 pt-0.5">
-                                                            <span
-                                                                class="block text-[13.5px] font-bold text-gray-900 leading-snug group-hover/item:text-[var(--color-secondary)] transition">
-                                                                {{ $sub['title'] }}
-                                                            </span>
-                                                            <span
-                                                                class="block text-[11.5px] text-gray-500 leading-relaxed mt-0.5">
-                                                                {{ $sub['description'] }}
-                                                            </span>
+                                                        <span class="submenu-text">
+                                                            <span class="submenu-title">{{ $sub['title'] }}</span>
+                                                            <span class="submenu-desc">{{ $sub['description'] }}</span>
                                                         </span>
                                                     </a>
                                                 @endforeach
                                             </div>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
@@ -1206,94 +1019,57 @@
                     @endforeach
 
                     {{-- Dropdown Lainnya --}}
-                    <div class="relative group">
+                    <div class="relative group dropdown-wrapper">
                         <a href="#"
                             class="hover:text-[var(--color-secondary)] transition font-medium flex items-center gap-1.5 py-2
                             {{ request()->routeIs('faq') || request()->routeIs('karier') || request()->routeIs('kontak') ? 'text-[var(--color-secondary)] font-semibold active-nav' : '' }}">
                             {{ $menuLabels['others'] ?? 'Lainnya' }}
-                            <i
-                                class="fas fa-chevron-down text-[10px] transition-transform duration-200 group-hover:rotate-180"></i>
+                            <i class="fas fa-chevron-down text-[10px] transition-transform duration-200 group-hover:rotate-180"></i>
                         </a>
 
                         @php $mega = $megaMenus['lainnya']; @endphp
-                        <div
-                            class="absolute right-0 top-full pt-3 w-[900px] max-w-[95vw]
-                                opacity-0 invisible translate-y-2
-                                group-hover:opacity-100 group-hover:visible group-hover:translate-y-0
-                                transition-all duration-300 ease-out z-[9999]">
+                        <div class="dropdown-panel absolute top-full pt-3 opacity-0 invisible
+                            group-hover:opacity-100 group-hover:visible
+                            transition-all duration-300 ease-out">
                             <div class="bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden">
-                                <div class="grid grid-cols-12 gap-0">
-
-                                    {{-- KIRI --}}
-                                    <div class="col-span-5 p-6 border-r border-gray-100 bg-white">
-                                        <span
-                                            class="text-[11px] font-bold uppercase tracking-[0.18em] text-amber-600">
-                                            {{ $mega['label'] }}
-                                        </span>
-                                        <h3 class="text-2xl font-extrabold text-gray-900 mt-2 mb-3 leading-snug">
-                                            {{ $mega['title'] }}
-                                        </h3>
-                                        <p class="text-[12.5px] text-gray-500 leading-relaxed">
-                                            {{ $mega['description'] }}
-                                        </p>
-                                        <div class="mt-6 rounded-lg overflow-hidden h-[100px] relative">
-                                            <div
-                                                class="absolute inset-0 bg-gradient-to-br from-blue-50 via-blue-100 to-blue-200">
-                                            </div>
-                                            <svg class="absolute bottom-0 left-0 w-full" viewBox="0 0 400 100"
-                                                preserveAspectRatio="none">
-                                                <path
-                                                    d="M0,60 C80,90 160,30 240,55 C320,80 380,40 400,50 L400,100 L0,100 Z"
-                                                    fill="#93c5fd" opacity="0.55" />
-                                                <path
-                                                    d="M0,75 C100,95 180,55 260,72 C330,88 380,65 400,72 L400,100 L0,100 Z"
-                                                    fill="#3b82f6" opacity="0.45" />
-                                                <path
-                                                    d="M0,88 C90,100 200,78 300,88 C360,94 390,86 400,88 L400,100 L0,100 Z"
-                                                    fill="#1d4ed8" opacity="0.35" />
+                                <div class="mega-panel-inner">
+                                    <div class="mega-panel-left">
+                                        <div class="mega-label">{{ $mega['label'] }}</div>
+                                        <div class="mega-title">{{ $mega['title'] }}</div>
+                                        <div class="mega-desc">{{ $mega['description'] }}</div>
+                                        <div class="mega-wave">
+                                            <div class="absolute inset-0 bg-gradient-to-br from-blue-50 via-blue-100 to-blue-200"></div>
+                                            <svg class="absolute bottom-0 left-0 w-full" viewBox="0 0 400 100" preserveAspectRatio="none">
+                                                <path d="M0,60 C80,90 160,30 240,55 C320,80 380,40 400,50 L400,100 L0,100 Z" fill="#93c5fd" opacity="0.55" />
+                                                <path d="M0,75 C100,95 180,55 260,72 C330,88 380,65 400,72 L400,100 L0,100 Z" fill="#3b82f6" opacity="0.45" />
+                                                <path d="M0,88 C90,100 200,78 300,88 C360,94 390,86 400,88 L400,100 L0,100 Z" fill="#1d4ed8" opacity="0.35" />
                                             </svg>
                                         </div>
                                     </div>
 
-                                    {{-- KANAN --}}
-                                    <div class="col-span-7 p-4 sm:p-5">
-                                        <div class="space-y-0.5">
+                                    <div class="mega-panel-right">
+                                        <div class="submenu-grid">
                                             @foreach ($mega['submenus'] as $sub)
-                                                <a href="{{ route($sub['route']) }}"
-                                                    class="group/item flex items-start gap-3 rounded-xl p-3 hover:bg-blue-50/70 transition-colors">
-                                                    <span
-                                                        class="flex-shrink-0 w-11 h-11 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center
-                                                            group-hover/item:bg-blue-100 transition-colors">
-                                                        <i class="fas {{ $sub['icon'] }} text-[15px]"></i>
+                                                <a href="{{ route($sub['route']) }}" class="submenu-item">
+                                                    <span class="submenu-icon">
+                                                        <i class="fas {{ $sub['icon'] }}"></i>
                                                     </span>
-                                                    <span class="min-w-0 pt-0.5">
-                                                        <span
-                                                            class="block text-[13.5px] font-bold text-gray-900 leading-snug group-hover/item:text-[var(--color-secondary)] transition">
-                                                            {{ $sub['title'] }}
-                                                        </span>
-                                                        <span
-                                                            class="block text-[11.5px] text-gray-500 leading-relaxed mt-0.5">
-                                                            {{ $sub['description'] }}
-                                                        </span>
+                                                    <span class="submenu-text">
+                                                        <span class="submenu-title">{{ $sub['title'] }}</span>
+                                                        <span class="submenu-desc">{{ $sub['description'] }}</span>
                                                     </span>
                                                 </a>
                                             @endforeach
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
                     </div>
                 </nav>
 
-                <!-- ========================================================= -->
                 <!-- RIGHT SIDE -->
-                <!-- ========================================================= -->
                 <div class="flex items-center gap-2 md:gap-3">
-                    
-
-                    <!-- Language Toggle -->
                     <button onclick="toggleLanguage()"
                         class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium border border-gray-200 hover:border-[var(--color-secondary)] hover:text-[var(--color-secondary)] transition"
                         id="langToggle" title="Ganti Bahasa">
@@ -1301,41 +1077,30 @@
                         <span id="langText">{{ $isEnglish ? 'EN' : 'ID' }}</span>
                     </button>
 
-                    <!-- Dark Mode Toggle -->
                     <button id="darkModeToggle" aria-label="Toggle dark mode" title="Toggle Dark Mode">
                         <i id="darkModeIconFrontend" class="fas fa-moon text-sm" aria-hidden="true"></i>
                     </button>
 
-                    <!-- Hamburger Menu (Mobile) -->
-                    <button class="lg:hidden hamburger" id="hamburgerBtn" aria-label="Toggle navigation menu"
-                        aria-expanded="false">
+                    <button class="lg:hidden hamburger" id="hamburgerBtn" aria-label="Toggle navigation menu" aria-expanded="false">
                         <span></span>
                         <span></span>
                         <span></span>
                     </button>
-
                 </div>
 
             </div>
         </div>
     </header>
 
-    <!-- ========================================================= -->
     <!-- MAIN CONTENT -->
-    <!-- ========================================================= -->
     <main role="main">
         @yield('content')
     </main>
 
-    <!-- ========================================================= -->
     <!-- FOOTER -->
-    <!-- ========================================================= -->
-    <footer class="text-white mt-20" style="background-color: {{ $pengaturan->warna_utama ?? '#0B2A4A' }};"
-        role="contentinfo">
-        <div
-            class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10 border-b border-white/10">
+    <footer class="text-white mt-20" style="background-color: {{ $pengaturan->warna_utama ?? '#0B2A4A' }};" role="contentinfo">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10 border-b border-white/10">
 
-            <!-- Kolom 1: Profil -->
             <div>
                 <div class="flex items-center gap-3 mb-4">
                     <div class="flex items-center justify-center w-13 h-12 rounded">
@@ -1349,22 +1114,17 @@
                 </p>
             </div>
 
-            <!-- Kolom 2: Tautan Cepat -->
             <div>
-                <h4 class="font-bold text-white mb-4 uppercase text-xs tracking-wider">
-                    {{ $menuLabels['quick_links'] }}</h4>
+                <h4 class="font-bold text-white mb-4 uppercase text-xs tracking-wider">{{ $menuLabels['quick_links'] }}</h4>
                 <ul class="space-y-2 text-sm text-gray-300">
                     @foreach ($footer->quick_links ?? [] as $link)
-                        <li><a href="{{ $link['url'] ?? '#' }}"
-                                class="hover:text-white transition">{{ $link['label'] ?? 'Link' }}</a></li>
+                        <li><a href="{{ $link['url'] ?? '#' }}" class="hover:text-white transition">{{ $link['label'] ?? 'Link' }}</a></li>
                     @endforeach
                 </ul>
             </div>
 
-            <!-- Kolom 3: Kontak & Sosial Media -->
             <div>
-                <h4 class="font-bold text-white mb-4 uppercase text-xs tracking-wider">
-                    {{ $menuLabels['contact_info'] }}</h4>
+                <h4 class="font-bold text-white mb-4 uppercase text-xs tracking-wider">{{ $menuLabels['contact_info'] }}</h4>
                 <ul class="space-y-3 text-sm text-gray-300">
                     <li class="flex items-start gap-3">
                         <i class="fas fa-map-marker-alt text-blue-400 mt-0.5" aria-hidden="true"></i>
@@ -1372,19 +1132,15 @@
                     </li>
                     <li class="flex items-center gap-3">
                         <i class="fas fa-envelope text-blue-400" aria-hidden="true"></i>
-                        <a href="mailto:{{ $footer->email ?? 'info@bantah.go.id' }}"
-                            class="hover:text-white transition">{{ $footer->email ?? 'info@bantah.go.id' }}</a>
+                        <a href="mailto:{{ $footer->email ?? 'info@bantah.go.id' }}" class="hover:text-white transition">{{ $footer->email ?? 'info@bantah.go.id' }}</a>
                     </li>
                     <li class="flex items-center gap-3">
                         <i class="fas fa-phone text-blue-400" aria-hidden="true"></i>
-                        <a href="tel:{{ $footer->telepon ?? '02134567890' }}"
-                            class="hover:text-white transition">{{ $footer->telepon ?? '(021) 3456-7890' }}</a>
+                        <a href="tel:{{ $footer->telepon ?? '02134567890' }}" class="hover:text-white transition">{{ $footer->telepon ?? '(021) 3456-7890' }}</a>
                     </li>
                 </ul>
 
-                @php
-                    $socialMedias = \App\Models\SocialMedia::active()->ordered()->get();
-                @endphp
+                @php $socialMedias = \App\Models\SocialMedia::active()->ordered()->get(); @endphp
 
                 @if ($socialMedias->count() > 0)
                     <div class="flex flex-wrap gap-3 mt-4">
@@ -1393,19 +1149,16 @@
                                 class="w-9 h-9 rounded-full flex items-center justify-center hover:scale-110 transition group"
                                 style="background-color: {{ $social->warna ?? '#ffffff' }}; color: white;"
                                 title="{{ $social->nama }}" aria-label="{{ $social->nama }}">
-                                <i class="{{ $social->icon }} text-sm group-hover:scale-110 transition"
-                                    aria-hidden="true"></i>
+                                <i class="{{ $social->icon }} text-sm group-hover:scale-110 transition" aria-hidden="true"></i>
                             </a>
                         @endforeach
                     </div>
                 @endif
             </div>
 
-            <!-- Kolom 4: Newsletter -->
             @if ($footer->show_newsletter)
                 <div>
-                    <h4 class="font-bold text-white mb-4 uppercase text-xs tracking-wider">
-                        {{ $menuLabels['newsletter'] }}</h4>
+                    <h4 class="font-bold text-white mb-4 uppercase text-xs tracking-wider">{{ $menuLabels['newsletter'] }}</h4>
                     <p class="text-sm text-gray-300 mb-3">
                         {{ $isEnglish ? 'Get the latest information from the Land Bank Agency.' : 'Dapatkan informasi terbaru dari Badan Bank Tanah.' }}
                     </p>
@@ -1424,14 +1177,8 @@
 
         </div>
 
-        <!-- Copyright -->
-        <div
-            class="max-w-7xl mx-auto px-4 py-5 flex flex-col md:flex-row justify-between items-center gap-2 text-[10px] md:text-xs text-gray-400">
-            <p>{!! str_replace(
-                '{year}',
-                date('Y'),
-                $footer->footer_text ?? '&copy; {year} Badan Bank Tanah. Hak Cipta Dilindungi.',
-            ) !!}</p>
+        <div class="max-w-7xl mx-auto px-4 py-5 flex flex-col md:flex-row justify-between items-center gap-2 text-[10px] md:text-xs text-gray-400">
+            <p>{!! str_replace('{year}', date('Y'), $footer->footer_text ?? '&copy; {year} Badan Bank Tanah. Hak Cipta Dilindungi.') !!}</p>
             <div class="flex gap-4">
                 <a href="#" class="hover:text-white transition">{{ $menuLabels['privacy'] }}</a>
                 <a href="#" class="hover:text-white transition">{{ $menuLabels['terms'] }}</a>
@@ -1440,13 +1187,10 @@
         </div>
     </footer>
 
-    <!-- ========================================================= -->
     <!-- SCRIPTS -->
-    <!-- ========================================================= -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     @stack('scripts')
 
-    <!-- Mobile Nav Script -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const hamburger = document.getElementById('hamburgerBtn');
@@ -1472,80 +1216,47 @@
             }
 
             function toggleMobileNav() {
-                if (mobileNav.classList.contains('open')) {
-                    closeMobileNav();
-                } else {
-                    openMobileNav();
-                }
+                if (mobileNav.classList.contains('open')) closeMobileNav();
+                else openMobileNav();
             }
 
-            if (hamburger) {
-                hamburger.addEventListener('click', toggleMobileNav);
-            }
-
-            if (closeBtn) {
-                closeBtn.addEventListener('click', closeMobileNav);
-            }
-
-            if (overlay) {
-                overlay.addEventListener('click', closeMobileNav);
-            }
+            if (hamburger) hamburger.addEventListener('click', toggleMobileNav);
+            if (closeBtn) closeBtn.addEventListener('click', closeMobileNav);
+            if (overlay) overlay.addEventListener('click', closeMobileNav);
 
             if (mobileNav) {
                 mobileNav.querySelectorAll('.nav-item').forEach(link => {
                     link.addEventListener('click', function() {
-                        if (mobileNav.classList.contains('open')) {
-                            closeMobileNav();
-                        }
+                        if (mobileNav.classList.contains('open')) closeMobileNav();
                     });
                 });
             }
 
             document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && mobileNav && mobileNav.classList.contains('open')) {
-                    closeMobileNav();
-                }
+                if (e.key === 'Escape' && mobileNav && mobileNav.classList.contains('open')) closeMobileNav();
             });
         });
     </script>
 
-    <!-- ========================================================= -->
-    <!-- SCROLL REVEAL -->
-    <!-- ========================================================= -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
-
             const revealObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active');
-                    }
+                    if (entry.isIntersecting) entry.target.classList.add('active');
                 });
-            }, {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            });
-
-            revealElements.forEach(el => {
-                revealObserver.observe(el);
-            });
+            }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+            revealElements.forEach(el => revealObserver.observe(el));
         });
     </script>
 
     <script>
-        // =========================================================
-        // FRONTEND DARK MODE
-        // =========================================================
         document.addEventListener('DOMContentLoaded', function() {
             const darkToggle = document.getElementById('darkModeToggle');
             const darkIcon = document.getElementById('darkModeIconFrontend');
-
             if (!darkToggle) return;
 
-            // Cek status dari localStorage
             const savedMode = localStorage.getItem('frontendDarkMode');
-
             if (savedMode === 'true') {
                 document.body.classList.add('dark');
                 if (darkIcon) {
@@ -1558,7 +1269,6 @@
                 document.body.classList.toggle('dark');
                 const active = document.body.classList.contains('dark');
                 localStorage.setItem('frontendDarkMode', active);
-
                 if (darkIcon) {
                     if (active) {
                         darkIcon.classList.remove('fa-moon');
@@ -1572,21 +1282,16 @@
         });
     </script>
 
-    <!-- ========================================================= -->
-    <!-- LANGUAGE TOGGLE -->
-    <!-- ========================================================= -->
     <script>
         function toggleLanguage() {
             const langText = document.getElementById('langText');
             const currentLang = langText.textContent.trim();
             const newLang = currentLang === 'ID' ? 'en' : 'id';
-
             const url = new URL(window.location.href);
             url.searchParams.set('lang', newLang);
             window.location.href = url.toString();
         }
 
-        // Update tombol bahasa sesuai session
         document.addEventListener('DOMContentLoaded', function() {
             const langText = document.getElementById('langText');
             if (langText) {
@@ -1596,76 +1301,7 @@
         });
     </script>
 
-    {{-- CHATBOT --}}
     @include('components.chatbot')
-
-
-    <script>
-        // =========================================================
-        // DROPDOWN "LAINNYA" - TOGGLE
-        // =========================================================
-        function toggleDropdownLainnya() {
-            const menu = document.getElementById('dropdownLainnyaMenu');
-            const btn = document.getElementById('dropdownLainnyaBtn');
-            const icon = document.getElementById('dropdownLainnyaIcon');
-
-            if (!menu) return;
-
-            const isOpen = !menu.classList.contains('hidden');
-
-            if (isOpen) {
-                menu.classList.add('hidden');
-                menu.classList.remove('block');
-                if (btn) btn.setAttribute('aria-expanded', 'false');
-                if (icon) icon.style.transform = 'rotate(0deg)';
-            } else {
-                menu.classList.remove('hidden');
-                menu.classList.add('block');
-                if (btn) btn.setAttribute('aria-expanded', 'true');
-                if (icon) icon.style.transform = 'rotate(180deg)';
-            }
-        }
-
-        // =========================================================
-        // TUTUP DROPDOWN SAAT KLIK DI LUAR
-        // =========================================================
-        document.addEventListener('click', function(event) {
-            const menu = document.getElementById('dropdownLainnyaMenu');
-            const btn = document.getElementById('dropdownLainnyaBtn');
-            const icon = document.getElementById('dropdownLainnyaIcon');
-
-            if (!menu || !btn) return;
-
-            // Cek apakah klik terjadi di dalam dropdown atau tombol
-            const isClickInside = menu.contains(event.target) || btn.contains(event.target);
-
-            if (!isClickInside) {
-                // Tutup dropdown
-                menu.classList.add('hidden');
-                menu.classList.remove('block');
-                btn.setAttribute('aria-expanded', 'false');
-                if (icon) icon.style.transform = 'rotate(0deg)';
-            }
-        });
-
-        // =========================================================
-        // TUTUP DROPDOWN SAAT ESCAPE DI TEKAN
-        // =========================================================
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                const menu = document.getElementById('dropdownLainnyaMenu');
-                const btn = document.getElementById('dropdownLainnyaBtn');
-                const icon = document.getElementById('dropdownLainnyaIcon');
-
-                if (menu && !menu.classList.contains('hidden')) {
-                    menu.classList.add('hidden');
-                    menu.classList.remove('block');
-                    if (btn) btn.setAttribute('aria-expanded', 'false');
-                    if (icon) icon.style.transform = 'rotate(0deg)';
-                }
-            }
-        });
-    </script>
 
 </body>
 

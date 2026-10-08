@@ -26,12 +26,35 @@ class HomeController extends Controller
         $asets = AsetTanah::latest()->take(3)->get();
         $berita = Berita::where('status', 'Dipublikasikan')->latest()->take(3)->get();
 
+        // =========================================================
+        // ✅ TAMBAHAN: Data marker untuk peta di halaman home
+        // Kolom koordinat: `lat` & `lng` (sesuai Model AsetTanah)
+        // =========================================================
+        $markers = AsetTanah::whereNotNull('lat')
+            ->whereNotNull('lng')
+            ->get()
+            ->map(function ($aset) {
+                return [
+                    'id' => $aset->id,
+                    'nama_lokasi' => $aset->nama_lokasi ?? 'Aset Tanah',
+                    'provinsi' => $aset->provinsi ?? '',
+                    'kabupaten' => $aset->kabupaten ?? '',
+                    'luas_hektar' => (float) ($aset->luas_hektar ?? 0),
+                    'status' => $aset->status ?? '-',
+                    'peruntukan' => $aset->peruntukan ?? '-',
+                    'skema' => $aset->skema ?? '-',
+                    'lat' => (float) $aset->lat,
+                    'lng' => (float) $aset->lng,
+                ];
+            })
+            ->toArray();
+
         // Get current locale
         $locale = session('locale', 'id');
         $isEnglish = $locale === 'en';
 
         // Translation helper function
-        $t = function($data, $field) use ($isEnglish) {
+        $t = function ($data, $field) use ($isEnglish) {
             if (is_object($data) && property_exists($data, $field . '_en')) {
                 $enValue = $data->{$field . '_en'};
                 if ($isEnglish && !empty($enValue)) {
@@ -45,17 +68,24 @@ class HomeController extends Controller
         // Pass translation helper to view
         $translate = $t;
 
-        $mainMenus = $menuNavigasi->filter(function($menu) {
+        $mainMenus = $menuNavigasi->filter(function ($menu) {
             return !in_array($menu->nama, ['FAQ', 'Karier', 'Kontak']);
         });
 
-        $otherMenus = $menuNavigasi->filter(function($menu) {
+        $otherMenus = $menuNavigasi->filter(function ($menu) {
             return in_array($menu->nama, ['FAQ', 'Karier', 'Kontak']);
         });
 
         return view('frontend.home', compact(
-            'asets', 'berita', 'menuNavigasi', 'pengaturan',
-            'mainMenus', 'otherMenus', 'translate', 'isEnglish'
+            'asets',
+            'berita',
+            'menuNavigasi',
+            'pengaturan',
+            'mainMenus',
+            'otherMenus',
+            'translate',
+            'isEnglish',
+            'markers' // ✅ Tambahan — kirim ke view
         ));
     }
 }
